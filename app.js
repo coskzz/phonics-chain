@@ -1,9 +1,4 @@
 // ===== Phonics Chain — app.js =====
-// Architecture follows hapikuru-english-app pattern:
-// - Firebase Auth (email/password via custom ID)
-// - Firestore for user data, scores, rankings
-// - Roles: student / teacher
-// - Pure HTML/JS, no build step
 
 // ===== Firebase Init =====
 let auth, db, secondaryApp = null;
@@ -26,35 +21,8 @@ let currentUser = null;
 let userDoc = null;
 let userRole = 'student';
 
-// Game state
-let game = {
-  difficulty: 'normal',
-  currentFamily: null,
-  currentWordIndex: 0,
-  chain: [],
-  score: 0,
-  combo: 0,
-  maxCombo: 0,
-  wordsCorrect: 0,
-  wordsMissed: 0,
-  stretchSuccesses: [],
-  discoveredWords: [],
-  typedLetters: [],
-  givenLetters: [],
-  targetWord: '',
-  availableFamilies: [],
-  familiesUsed: 0,
-  gameOver: false,
-};
-
 // ===== Constants =====
 const EMAIL_DOMAIN = '@phonicschain.app';
-const DIFF_SETTINGS = {
-  easy:    { minEiken: 0, maxEiken: 1, label: 'やさしい' },
-  normal:  { minEiken: 0, maxEiken: 2, label: 'ふつう' },
-  hard:    { minEiken: 1, maxEiken: 5, label: 'むずかしい' },
-  extreme: { minEiken: 0, maxEiken: 6, label: 'エクストリーム' },
-};
 const GRADE_LABELS = {
   e1:'小1', e2:'小2', e3:'小3', e4:'小4', e5:'小5', e6:'小6',
   j1:'中1', j2:'中2', j3:'中3', h1:'高1', h2:'高2', h3:'高3', adult:'大人'
@@ -63,14 +31,145 @@ const GRADE_EIKEN_MAP = {
   e1:0, e2:0, e3:0, e4:0, e5:1, e6:1,
   j1:2, j2:2, j3:3, h1:3, h2:4, h3:4, adult:5
 };
+const ONSET_CLUSTERS = {
+  1: 'bcdfghjklmnpqrstvwxyz'.split(''),
+  2: ['bl','br','ch','cl','cr','dr','fl','fr','gl','gr','kn','ph','pl','pr','qu','sc','sh','sk','sl','sm','sn','sp','st','sw','th','tr','tw','wh','wr'],
+  3: ['chr','sch','scr','shr','spl','spr','str','thr'],
+};
+const GAME_TIME = 60;
+const TIME_BONUS_CORRECT = 3;
+const TIME_BONUS_CHAIN = 5;
+const TIME_PENALTY_WRONG = 3;
 
 // ===== Helpers =====
 function $(id) { return document.getElementById(id); }
 function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); }
-function showTab(show) { $('tab-bar').classList.toggle('hidden', !show); }
+function showTab(vis) { $('tab-bar').classList.toggle('hidden', !vis); }
 function shuffleArray(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function toEmail(id) { return id.includes('@') ? id : id.toLowerCase() + EMAIL_DOMAIN; }
 function fromEmail(email) { return email.endsWith(EMAIL_DOMAIN) ? email.replace(EMAIL_DOMAIN, '') : email; }
+
+// ===== Sound Engine (Web Audio API) =====
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq, duration, type, vol) {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'square';
+    osc.frequency.value = freq;
+    gain.gain.value = vol || 0.15;
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+const SFX = {
+  correct() {
+    playTone(880, 0.08, 'square', 0.12);
+    setTimeout(() => playTone(1320, 0.1, 'square', 0.1), 50);
+  },
+  wrong() {
+    playTone(200, 0.15, 'sawtooth', 0.12);
+    setTimeout(() => playTone(150, 0.2, 'sawtooth', 0.1), 80);
+  },
+  combo(n) {
+    const base = 440 + (n * 30);
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => playTone(base + i * 110, 0.08, 'square', 0.08), i * 40);
+    }
+  },
+  stretch() {
+    const notes = [523, 659, 784, 1047];
+    notes.forEach((f, i) => setTimeout(() => playTone(f, 0.15, 'square', 0.1), i * 70));
+  },
+  chainComplete() {
+    const notes = [523, 659, 784, 880, 1047];
+    notes.forEach((f, i) => setTimeout(() => playTone(f, 0.12, 'triangle', 0.1), i * 60));
+  },
+  tick() { playTone(1000, 0.03, 'square', 0.06); },
+  gameOver() {
+    const notes = [440, 349, 262, 196];
+    notes.forEach((f, i) => setTimeout(() => playTone(f, 0.25, 'sawtooth', 0.08), i * 150));
+  },
+};
+
+// ===== Particle System =====
+let particles = [];
+let particleCanvas, particleCtx;
+let particleRAF = null;
+
+function initParticles() {
+  particleCanvas = $('particle-canvas');
+  if (!particleCanvas) return;
+  particleCtx = particleCanvas.getContext('2d');
+  resizeParticleCanvas();
+}
+function resizeParticleCanvas() {
+  if (!particleCanvas) return;
+  const container = $('game-container');
+  if (!container) return;
+  particleCanvas.width = container.offsetWidth;
+  particleCanvas.height = container.offsetHeight;
+}
+function emitParticles(x, y, count, colors, speed) {
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+    const v = (speed || 4) * (0.5 + Math.random());
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * v,
+      vy: Math.sin(angle) * v - 2,
+      life: 1,
+      decay: 0.015 + Math.random() * 0.02,
+      size: 3 + Math.random() * 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+    });
+  }
+  if (!particleRAF) tickParticles();
+}
+function tickParticles() {
+  if (!particleCtx) return;
+  particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+  particles = particles.filter(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.15;
+    p.life -= p.decay;
+    if (p.life <= 0) return false;
+    particleCtx.globalAlpha = p.life;
+    particleCtx.fillStyle = p.color;
+    particleCtx.beginPath();
+    particleCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    particleCtx.fill();
+    return true;
+  });
+  particleCtx.globalAlpha = 1;
+  if (particles.length > 0) {
+    particleRAF = requestAnimationFrame(tickParticles);
+  } else {
+    particleRAF = null;
+  }
+}
+
+// ===== Speech =====
+function speakWord(word) {
+  try {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(word);
+      u.lang = 'en-US';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
+  } catch(e) {}
+}
 
 // ===== Auth =====
 $('show-signup').addEventListener('click', e => { e.preventDefault(); $('form-login').classList.add('hidden'); $('form-signup').classList.remove('hidden'); });
@@ -80,11 +179,8 @@ $('btn-login').addEventListener('click', async () => {
   const id = $('login-id').value.trim();
   const pw = $('login-password').value;
   if (!id || !pw) return showError('login-error', 'IDとパスワードを入力してください');
-  try {
-    await auth.signInWithEmailAndPassword(toEmail(id), pw);
-  } catch (e) {
-    showError('login-error', 'ログインに失敗しました。IDとパスワードを確認してください。');
-  }
+  try { await auth.signInWithEmailAndPassword(toEmail(id), pw); }
+  catch (e) { showError('login-error', 'ログインに失敗しました。IDとパスワードを確認してください。'); }
 });
 
 $('btn-signup').addEventListener('click', async () => {
@@ -101,25 +197,11 @@ $('btn-signup').addEventListener('click', async () => {
     if (!idCheck.empty) return showError('signup-error', 'このIDはすでに使われています');
     const cred = await auth.createUserWithEmailAndPassword(toEmail(id), pw);
     await db.collection('users').doc(cred.user.uid).set({
-      nickname: nick,
-      loginId: id.toLowerCase(),
-      grade: grade,
-      schoolId: '',
-      role: 'student',
+      nickname: nick, loginId: id.toLowerCase(), grade, schoolId: '', role: 'student',
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      discoveredWords: [],
-      highScore: 0,
-      weekScore: 0,
-      weekScoreDate: '',
-      longestChain: 0,
-      totalGames: 0,
-      totalCorrect: 0,
-      stretchCount: 0,
-      streak: 0,
-      bestStreak: 0,
-      lastPlayDate: '',
-      dailyLog: {},
-      pw: pw,
+      discoveredWords: [], highScore: 0, weekScore: 0, weekScoreDate: '',
+      longestChain: 0, totalGames: 0, totalCorrect: 0, stretchCount: 0,
+      streak: 0, bestStreak: 0, lastPlayDate: '', dailyLog: {}, pw,
     });
   } catch (e) {
     showError('signup-error', e.message.includes('email-already-in-use') ? 'このIDはすでに使われています' : 'アカウント作成に失敗しました: ' + e.message);
@@ -128,7 +210,6 @@ $('btn-signup').addEventListener('click', async () => {
 
 function showError(id, msg) { const el = $(id); el.textContent = msg; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 4000); }
 
-// Auth state listener
 auth.onAuthStateChanged(async user => {
   if (user) {
     currentUser = user;
@@ -136,24 +217,18 @@ auth.onAuthStateChanged(async user => {
     if (!doc.exists) { auth.signOut(); return; }
     userDoc = doc.data();
     userRole = userDoc.role || 'student';
-    if (userRole === 'teacher') {
-      enterAdmin();
-    } else {
-      enterHome();
-    }
+    if (userRole === 'teacher') enterAdmin();
+    else enterHome();
   } else {
-    currentUser = null;
-    userDoc = null;
-    show('screen-login');
-    showTab(false);
+    currentUser = null; userDoc = null;
+    show('screen-login'); showTab(false);
   }
 });
 
 // ===== Home =====
 function enterHome() {
-  show('screen-home');
-  showTab(true);
-  $('tab-admin').parentElement.classList.toggle('hidden', userRole !== 'teacher');
+  show('screen-home'); showTab(true);
+  $('tab-admin')?.parentElement?.classList.toggle('hidden', userRole !== 'teacher');
   $('home-username').textContent = userDoc.nickname || '';
   const streak = userDoc.streak || 0;
   $('home-streak').textContent = streak > 0 ? ('🔥 ' + streak + '日') : '';
@@ -161,13 +236,11 @@ function enterHome() {
   $('stat-words').textContent = (userDoc.discoveredWords || []).length;
   $('stat-chains').textContent = userDoc.longestChain || 0;
   $('stat-score').textContent = userDoc.highScore || 0;
-  // Recent stretch
   const disc = userDoc.discoveredWords || [];
   const stretches = disc.filter(w => {
     const word = ALL_WORDS.find(aw => aw.en === w);
     if (!word) return false;
-    const userLevel = GRADE_EIKEN_MAP[userDoc.grade] || 0;
-    return eikenDifficulty(word.eiken) > userLevel;
+    return eikenDifficulty(word.eiken) > (GRADE_EIKEN_MAP[userDoc.grade] || 0);
   });
   if (stretches.length > 0) {
     const last = stretches[stretches.length - 1];
@@ -192,252 +265,493 @@ function setActiveTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
 }
 
-// ===== Game Start =====
-$('btn-play').addEventListener('click', () => { show('screen-difficulty'); showTab(false); });
-$('btn-back-home-diff').addEventListener('click', () => enterHome());
+// ===== GAME =====
+let game = {};
+let gameTimer = null;
+let tickTimer = null;
 
-document.querySelectorAll('.diff-btn').forEach(btn => {
-  btn.addEventListener('click', () => startGame(btn.dataset.diff));
-});
+$('btn-play').addEventListener('click', () => startGame());
 
-function startGame(difficulty) {
-  const settings = DIFF_SETTINGS[difficulty];
-  // Filter families that have words in the difficulty range
-  const families = CHAIN_FAMILIES.filter(fam =>
-    fam.words.some(w => eikenDifficulty(w.eiken) >= settings.minEiken && eikenDifficulty(w.eiken) <= settings.maxEiken)
-  ).map(fam => ({
-    ...fam,
-    words: fam.words.filter(w => eikenDifficulty(w.eiken) <= settings.maxEiken)
-  })).filter(fam => fam.words.length >= 3);
-
+function startGame() {
+  const families = shuffleArray(CHAIN_FAMILIES.filter(f => f.words.length >= 2));
   if (families.length === 0) return;
 
   game = {
-    difficulty,
-    currentFamily: null,
-    currentWordIndex: 0,
+    families,
+    familyIdx: 0,
+    wordIdx: 0,
     chain: [],
+    chainLen: 0,
+    maxChain: 0,
     score: 0,
+    displayScore: 0,
     combo: 0,
     maxCombo: 0,
     wordsCorrect: 0,
     wordsMissed: 0,
     stretchSuccesses: [],
     discoveredWords: [],
-    typedLetters: [],
-    givenLetters: [],
-    targetWord: '',
-    availableFamilies: shuffleArray(families),
-    familiesUsed: 0,
+    timeLeft: GAME_TIME,
     gameOver: false,
+    answering: false,
+    totalAnswered: 0,
+    startedAt: Date.now(),
+    lastCorrectAt: Date.now(),
   };
 
   show('screen-game');
   showTab(false);
+  initParticles();
+  resizeParticleCanvas();
   $('game-score').textContent = '0';
   $('game-chain-count').textContent = '0';
   $('chain-visual').innerHTML = '';
-  removeComboDisplay();
+  $('combo-area').innerHTML = '';
+  $('game-timer').textContent = GAME_TIME.toFixed(1);
+  $('game-timer').classList.remove('danger');
+  $('timer-bar').style.width = '100%';
+  $('timer-bar').classList.remove('danger');
+  updateBg(0);
 
-  nextFamily();
-}
-
-function nextFamily() {
-  if (game.familiesUsed >= game.availableFamilies.length) {
-    endGame();
-    return;
-  }
-  game.currentFamily = game.availableFamilies[game.familiesUsed];
-  game.familiesUsed++;
-  game.currentWordIndex = 0;
-  game.chain = [];
-  $('chain-visual').innerHTML = '';
+  startTimer();
   presentWord();
 }
 
+function startTimer() {
+  clearInterval(gameTimer);
+  clearInterval(tickTimer);
+  const startTime = Date.now();
+  const startTimeLeft = game.timeLeft;
+
+  gameTimer = setInterval(() => {
+    if (game.gameOver) return;
+    const elapsed = (Date.now() - startTime) / 1000;
+    game.timeLeft = Math.max(0, startTimeLeft - elapsed);
+    $('game-timer').textContent = game.timeLeft.toFixed(1);
+    $('timer-bar').style.width = (game.timeLeft / GAME_TIME * 100) + '%';
+
+    const danger = game.timeLeft < 10;
+    $('game-timer').classList.toggle('danger', danger);
+    $('timer-bar').classList.toggle('danger', danger);
+
+    if (game.timeLeft <= 0) {
+      clearInterval(gameTimer);
+      clearInterval(tickTimer);
+      endGame();
+    }
+  }, 50);
+
+  tickTimer = setInterval(() => {
+    if (game.gameOver) return;
+    if (game.timeLeft <= 10 && game.timeLeft > 0) SFX.tick();
+  }, 1000);
+}
+
+function addTime(sec) {
+  game.timeLeft = Math.min(game.timeLeft + sec, GAME_TIME * 1.5);
+  clearInterval(gameTimer);
+  clearInterval(tickTimer);
+  startTimer();
+}
+
+function currentFamily() { return game.families[game.familyIdx]; }
+function currentWord() { return currentFamily()?.words[game.wordIdx]; }
+function prevWord() { return game.wordIdx > 0 ? currentFamily().words[game.wordIdx - 1] : null; }
+
+// ===== Chunk Diff Logic =====
+function findChunkDiff(prev, curr) {
+  const p = prev.toLowerCase();
+  const c = curr.toLowerCase();
+  // Find longest common suffix
+  let suffLen = 0;
+  while (suffLen < p.length && suffLen < c.length && p[p.length - 1 - suffLen] === c[c.length - 1 - suffLen]) suffLen++;
+  const suffix = c.slice(c.length - suffLen);
+  const cPrefix = c.slice(0, c.length - suffLen);
+  const pPrefix = p.slice(0, p.length - suffLen);
+
+  if (cPrefix.length > 0 && cPrefix !== pPrefix) {
+    return { blankStart: 0, blankLen: cPrefix.length, chunk: cPrefix, suffix };
+  }
+  // Find longest common prefix
+  let prefLen = 0;
+  while (prefLen < p.length && prefLen < c.length && p[prefLen] === c[prefLen]) prefLen++;
+  const prefix = c.slice(0, prefLen);
+  const cSuffix = c.slice(prefLen);
+  if (cSuffix.length > 0) {
+    return { blankStart: prefLen, blankLen: cSuffix.length, chunk: cSuffix, suffix: '' };
+  }
+  // Fallback: pick a random position
+  const pos = Math.floor(Math.random() * c.length);
+  return { blankStart: pos, blankLen: 1, chunk: c[pos], suffix: '' };
+}
+
+function generateChoices(correctChunk) {
+  const len = correctChunk.length;
+  const pool = ONSET_CLUSTERS[len] || ONSET_CLUSTERS[1];
+  const choices = [correctChunk];
+  const candidates = shuffleArray(pool.filter(c => c !== correctChunk));
+  for (const c of candidates) {
+    if (choices.length >= 4) break;
+    if (c.length === len) choices.push(c);
+  }
+  // If not enough same-length, generate random
+  while (choices.length < 4) {
+    let r = '';
+    for (let i = 0; i < len; i++) r += 'bcdfghjklmnpqrstvwxyz'[Math.floor(Math.random() * 21)];
+    if (!choices.includes(r)) choices.push(r);
+  }
+  return shuffleArray(choices);
+}
+
+// ===== Present Word =====
 function presentWord() {
-  if (game.currentWordIndex >= game.currentFamily.words.length) {
-    // Family complete - move to next
-    nextFamily();
+  if (game.gameOver) return;
+  const fam = currentFamily();
+  if (!fam || game.familyIdx >= game.families.length) { endGame(); return; }
+  if (game.wordIdx >= fam.words.length) { nextFamily(); return; }
+
+  const word = currentWord();
+  const prev = prevWord();
+  const isFirst = game.wordIdx === 0;
+
+  // Family label + progress
+  $('word-family').textContent = `${fam.theme}  (${game.wordIdx + 1}/${fam.words.length})`;
+  $('word-meaning').textContent = word.ja;
+
+  if (isFirst) {
+    // Show complete word as intro
+    renderWordLetters(word.en, -1, 0, '');
+    $('choices-area').innerHTML = '';
+    game.answering = false;
+    // Auto-advance
+    setTimeout(() => {
+      speakWord(word.en);
+      addChainPill(word.en);
+      game.chain.push(word.en);
+      game.chainLen++;
+      $('game-chain-count').textContent = game.chainLen;
+      if (!game.discoveredWords.includes(word.en)) game.discoveredWords.push(word.en);
+      game.wordIdx++;
+      presentWord();
+    }, 600);
     return;
   }
 
-  const word = game.currentFamily.words[game.currentWordIndex];
+  // Find chunk diff
+  const diff = findChunkDiff(prev.en, word.en);
+  game.currentDiff = diff;
   game.targetWord = word.en.toLowerCase();
 
-  // Determine which letters to give as hints
-  const isFirst = game.currentWordIndex === 0;
-  if (isFirst) {
-    // First word in chain: show all letters (intro)
-    game.givenLetters = game.targetWord.split('').map((_, i) => i);
-  } else {
-    // Show letters that were in previous word (shared pattern)
-    const prevWord = game.currentFamily.words[game.currentWordIndex - 1].en.toLowerCase();
-    game.givenLetters = [];
-    // Find shared suffix/pattern
-    for (let i = 0; i < game.targetWord.length; i++) {
-      if (prevWord.includes(game.targetWord[i]) && Math.random() < 0.4) {
-        game.givenLetters.push(i);
-      }
-    }
-    // Always give at least the shared ending
-    const minGiven = Math.max(1, Math.floor(game.targetWord.length * 0.3));
-    if (game.givenLetters.length < minGiven) {
-      // Give ending letters
-      for (let i = game.targetWord.length - 1; i >= 0 && game.givenLetters.length < minGiven; i--) {
-        if (!game.givenLetters.includes(i)) game.givenLetters.push(i);
-      }
-    }
+  // Render word with blank
+  renderWordLetters(word.en, diff.blankStart, diff.blankLen, diff.chunk);
+
+  // Generate 4 choices
+  const choices = generateChoices(diff.chunk);
+  renderChoices(choices, diff.chunk);
+  game.answering = true;
+}
+
+// ===== Render letter blocks =====
+const BLOCK_COLORS = ['#667eea','#764ba2','#4ade80','#f59e0b','#ec4899','#06b6d4','#8b5cf6','#ef4444','#10b981','#f97316'];
+
+function renderWordLetters(word, blankStart, blankLen, chunk) {
+  const container = $('word-letters');
+  container.innerHTML = '';
+  const letters = word.toLowerCase().split('');
+
+  // If showing previous word arrow
+  const prev = prevWord();
+  if (prev && blankStart >= 0) {
+    const arrow = document.createElement('span');
+    arrow.className = 'word-letter';
+    arrow.style.cssText = 'font-size:1rem;color:#64748b;margin-right:4px;opacity:0.5';
+    arrow.textContent = prev.en + ' →';
+    container.appendChild(arrow);
   }
 
-  game.typedLetters = new Array(game.targetWord.length).fill(null);
-  game.givenLetters.forEach(i => { game.typedLetters[i] = game.targetWord[i]; });
+  for (let i = 0; i < letters.length; i++) {
+    const span = document.createElement('span');
+    span.className = 'word-letter';
 
-  // UI
-  $('prompt-family').textContent = game.currentFamily.theme;
-  $('prompt-meaning').textContent = word.ja;
-
-  // Build hint display
-  let hint = '';
-  for (let i = 0; i < game.targetWord.length; i++) {
-    hint += game.givenLetters.includes(i) ? game.targetWord[i] : '_';
-  }
-  $('prompt-hint').textContent = hint;
-
-  renderAnswerBoxes();
-  renderKeyboard();
-
-  if (isFirst) {
-    // Auto-complete first word after brief display
-    setTimeout(() => {
-      showCorrectFeedback(word, false);
-    }, 800);
+    if (blankStart >= 0 && i >= blankStart && i < blankStart + blankLen) {
+      span.classList.add('blank');
+      span.textContent = '_';
+      span.style.background = 'rgba(251,191,36,0.15)';
+      span.style.borderRadius = '6px';
+      span.style.padding = '0 3px';
+      span.dataset.blankIdx = i - blankStart;
+    } else {
+      span.textContent = letters[i];
+      const ci = (i * 7 + word.charCodeAt(0)) % BLOCK_COLORS.length;
+      span.style.color = '#e2e8f0';
+      span.style.background = 'rgba(255,255,255,0.08)';
+      span.style.borderRadius = '6px';
+      span.style.padding = '0 4px';
+    }
+    container.appendChild(span);
   }
 }
 
-function renderAnswerBoxes() {
-  const container = $('answer-display');
-  container.innerHTML = '';
-  for (let i = 0; i < game.targetWord.length; i++) {
-    const box = document.createElement('div');
-    box.className = 'answer-letter';
-    if (game.givenLetters.includes(i)) {
-      box.classList.add('given');
-      box.textContent = game.targetWord[i];
-    } else if (game.typedLetters[i]) {
-      box.classList.add('filled');
-      box.textContent = game.typedLetters[i];
-    }
-    container.appendChild(box);
-  }
-}
-
-function renderKeyboard() {
-  const container = $('letter-keyboard');
-  container.innerHTML = '';
-  const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
-  rows.forEach(row => {
-    row.split('').forEach(letter => {
-      const btn = document.createElement('button');
-      btn.className = 'key-btn';
-      btn.textContent = letter;
-      btn.addEventListener('click', () => typeLetter(letter));
-      container.appendChild(btn);
-    });
-    if (row === 'zxcvbnm') {
-      const bksp = document.createElement('button');
-      bksp.className = 'key-btn backspace';
-      bksp.textContent = '⌫';
-      bksp.addEventListener('click', () => backspace());
-      container.appendChild(bksp);
-    }
+function renderChoices(choices, correctChunk) {
+  const area = $('choices-area');
+  area.innerHTML = '';
+  choices.forEach(ch => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = ch;
+    btn.addEventListener('click', () => handleChoice(ch, correctChunk, btn));
+    area.appendChild(btn);
   });
 }
 
-function typeLetter(letter) {
-  if (game.gameOver) return;
-  // Find first empty non-given slot
-  const idx = game.typedLetters.findIndex((l, i) => l === null && !game.givenLetters.includes(i));
-  if (idx === -1) return;
-  game.typedLetters[idx] = letter;
-  renderAnswerBoxes();
+// ===== Handle Choice =====
+function handleChoice(chosen, correct, btn) {
+  if (!game.answering || game.gameOver) return;
+  game.answering = false;
+  const word = currentWord();
+  const isCorrect = chosen === correct;
 
-  // Check if all filled
-  if (!game.typedLetters.includes(null)) {
-    checkAnswer();
-  }
-}
+  // Disable all buttons immediately
+  document.querySelectorAll('.choice-btn').forEach(b => b.classList.add('disabled'));
 
-function backspace() {
-  // Remove last typed (non-given) letter
-  for (let i = game.typedLetters.length - 1; i >= 0; i--) {
-    if (game.typedLetters[i] !== null && !game.givenLetters.includes(i)) {
-      game.typedLetters[i] = null;
-      renderAnswerBoxes();
-      return;
-    }
-  }
-}
-
-// Physical keyboard support
-document.addEventListener('keydown', e => {
-  if (!$('screen-game').classList.contains('active') || game.gameOver) return;
-  if (e.key === 'Backspace') { backspace(); e.preventDefault(); }
-  else if (/^[a-z]$/i.test(e.key)) { typeLetter(e.key.toLowerCase()); e.preventDefault(); }
-});
-
-function checkAnswer() {
-  const answer = game.typedLetters.join('');
-  const word = game.currentFamily.words[game.currentWordIndex];
-  const correct = answer === game.targetWord;
-
-  const boxes = $('answer-display').children;
-  for (let i = 0; i < boxes.length; i++) {
-    if (!game.givenLetters.includes(i)) {
-      boxes[i].classList.add(correct ? 'correct' : 'wrong');
-    }
-  }
-
-  if (correct) {
+  if (isCorrect) {
+    btn.classList.add('correct');
+    SFX.correct();
     game.wordsCorrect++;
     game.combo++;
+    game.totalAnswered++;
+    game.lastCorrectAt = Date.now();
     if (game.combo > game.maxCombo) game.maxCombo = game.combo;
 
-    // Score: base + combo bonus + difficulty bonus
-    const diffBonus = eikenDifficulty(word.eiken) * 10;
-    const comboBonus = Math.min(game.combo * 5, 50);
-    const wordScore = 10 + diffBonus + comboBonus;
+    // Score
+    const diffBonus = eikenDifficulty(word.eiken) * 15;
+    const comboBonus = Math.min(game.combo * 8, 80);
+    const speedBonus = Math.max(0, 30 - Math.floor((Date.now() - game.lastCorrectAt) / 100));
+    const wordScore = 20 + diffBonus + comboBonus + speedBonus;
     game.score += wordScore;
-    $('game-score').textContent = game.score;
+    animateScore(wordScore);
+    showScorePopup('+' + wordScore);
+
+    // Time bonus
+    addTime(TIME_BONUS_CORRECT);
 
     // Chain
     game.chain.push(word.en);
-    $('game-chain-count').textContent = game.chain.length;
+    game.chainLen++;
+    if (game.chainLen > game.maxChain) game.maxChain = game.chainLen;
+    $('game-chain-count').textContent = game.chainLen;
     addChainPill(word.en);
 
-    // Combo display
-    if (game.combo >= 2) showCombo(game.combo);
-
     // Discover
-    if (!game.discoveredWords.includes(word.en)) {
-      game.discoveredWords.push(word.en);
+    if (!game.discoveredWords.includes(word.en)) game.discoveredWords.push(word.en);
+
+    // Combo display
+    updateCombo();
+    if (game.combo % 5 === 0 && game.combo > 0) {
+      SFX.combo(game.combo);
+      screenFlash('white');
     }
 
-    // Check stretch success
+    // Background intensity
+    updateBg(game.combo);
+
+    // Particles
+    const rect = btn.getBoundingClientRect();
+    const contRect = $('game-container').getBoundingClientRect();
+    const px = rect.left + rect.width / 2 - contRect.left;
+    const py = rect.top + rect.height / 2 - contRect.top;
+    emitParticles(px, py, 15, ['#4ade80', '#22c55e', '#fbbf24', '#fff', '#a78bfa'], 5);
+
+    // Screen shake
+    shakeScreen(false);
+
+    // Flash correct letters
+    flashCorrectLetters();
+
+    // Stretch check
     const userLevel = userDoc ? (GRADE_EIKEN_MAP[userDoc.grade] || 0) : 0;
     const isStretch = eikenDifficulty(word.eiken) > userLevel;
+    if (isStretch) {
+      SFX.stretch();
+      showStretchBanner(word);
+      emitParticles(px, py, 40, ['#fbbf24', '#f59e0b', '#fde047', '#fff'], 7);
+      shakeScreen(true);
+      if (!game.stretchSuccesses.find(s => s.en === word.en)) {
+        game.stretchSuccesses.push({ en: word.en, eiken: word.eiken });
+      }
+    }
 
+    // Show eiken float
+    showFloatFeedback(word);
+
+    // Speak the word
+    speakWord(word.en);
+
+    // Next word quickly
     setTimeout(() => {
-      showCorrectFeedback(word, isStretch);
-    }, 400);
+      game.wordIdx++;
+      // Check if family complete
+      if (game.wordIdx >= currentFamily().words.length) {
+        SFX.chainComplete();
+        addTime(TIME_BONUS_CHAIN);
+        showChainComplete();
+        setTimeout(() => nextFamily(), 600);
+      } else {
+        presentWord();
+      }
+    }, 350);
+
   } else {
+    btn.classList.add('wrong');
+    SFX.wrong();
     game.wordsMissed++;
     game.combo = 0;
-    removeComboDisplay();
+    updateCombo();
+    updateBg(0);
+
+    // Show correct answer
+    document.querySelectorAll('.choice-btn').forEach(b => {
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+
+    // Penalty
+    addTime(-TIME_PENALTY_WRONG);
+
+    // Shake
+    shakeScreen(false);
+
+    // Red particles
+    const rect = btn.getBoundingClientRect();
+    const contRect = $('game-container').getBoundingClientRect();
+    emitParticles(rect.left + rect.width / 2 - contRect.left, rect.top + rect.height / 2 - contRect.top, 8, ['#ef4444','#f97316','#fca5a5'], 3);
+
     setTimeout(() => {
-      showWrongFeedback(word);
+      game.chainLen = 0;
+      $('game-chain-count').textContent = '0';
+      $('chain-visual').innerHTML = '';
+      nextFamily();
     }, 500);
   }
+}
+
+function nextFamily() {
+  if (game.gameOver) return;
+  game.familyIdx++;
+  game.wordIdx = 0;
+  game.chainLen = 0;
+  game.chain = [];
+  $('game-chain-count').textContent = '0';
+  $('chain-visual').innerHTML = '';
+  if (game.familyIdx >= game.families.length) {
+    game.families = shuffleArray(CHAIN_FAMILIES.filter(f => f.words.length >= 2));
+    game.familyIdx = 0;
+  }
+  presentWord();
+}
+
+// ===== Visual Effects =====
+function shakeScreen(big) {
+  const c = $('game-container');
+  c.classList.remove('shake', 'big-shake');
+  void c.offsetWidth;
+  c.classList.add(big ? 'big-shake' : 'shake');
+  setTimeout(() => c.classList.remove('shake', 'big-shake'), big ? 300 : 150);
+}
+
+function screenFlash(type) {
+  const el = $('screen-flash');
+  el.classList.remove('flash-white', 'flash-gold');
+  void el.offsetWidth;
+  el.classList.add('flash-' + type);
+  setTimeout(() => el.classList.remove('flash-white', 'flash-gold'), 100);
+}
+
+function flashCorrectLetters() {
+  document.querySelectorAll('.word-letter.blank').forEach(el => {
+    const word = currentWord();
+    const diff = game.currentDiff;
+    const idx = parseInt(el.dataset.blankIdx);
+    el.textContent = diff.chunk[idx] || '';
+    el.classList.remove('blank');
+    el.classList.add('correct-flash');
+  });
+}
+
+function animateScore(added) {
+  const target = game.score;
+  const el = $('game-score');
+  el.classList.remove('score-pop');
+  void el.offsetWidth;
+  el.classList.add('score-pop');
+  let current = target - added;
+  const step = Math.ceil(added / 8);
+  const anim = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = current;
+    if (current >= target) clearInterval(anim);
+  }, 25);
+  setTimeout(() => el.classList.remove('score-pop'), 300);
+}
+
+function showScorePopup(text) {
+  const el = document.createElement('div');
+  el.className = 'float-feedback';
+  el.style.cssText = 'font-size:1.4rem;font-weight:900;color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,0.6)';
+  el.textContent = text;
+  $('game-container').appendChild(el);
+  setTimeout(() => el.remove(), 800);
+}
+
+function showFloatFeedback(word) {
+  const el = document.createElement('div');
+  el.className = 'float-feedback';
+  el.style.top = '40%';
+  el.innerHTML = `${word.en} <span class="fb-eiken">${EIKEN_LABELS[word.eiken]}</span>`;
+  $('game-container').appendChild(el);
+  setTimeout(() => el.remove(), 800);
+}
+
+function showStretchBanner(word) {
+  const el = $('stretch-banner');
+  el.textContent = `\u{1F31F} 背伸び成功！ ${word.en} = ${EIKEN_LABELS[word.eiken]}`;
+  el.classList.remove('hidden');
+  void el.offsetWidth;
+  el.style.animation = 'none';
+  void el.offsetWidth;
+  el.style.animation = '';
+  setTimeout(() => el.classList.add('hidden'), 1200);
+}
+
+function showChainComplete() {
+  const el = $('chain-complete-banner');
+  el.textContent = 'CHAIN COMPLETE!';
+  el.classList.remove('hidden');
+  el.style.animation = 'none';
+  void el.offsetWidth;
+  el.style.animation = '';
+  screenFlash('gold');
+  // Big center particles
+  const c = $('game-container');
+  emitParticles(c.offsetWidth / 2, c.offsetHeight / 3, 30, ['#667eea','#764ba2','#fbbf24','#4ade80','#fff'], 6);
+  setTimeout(() => el.classList.add('hidden'), 1000);
+}
+
+function updateCombo() {
+  const area = $('combo-area');
+  if (game.combo < 2) { area.innerHTML = ''; return; }
+  const size = Math.min(1.5 + game.combo * 0.12, 3.5);
+  area.innerHTML = `<span class="combo-text pop" style="font-size:${size}rem">${game.combo} COMBO</span>`;
+  setTimeout(() => {
+    const t = area.querySelector('.combo-text');
+    if (t) t.classList.remove('pop');
+  }, 200);
+}
+
+function updateBg(combo) {
+  const c = $('game-container');
+  if (!c) return;
+  const intensity = Math.min(combo * 3, 40);
+  c.style.background = `hsl(${230 + combo * 2}, ${15 + intensity}%, ${4 + intensity * 0.15}%)`;
 }
 
 function addChainPill(word) {
@@ -445,94 +759,45 @@ function addChainPill(word) {
   pill.className = 'chain-word-pill';
   pill.textContent = word;
   $('chain-visual').appendChild(pill);
-  // Scroll to end
   $('chain-visual').scrollLeft = $('chain-visual').scrollWidth;
 }
 
-function showCombo(n) {
-  removeComboDisplay();
-  const div = document.createElement('div');
-  div.className = 'combo-display';
-  div.id = 'combo-display';
-  div.innerHTML = `<div class="combo-num">${n}</div><div class="combo-label">COMBO</div>`;
-  document.body.appendChild(div);
-}
-function removeComboDisplay() {
-  const el = $('combo-display');
-  if (el) el.remove();
-}
+// Speak button
+$('btn-speak').addEventListener('click', () => {
+  const word = currentWord();
+  if (word) speakWord(word.en);
+});
 
-function showCorrectFeedback(word, isStretch) {
-  const fb = $('game-feedback');
-  const content = $('feedback-content');
-
-  let html = `<div class="feedback-emoji">✨</div>`;
-  html += `<div class="feedback-word">${word.en}</div>`;
-  html += `<div class="feedback-ph">${word.ph}</div>`;
-  html += `<div class="feedback-meaning">${word.ja}</div>`;
-  html += `<div class="feedback-eiken">${EIKEN_LABELS[word.eiken]}</div>`;
-
-  if (isStretch) {
-    html += `<div class="feedback-stretch">🌟 背伸び成功！すごい！</div>`;
-    if (!game.stretchSuccesses.find(s => s.en === word.en)) {
-      game.stretchSuccesses.push({ en: word.en, eiken: word.eiken });
-    }
-  }
-
-  content.innerHTML = html;
-  fb.classList.remove('hidden');
-
-  const delay = isStretch ? 1800 : 1200;
-  setTimeout(() => {
-    fb.classList.add('hidden');
-    game.currentWordIndex++;
-    presentWord();
-  }, delay);
-}
-
-function showWrongFeedback(word) {
-  const fb = $('game-feedback');
-  const content = $('feedback-content');
-  content.innerHTML = `
-    <div class="feedback-emoji">💥</div>
-    <div class="feedback-word" style="color:#ef4444">${word.en}</div>
-    <div class="feedback-ph">${word.ph}</div>
-    <div class="feedback-meaning">${word.ja}</div>
-    <div style="color:#94a3b8;font-size:0.85rem;margin-top:8px">チェーンが切れた！次のファミリーへ</div>
-  `;
-  fb.classList.remove('hidden');
-  setTimeout(() => {
-    fb.classList.add('hidden');
-    nextFamily();
-  }, 1500);
-}
-
-// Quit game
+// Quit
 $('btn-quit-game').addEventListener('click', () => endGame());
 
+// ===== End Game =====
 async function endGame() {
+  if (game.gameOver) return;
   game.gameOver = true;
-  removeComboDisplay();
+  clearInterval(gameTimer);
+  clearInterval(tickTimer);
+  SFX.gameOver();
 
-  // Show results
   show('screen-results');
   showTab(false);
 
-  const chainLen = game.chain.length;
-  $('results-title').textContent = chainLen >= 20 ? '🏆 すごすぎる！' :
-                                    chainLen >= 10 ? '🎉 やったね！' :
-                                    chainLen >= 5  ? '👏 いい感じ！' : '💪 がんばった！';
+  const wpm = game.totalAnswered > 0 ? Math.round(game.wordsCorrect / ((Date.now() - game.startedAt) / 60000)) : 0;
+
+  $('results-title').textContent = game.score >= 2000 ? '🏆 神！' :
+                                    game.score >= 1000 ? '🌟 すごすぎる！' :
+                                    game.score >= 500 ? '🎉 やったね！' :
+                                    game.score >= 200 ? '👏 いい感じ！' : '💪 がんばった！';
 
   $('results-score-num').textContent = game.score;
 
   $('results-stats').innerHTML = `
-    <div class="result-stat"><div class="result-stat-num">${game.wordsCorrect}</div><div class="result-stat-label">正解した単語</div></div>
-    <div class="result-stat"><div class="result-stat-num">${chainLen}</div><div class="result-stat-label">最長チェーン</div></div>
+    <div class="result-stat"><div class="result-stat-num">${game.wordsCorrect}</div><div class="result-stat-label">正解</div></div>
+    <div class="result-stat"><div class="result-stat-num">${game.maxChain}</div><div class="result-stat-label">最長チェーン</div></div>
     <div class="result-stat"><div class="result-stat-num">${game.maxCombo}</div><div class="result-stat-label">最大コンボ</div></div>
-    <div class="result-stat"><div class="result-stat-num">${game.stretchSuccesses.length}</div><div class="result-stat-label">背伸び成功</div></div>
+    <div class="result-stat"><div class="result-stat-num">${wpm}</div><div class="result-stat-label">語/分</div></div>
   `;
 
-  // Stretch successes
   if (game.stretchSuccesses.length > 0) {
     $('results-stretch').innerHTML = '<div style="font-size:0.9rem;font-weight:700;margin-bottom:8px;color:#fbbf24">🌟 背伸び成功した単語</div>' +
       game.stretchSuccesses.map(s => `
@@ -545,12 +810,13 @@ async function endGame() {
     $('results-stretch').innerHTML = '';
   }
 
-  // Discovered words list
   if (game.discoveredWords.length > 0) {
     $('results-words').innerHTML = game.discoveredWords.map(w => {
       const word = ALL_WORDS.find(aw => aw.en === w);
       return word ? `<div class="rw-item"><span>${w} ${word.ph}</span><span>${word.ja}</span></div>` : '';
     }).join('');
+  } else {
+    $('results-words').innerHTML = '';
   }
 
   // Save to Firestore
@@ -561,26 +827,19 @@ async function endGame() {
       totalCorrect: firebase.firestore.FieldValue.increment(game.wordsCorrect),
     };
     if (game.score > (userDoc.highScore || 0)) updates.highScore = game.score;
-    if (chainLen > (userDoc.longestChain || 0)) updates.longestChain = chainLen;
+    if (game.maxChain > (userDoc.longestChain || 0)) updates.longestChain = game.maxChain;
     if (game.stretchSuccesses.length > 0) {
       updates.stretchCount = firebase.firestore.FieldValue.increment(game.stretchSuccesses.length);
     }
-
-    // Discovered words
     const existing = userDoc.discoveredWords || [];
     const newWords = game.discoveredWords.filter(w => !existing.includes(w));
-    if (newWords.length > 0) {
-      updates.discoveredWords = firebase.firestore.FieldValue.arrayUnion(...newWords);
-    }
+    if (newWords.length > 0) updates.discoveredWords = firebase.firestore.FieldValue.arrayUnion(...newWords);
 
-    // Weekly score
     const weekStart = getWeekStart(today);
     if (userDoc.weekScoreDate !== weekStart || game.score > (userDoc.weekScore || 0)) {
       updates.weekScore = game.score;
       updates.weekScoreDate = weekStart;
     }
-
-    // Streak
     const lastPlay = userDoc.lastPlayDate || '';
     if (lastPlay !== today) {
       const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
@@ -588,44 +847,32 @@ async function endGame() {
       updates.streak = newStreak;
       if (newStreak > (userDoc.bestStreak || 0)) updates.bestStreak = newStreak;
       updates.lastPlayDate = today;
-      // Daily log
-      updates[`dailyLog.${today}`] = {
-        games: firebase.firestore.FieldValue.increment(1),
-        correct: game.wordsCorrect,
-        score: game.score,
-      };
+      updates[`dailyLog.${today}`] = { games: firebase.firestore.FieldValue.increment(1), correct: game.wordsCorrect, score: game.score };
     }
-
     try {
       await db.collection('users').doc(currentUser.uid).update(updates);
-      // Refresh local doc
       const freshDoc = await db.collection('users').doc(currentUser.uid).get();
       userDoc = freshDoc.data();
-    } catch (e) {
-      console.error('Save error:', e);
-    }
+    } catch (e) { console.error('Save error:', e); }
   }
 }
 
 function getWeekStart(dateStr) {
   const d = new Date(dateStr);
   const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   return new Date(d.setDate(diff)).toISOString().slice(0, 10);
 }
 
-$('btn-retry').addEventListener('click', () => startGame(game.difficulty));
+$('btn-retry').addEventListener('click', () => startGame());
 $('btn-results-home').addEventListener('click', () => enterHome());
 
 // ===== Encyclopedia =====
 function enterEncyclopedia() {
-  show('screen-encyclopedia');
-  showTab(true);
-  setActiveTab('encyclopedia');
+  show('screen-encyclopedia'); showTab(true); setActiveTab('encyclopedia');
   renderEncyclopedia('all');
 }
 $('btn-back-enc').addEventListener('click', () => enterHome());
-
 document.querySelectorAll('#enc-filter .chip').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('#enc-filter .chip').forEach(b => b.classList.remove('active'));
@@ -633,56 +880,40 @@ document.querySelectorAll('#enc-filter .chip').forEach(btn => {
     renderEncyclopedia(btn.dataset.eiken);
   });
 });
-
 function renderEncyclopedia(filterEiken) {
   const discovered = userDoc ? (userDoc.discoveredWords || []) : [];
   const list = $('enc-list');
   list.innerHTML = '';
-
-  let totalWords = 0;
-  let discoveredCount = 0;
-
+  let totalWords = 0, discoveredCount = 0;
   CHAIN_FAMILIES.forEach(fam => {
     const filtered = fam.words.filter(w => filterEiken === 'all' || String(w.eiken) === filterEiken);
     if (filtered.length === 0) return;
-
     const famDiv = document.createElement('div');
     famDiv.className = 'enc-family';
     famDiv.innerHTML = `<div class="enc-family-title">${fam.theme}</div>`;
-
     filtered.forEach(w => {
-      const isDiscovered = discovered.includes(w.en);
+      const isDisc = discovered.includes(w.en);
       totalWords++;
-      if (isDiscovered) discoveredCount++;
-
+      if (isDisc) discoveredCount++;
       const row = document.createElement('div');
-      row.className = 'enc-word' + (isDiscovered ? '' : ' locked');
+      row.className = 'enc-word' + (isDisc ? '' : ' locked');
       row.innerHTML = `
         <span class="enc-word-en">${w.en}</span>
-        <span class="enc-word-ph">${isDiscovered ? w.ph : '???'}</span>
-        <span class="enc-word-ja">${isDiscovered ? w.ja : '???'}</span>
+        <span class="enc-word-ph">${isDisc ? w.ph : '???'}</span>
+        <span class="enc-word-ja">${isDisc ? w.ja : '???'}</span>
         <span class="enc-word-eiken">${EIKEN_LABELS[w.eiken]}</span>
       `;
       famDiv.appendChild(row);
     });
     list.appendChild(famDiv);
   });
-
-  $('enc-stats').textContent = `${discoveredCount} / ${totalWords} 単語を発見済み (${totalWords > 0 ? Math.round(discoveredCount/totalWords*100) : 0}%)`;
+  $('enc-stats').textContent = `${discoveredCount} / ${totalWords} 単語を発見済み (${totalWords > 0 ? Math.round(discoveredCount / totalWords * 100) : 0}%)`;
 }
 
 // ===== Rankings =====
-let rankTab = 'all';
-let rankPeriod = 'week';
-
-function enterRanking() {
-  show('screen-ranking');
-  showTab(true);
-  setActiveTab('ranking');
-  loadRankings();
-}
+let rankTab = 'all', rankPeriod = 'week';
+function enterRanking() { show('screen-ranking'); showTab(true); setActiveTab('ranking'); loadRankings(); }
 $('btn-back-rank').addEventListener('click', () => enterHome());
-
 document.querySelectorAll('.rank-tab').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.rank-tab').forEach(b => b.classList.remove('active'));
@@ -699,107 +930,73 @@ document.querySelectorAll('#rank-period .chip').forEach(btn => {
     loadRankings();
   });
 });
-
 async function loadRankings() {
   const list = $('rank-list');
   list.innerHTML = '<div style="text-align:center;padding:20px;color:#888">読み込み中...</div>';
-
   try {
     let query = db.collection('users').where('role', '==', 'student');
-    if (rankTab === 'school' && userDoc && userDoc.schoolId) {
-      query = query.where('schoolId', '==', userDoc.schoolId);
-    }
-    if (rankTab === 'grade' && userDoc && userDoc.grade) {
-      query = query.where('grade', '==', userDoc.grade);
-    }
-
+    if (rankTab === 'school' && userDoc?.schoolId) query = query.where('schoolId', '==', userDoc.schoolId);
+    if (rankTab === 'grade' && userDoc?.grade) query = query.where('grade', '==', userDoc.grade);
     const scoreField = rankPeriod === 'week' ? 'weekScore' : 'highScore';
     const snap = await query.orderBy(scoreField, 'desc').limit(50).get();
-
     list.innerHTML = '';
-    if (snap.empty) {
-      list.innerHTML = '<div style="text-align:center;padding:20px;color:#888">まだデータがありません</div>';
-      return;
-    }
-
+    if (snap.empty) { list.innerHTML = '<div style="text-align:center;padding:20px;color:#888">まだデータがありません</div>'; return; }
     snap.docs.forEach((doc, i) => {
       const d = doc.data();
       const isMe = currentUser && doc.id === currentUser.uid;
+      const posText = i < 3 ? ['🥇', '🥈', '🥉'][i] : (i + 1);
       const posClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-      const posText = i < 3 ? ['🥇','🥈','🥉'][i] : (i + 1);
-      const gradeLabel = GRADE_LABELS[d.grade] || '';
       const item = document.createElement('div');
       item.className = 'rank-item' + (isMe ? ' me' : '');
       item.innerHTML = `
         <div class="rank-pos ${posClass}">${posText}</div>
-        <div class="rank-name">${d.nickname || '???'}${gradeLabel ? ' <span style="font-size:0.75rem;color:#888">' + gradeLabel + '</span>' : ''}</div>
+        <div class="rank-name">${d.nickname || '???'}${d.grade ? ' <span style="font-size:0.75rem;color:#888">' + (GRADE_LABELS[d.grade]||'') + '</span>' : ''}</div>
         <div class="rank-score">${d[scoreField] || 0} pt</div>
       `;
       list.appendChild(item);
     });
   } catch (e) {
-    console.error('Rankings error:', e);
     list.innerHTML = '<div style="text-align:center;padding:20px;color:#888">ランキングの読み込みに失敗しました</div>';
   }
 }
 
 // ===== My Page =====
 function enterMyPage() {
-  show('screen-mypage');
-  showTab(true);
-  setActiveTab('mypage');
+  show('screen-mypage'); showTab(true); setActiveTab('mypage');
   if (!userDoc) return;
-
   $('mypage-name').textContent = userDoc.nickname || '';
   $('mypage-grade').textContent = GRADE_LABELS[userDoc.grade] || '';
   $('mypage-school').textContent = userDoc.schoolId ? ('校舎: ' + userDoc.schoolId) : '';
-
   $('mypage-effort').innerHTML = `
     <div class="effort-item"><div class="effort-num">${userDoc.totalGames || 0}</div><div class="effort-label">プレイ回数</div></div>
     <div class="effort-item"><div class="effort-num">${userDoc.totalCorrect || 0}</div><div class="effort-label">正解数</div></div>
     <div class="effort-item"><div class="effort-num">${(userDoc.discoveredWords || []).length}</div><div class="effort-label">発見した単語</div></div>
     <div class="effort-item"><div class="effort-num">${userDoc.stretchCount || 0}</div><div class="effort-label">背伸び成功</div></div>
   `;
-
-  const streak = userDoc.streak || 0;
-  const best = userDoc.bestStreak || 0;
-  $('mypage-streak').innerHTML = `
-    <div style="font-size:2rem">🔥</div>
-    <div>
-      <div style="font-size:1.5rem;font-weight:800">${streak}日</div>
-      <div style="font-size:0.8rem;color:#888">最高: ${best}日</div>
-    </div>
-  `;
-
-  // Calendar
+  const streak = userDoc.streak || 0, best = userDoc.bestStreak || 0;
+  $('mypage-streak').innerHTML = `<div style="font-size:2rem">🔥</div><div><div style="font-size:1.5rem;font-weight:800">${streak}日</div><div style="font-size:0.8rem;color:#888">最高: ${best}日</div></div>`;
   renderCalendar();
 }
 $('btn-back-mypage').addEventListener('click', () => enterHome());
 $('btn-logout').addEventListener('click', () => auth.signOut());
-
 function renderCalendar() {
   const cal = $('mypage-calendar');
   const log = userDoc.dailyLog || {};
   const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+  const year = today.getFullYear(), month = today.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const monthLabel = `${year}年${month + 1}月`;
-
-  let html = `<div style="font-size:0.85rem;font-weight:600;margin-bottom:8px">${monthLabel}</div>`;
+  let html = `<div style="font-size:0.85rem;font-weight:600;margin-bottom:8px">${year}年${month + 1}月</div>`;
   html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">';
   ['日','月','火','水','木','金','土'].forEach(d => { html += `<div style="font-size:0.7rem;color:#888">${d}</div>`; });
-
   const firstDay = new Date(year, month, 1).getDay();
   for (let i = 0; i < firstDay; i++) html += '<div></div>';
-
   for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     const hasLog = log[dateStr];
     const isToday = d === today.getDate();
     const bg = hasLog ? '#667eea' : isToday ? '#e8e8e8' : 'transparent';
     const color = hasLog ? '#fff' : '#333';
-    html += `<div style="width:28px;height:28px;border-radius:50%;background:${bg};color:${color};display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:${hasLog?'700':'400'};margin:0 auto">${d}</div>`;
+    html += `<div style="width:28px;height:28px;border-radius:50%;background:${bg};color:${color};display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:${hasLog ? '700' : '400'};margin:0 auto">${d}</div>`;
   }
   html += '</div>';
   cal.innerHTML = html;
@@ -807,16 +1004,11 @@ function renderCalendar() {
 
 // ===== Admin =====
 function enterAdmin() {
-  show('screen-admin');
-  showTab(true);
-  setActiveTab('admin');
+  show('screen-admin'); showTab(true); setActiveTab('admin');
   $('admin-teacher-name').textContent = userDoc ? userDoc.nickname : '';
   loadAdminStudents();
 }
-
 $('btn-admin-logout').addEventListener('click', () => auth.signOut());
-
-// Admin tabs
 document.querySelectorAll('.admin-tab').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
@@ -828,7 +1020,6 @@ document.querySelectorAll('.admin-tab').forEach(btn => {
     else if (btn.dataset.adminTab === 'schools') loadAdminSchools();
   });
 });
-
 async function loadAdminStudents() {
   const list = $('admin-student-list');
   list.innerHTML = '<div style="text-align:center;padding:20px;color:#888">読み込み中...</div>';
@@ -840,30 +1031,18 @@ async function loadAdminStudents() {
       const d = doc.data();
       const row = document.createElement('div');
       row.className = 'admin-student-row';
-      row.innerHTML = `
-        <div class="admin-student-name">${d.nickname || '???'}</div>
-        <div class="admin-student-stats">
-          ${GRADE_LABELS[d.grade] || ''} | ${(d.discoveredWords||[]).length}語 | 🔥${d.streak||0}日 | HS:${d.highScore||0}
-        </div>
-      `;
+      row.innerHTML = `<div class="admin-student-name">${d.nickname || '???'}</div><div class="admin-student-stats">${GRADE_LABELS[d.grade] || ''} | ${(d.discoveredWords || []).length}語 | 🔥${d.streak || 0}日 | HS:${d.highScore || 0}</div>`;
       list.appendChild(row);
     });
-  } catch (e) {
-    list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>';
-  }
+  } catch (e) { list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>'; }
 }
-
 $('btn-admin-refresh').addEventListener('click', loadAdminStudents);
-
-// Search filter
 $('admin-search').addEventListener('input', () => {
   const q = $('admin-search').value.toLowerCase();
   document.querySelectorAll('.admin-student-row').forEach(row => {
     row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 });
-
-// Create teacher
 $('btn-create-teacher').addEventListener('click', async () => {
   const name = $('create-teacher-name').value.trim();
   const id = $('create-teacher-id').value.trim();
@@ -878,19 +1057,13 @@ $('btn-create-teacher').addEventListener('click', async () => {
     await db.collection('users').doc(cred.user.uid).set({
       nickname: name, loginId: id.toLowerCase(), role: 'teacher',
       schoolId: $('create-teacher-school')?.value || '',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      pw: pw,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(), pw,
     });
     await secAuth.signOut();
-    $('create-teacher-name').value = '';
-    $('create-teacher-id').value = '';
-    $('create-teacher-password').value = '';
+    $('create-teacher-name').value = ''; $('create-teacher-id').value = ''; $('create-teacher-password').value = '';
     loadAdminTeachers();
-  } catch (e) {
-    showError('create-teacher-error', '作成に失敗しました: ' + e.message);
-  }
+  } catch (e) { showError('create-teacher-error', '作成に失敗しました: ' + e.message); }
 });
-
 async function loadAdminTeachers() {
   const list = $('admin-teacher-list');
   list.innerHTML = '<div style="text-align:center;padding:20px;color:#888">読み込み中...</div>';
@@ -904,12 +1077,8 @@ async function loadAdminTeachers() {
       row.innerHTML = `<div class="admin-student-name">${d.nickname}</div><div class="admin-student-stats">ID: ${d.loginId}</div>`;
       list.appendChild(row);
     });
-  } catch (e) {
-    list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>';
-  }
+  } catch (e) { list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>'; }
 }
-
-// Schools
 $('btn-create-school').addEventListener('click', async () => {
   const name = $('create-school-name').value.trim();
   if (!name) return showError('create-school-error', '校舎名を入力してください');
@@ -917,40 +1086,27 @@ $('btn-create-school').addEventListener('click', async () => {
     await db.collection('schools').add({ name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
     $('create-school-name').value = '';
     loadAdminSchools();
-  } catch (e) {
-    showError('create-school-error', '追加に失敗しました');
-  }
+  } catch (e) { showError('create-school-error', '追加に失敗しました'); }
 });
-
 async function loadAdminSchools() {
   const list = $('admin-school-list');
   list.innerHTML = '<div style="text-align:center;padding:20px;color:#888">読み込み中...</div>';
   try {
     const snap = await db.collection('schools').get();
     list.innerHTML = '';
-    // Also populate teacher school dropdown
     const sel = $('create-teacher-school');
-    if (sel) { sel.innerHTML = '<option value="">校舎を選択</option>'; }
+    if (sel) sel.innerHTML = '<option value="">校舎を選択</option>';
     snap.docs.forEach(doc => {
       const d = doc.data();
       const row = document.createElement('div');
       row.className = 'admin-student-row';
       row.innerHTML = `<div class="admin-student-name">${d.name}</div>`;
       list.appendChild(row);
-      if (sel) {
-        const opt = document.createElement('option');
-        opt.value = doc.id;
-        opt.textContent = d.name;
-        sel.appendChild(opt);
-      }
+      if (sel) { const opt = document.createElement('option'); opt.value = doc.id; opt.textContent = d.name; sel.appendChild(opt); }
     });
     if (snap.empty) list.innerHTML = '<div style="padding:20px;color:#888">校舎がまだ登録されていません</div>';
-  } catch (e) {
-    list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>';
-  }
+  } catch (e) { list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>'; }
 }
-
-// Profile edit (simple)
 $('btn-edit-profile')?.addEventListener('click', () => {
   const newNick = prompt('新しいニックネームを入力してください', userDoc.nickname);
   if (newNick && newNick.trim()) {
