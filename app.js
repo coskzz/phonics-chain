@@ -134,6 +134,26 @@ function emitParticles(x, y, count, colors, speed) {
   }
   if (!particleRAF) tickParticles();
 }
+function emitEdgeParticles(containerW, containerH, count, colors, speed) {
+  const half = Math.ceil(count / 2);
+  for (let i = 0; i < count; i++) {
+    const fromLeft = i < half;
+    const x = fromLeft ? 0 : containerW;
+    const y = containerH * 0.2 + Math.random() * containerH * 0.4;
+    const angleBase = fromLeft ? (-Math.PI / 4 + Math.random() * Math.PI / 2) : (Math.PI * 0.75 + Math.random() * Math.PI / 2);
+    const v = (speed || 4) * (0.5 + Math.random());
+    particles.push({
+      x, y,
+      vx: Math.cos(angleBase) * v,
+      vy: Math.sin(angleBase) * v - 1.5,
+      life: 1,
+      decay: 0.012 + Math.random() * 0.015,
+      size: 3 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+    });
+  }
+  if (!particleRAF) tickParticles();
+}
 function tickParticles() {
   if (!particleCtx) return;
   particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
@@ -569,12 +589,11 @@ function handleChoice(chosen, correct, btn) {
     // Background intensity
     updateBg(game.combo);
 
-    // Particles
-    const rect = btn.getBoundingClientRect();
+    // Particles — edges only so they don't cover the word
     const contRect = $('game-container').getBoundingClientRect();
-    const px = rect.left + rect.width / 2 - contRect.left;
-    const py = rect.top + rect.height / 2 - contRect.top;
-    emitParticles(px, py, 15, ['#4ade80', '#22c55e', '#fbbf24', '#fff', '#a78bfa'], 5);
+    const cw = contRect.width;
+    const ch = contRect.height;
+    emitEdgeParticles(cw, ch, 12, ['#4ade80', '#22c55e', '#fbbf24', '#fff', '#a78bfa'], 5);
 
     // Screen shake
     shakeScreen(false);
@@ -588,7 +607,7 @@ function handleChoice(chosen, correct, btn) {
     if (isStretch) {
       SFX.stretch();
       showStretchBanner(word);
-      emitParticles(px, py, 40, ['#fbbf24', '#f59e0b', '#fde047', '#fff'], 7);
+      emitEdgeParticles(cw, ch, 40, ['#fbbf24', '#f59e0b', '#fde047', '#fff'], 7);
       shakeScreen(true);
       if (!game.stretchSuccesses.find(s => s.en === word.en)) {
         game.stretchSuccesses.push({ en: word.en, eiken: word.eiken });
@@ -634,10 +653,9 @@ function handleChoice(chosen, correct, btn) {
     // Shake
     shakeScreen(false);
 
-    // Red particles
-    const rect = btn.getBoundingClientRect();
-    const contRect = $('game-container').getBoundingClientRect();
-    emitParticles(rect.left + rect.width / 2 - contRect.left, rect.top + rect.height / 2 - contRect.top, 8, ['#ef4444','#f97316','#fca5a5'], 3);
+    // Red particles — edges
+    const contR = $('game-container').getBoundingClientRect();
+    emitEdgeParticles(contR.width, contR.height, 8, ['#ef4444','#f97316','#fca5a5'], 3);
 
     setTimeout(() => {
       game.chainLen = 0;
@@ -744,9 +762,9 @@ function showChainComplete() {
   void el.offsetWidth;
   el.style.animation = '';
   screenFlash('gold');
-  // Big center particles
+  // Big edge particles
   const c = $('game-container');
-  emitParticles(c.offsetWidth / 2, c.offsetHeight / 3, 30, ['#667eea','#764ba2','#fbbf24','#4ade80','#fff'], 6);
+  emitEdgeParticles(c.offsetWidth, c.offsetHeight, 30, ['#667eea','#764ba2','#fbbf24','#4ade80','#fff'], 6);
   setTimeout(() => el.classList.add('hidden'), 1000);
 }
 

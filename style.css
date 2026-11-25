@@ -134,7 +134,7 @@ body {
 @keyframes pillSpring { 0% { transform: scale(0) rotate(-15deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
 
 /* Word display */
-.game-word-area { text-align: center; padding: 12px 16px; flex: 0 0 auto; }
+.game-word-area { text-align: center; padding: 12px 16px; flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
 .word-family { font-size: 0.7rem; color: #64748b; margin-bottom: 2px; }
 .word-display-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
 .word-letters { display: flex; align-items: center; justify-content: center; gap: 2px; min-height: 56px; }
@@ -200,7 +200,7 @@ body {
 
 /* Floating feedback */
 .float-feedback {
-  position: absolute; top: 30%; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
   font-size: 0.85rem; font-weight: 700; color: #fde047;
   pointer-events: none; z-index: 30;
   animation: floatUp 0.8s ease-out forwards;
@@ -215,7 +215,7 @@ body {
 
 /* Stretch banner */
 .stretch-banner {
-  position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
   color: #000; font-weight: 900; font-size: 1.1rem;
   padding: 8px 24px; border-radius: 12px;
