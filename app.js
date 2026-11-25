@@ -437,6 +437,29 @@ function generateChoices(correctChunk) {
   return shuffleArray(choices);
 }
 
+function generateFirstWordChoices(correctWord, family) {
+  const choices = [correctWord];
+  const others = family.words
+    .map(w => w.en.toLowerCase())
+    .filter(w => w !== correctWord && w.length <= correctWord.length + 2 && w.length >= correctWord.length - 1);
+  const pool = shuffleArray(others);
+  for (const w of pool) {
+    if (choices.length >= 4) break;
+    if (!choices.includes(w)) choices.push(w);
+  }
+  // Fill from ALL_WORDS if not enough
+  if (choices.length < 4) {
+    const allPool = shuffleArray(ALL_WORDS
+      .map(w => w.en.toLowerCase())
+      .filter(w => w !== correctWord && w.length >= correctWord.length - 1 && w.length <= correctWord.length + 1 && !choices.includes(w)));
+    for (const w of allPool) {
+      if (choices.length >= 4) break;
+      choices.push(w);
+    }
+  }
+  return shuffleArray(choices);
+}
+
 // ===== Present Word =====
 function presentWord() {
   if (game.gameOver) return;
@@ -453,21 +476,13 @@ function presentWord() {
   $('word-meaning').textContent = word.ja;
 
   if (isFirst) {
-    // Show complete word as intro
-    renderWordLetters(word.en, -1, 0, '');
-    $('choices-area').innerHTML = '';
-    game.answering = false;
-    // Auto-advance
-    setTimeout(() => {
-      speakWord(word.en);
-      addChainPill(word.en);
-      game.chain.push(word.en);
-      game.chainLen++;
-      $('game-chain-count').textContent = game.chainLen;
-      if (!game.discoveredWords.includes(word.en)) game.discoveredWords.push(word.en);
-      game.wordIdx++;
-      presentWord();
-    }, 600);
+    // First word: show meaning, pick the whole word from 4 choices
+    renderWordLetters('_'.repeat(word.en.length), 0, word.en.length, '');
+    game.currentDiff = { blankStart: 0, blankLen: word.en.length, chunk: word.en.toLowerCase() };
+    game.targetWord = word.en.toLowerCase();
+    const choices = generateFirstWordChoices(word.en.toLowerCase(), fam);
+    renderChoices(choices, word.en.toLowerCase());
+    game.answering = true;
     return;
   }
 
