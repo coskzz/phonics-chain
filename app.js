@@ -61,11 +61,15 @@ function fromEmail(email) { return email.endsWith(EMAIL_DOMAIN) ? email.replace(
 
 // ===== Sound Engine (Web Audio API) =====
 let audioCtx = null;
+let seMuted = false;
+let bgmMuted = false;
+
 function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   return audioCtx;
 }
 function playTone(freq, duration, type, vol) {
+  if (seMuted) return;
   try {
     const ctx = getAudioCtx();
     const osc = ctx.createOscillator();
@@ -109,6 +113,98 @@ const SFX = {
     notes.forEach((f, i) => setTimeout(() => playTone(f, 0.25, 'sawtooth', 0.08), i * 150));
   },
 };
+
+// ===== BGM Engine =====
+let bgmNodes = [];
+let bgmInterval = null;
+let bgmDanger = false;
+
+function startBGM() {
+  stopBGM();
+  if (bgmMuted) return;
+  bgmDanger = false;
+  playBGMLoop();
+}
+function stopBGM() {
+  bgmNodes.forEach(n => { try { n.stop(); } catch(e) {} });
+  bgmNodes = [];
+  if (bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; }
+}
+function playBGMLoop() {
+  const normal = [
+    [261, 329, 392], [293, 349, 440], [329, 392, 523], [349, 440, 523],
+    [392, 493, 587], [349, 440, 523], [329, 392, 493], [293, 349, 440],
+  ];
+  const danger = [
+    [392, 493, 587], [440, 523, 659], [493, 587, 740], [523, 659, 784],
+    [493, 587, 740], [523, 659, 784], [587, 740, 880], [523, 659, 784],
+  ];
+  let step = 0;
+  const play = () => {
+    if (bgmMuted) return;
+    const ctx = getAudioCtx();
+    const chords = bgmDanger ? danger : normal;
+    const chord = chords[step % chords.length];
+    const tempo = bgmDanger ? 180 : 280;
+    chord.forEach(freq => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = bgmDanger ? 'sawtooth' : 'triangle';
+      osc.frequency.value = freq;
+      gain.gain.value = bgmDanger ? 0.04 : 0.025;
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (tempo / 1000));
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + (tempo / 1000));
+      bgmNodes.push(osc);
+    });
+    step++;
+  };
+  play();
+  bgmInterval = setInterval(play, bgmDanger ? 180 : 280);
+}
+function setBGMDanger(isDanger) {
+  if (isDanger === bgmDanger) return;
+  bgmDanger = isDanger;
+  if (!bgmMuted && bgmInterval) {
+    clearInterval(bgmInterval);
+    bgmInterval = setInterval(() => {
+      if (bgmMuted) return;
+      const ctx = getAudioCtx();
+      const danger = [
+        [392, 493, 587], [440, 523, 659], [493, 587, 740], [523, 659, 784],
+        [493, 587, 740], [523, 659, 784], [587, 740, 880], [523, 659, 784],
+      ];
+      const normal = [
+        [261, 329, 392], [293, 349, 440], [329, 392, 523], [349, 440, 523],
+        [392, 493, 587], [349, 440, 523], [329, 392, 493], [293, 349, 440],
+      ];
+      const chords = bgmDanger ? danger : normal;
+      const chord = chords[Math.floor(Math.random() * chords.length)];
+      const tempo = bgmDanger ? 180 : 280;
+      chord.forEach(freq => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = bgmDanger ? 'sawtooth' : 'triangle';
+        osc.frequency.value = freq;
+        gain.gain.value = bgmDanger ? 0.04 : 0.025;
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (tempo / 1000));
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + (tempo / 1000));
+      });
+    }, bgmDanger ? 180 : 280);
+  }
+}
+
+// Mute toggles
+try {
+  seMuted = localStorage.getItem('pc_se_muted') === '1';
+  bgmMuted = localStorage.getItem('pc_bgm_muted') === '1';
+} catch(e) {}
+
 
 // ===== Particle System =====
 let particles = [];
@@ -375,6 +471,8 @@ function startGame() {
   showTab(false);
   initParticles();
   resizeParticleCanvas();
+  startBGM();
+  updateSoundButtons();
   $('game-score').textContent = '0';
   $('game-chain-count').textContent = '0';
   $('chain-visual').innerHTML = '';
@@ -405,6 +503,7 @@ function startTimer() {
     const danger = game.timeLeft < 10;
     $('game-timer').classList.toggle('danger', danger);
     $('timer-bar').classList.toggle('danger', danger);
+    setBGMDanger(danger);
 
     if (game.timeLeft <= 0) {
       clearInterval(gameTimer);
@@ -871,12 +970,30 @@ $('btn-speak').addEventListener('click', () => {
 // Quit
 $('btn-quit-game').addEventListener('click', () => endGame());
 
+// Sound toggles
+function updateSoundButtons() {
+  $('btn-toggle-bgm')?.classList.toggle('muted', bgmMuted);
+  $('btn-toggle-se')?.classList.toggle('muted', seMuted);
+}
+$('btn-toggle-bgm')?.addEventListener('click', () => {
+  bgmMuted = !bgmMuted;
+  try { localStorage.setItem('pc_bgm_muted', bgmMuted ? '1' : '0'); } catch(e) {}
+  updateSoundButtons();
+  if (bgmMuted) stopBGM(); else if (!game.gameOver) startBGM();
+});
+$('btn-toggle-se')?.addEventListener('click', () => {
+  seMuted = !seMuted;
+  try { localStorage.setItem('pc_se_muted', seMuted ? '1' : '0'); } catch(e) {}
+  updateSoundButtons();
+});
+
 // ===== End Game =====
 async function endGame() {
   if (game.gameOver) return;
   game.gameOver = true;
   clearInterval(gameTimer);
   clearInterval(tickTimer);
+  stopBGM();
   SFX.gameOver();
 
   show('screen-results');

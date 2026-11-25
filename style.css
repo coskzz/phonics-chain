@@ -143,6 +143,9 @@ body {
 .score-label { font-size: 0.6rem; opacity: 0.6; }
 .game-chain-display { display: flex; align-items: center; gap: 3px; font-size: 1rem; font-weight: 700; color: #ff6eb4; }
 .chain-icon { font-size: 0.9rem; }
+.sound-controls { display: flex; gap: 4px; }
+.sound-btn { background: rgba(255,255,255,0.15); border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 0.8rem; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.sound-btn.muted { opacity: 0.3; text-decoration: line-through; }
 
 /* Combo */
 .combo-area { text-align: center; min-height: 36px; flex-shrink: 0; }
