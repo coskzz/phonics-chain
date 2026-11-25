@@ -31,11 +31,21 @@ const GRADE_EIKEN_MAP = {
   e1:0, e2:0, e3:0, e4:0, e5:1, e6:1,
   j1:2, j2:2, j3:3, h1:3, h2:4, h3:4, adult:5
 };
+const VOWELS = new Set('aeiou'.split(''));
+const CONSONANTS = 'bcdfghjklmnpqrstvwxyz'.split('');
+const VOWEL_LIST = 'aeiou'.split('');
 const ONSET_CLUSTERS = {
-  1: 'bcdfghjklmnpqrstvwxyz'.split(''),
+  1: CONSONANTS,
   2: ['bl','br','ch','cl','cr','dr','fl','fr','gl','gr','kn','ph','pl','pr','qu','sc','sh','sk','sl','sm','sn','sp','st','sw','th','tr','tw','wh','wr'],
   3: ['chr','sch','scr','shr','spl','spr','str','thr'],
 };
+const VOWEL_CLUSTERS = {
+  1: VOWEL_LIST,
+  2: ['ai','au','ay','ea','ee','ei','ey','ie','oa','oo','ou','ow','oy','ue','ui'],
+};
+function isVowelChunk(chunk) {
+  return chunk.split('').every(c => VOWELS.has(c));
+}
 const GAME_TIME = 60;
 const TIME_BONUS_CORRECT = 3;
 const TIME_BONUS_CHAIN = 5;
@@ -433,17 +443,20 @@ function findChunkDiff(prev, curr) {
 
 function generateChoices(correctChunk) {
   const len = correctChunk.length;
-  const pool = ONSET_CLUSTERS[len] || ONSET_CLUSTERS[1];
+  const vowelMode = isVowelChunk(correctChunk);
+  const pool = vowelMode
+    ? (VOWEL_CLUSTERS[len] || VOWEL_LIST)
+    : (ONSET_CLUSTERS[len] || ONSET_CLUSTERS[1]);
   const choices = [correctChunk];
   const candidates = shuffleArray(pool.filter(c => c !== correctChunk));
   for (const c of candidates) {
     if (choices.length >= 4) break;
     if (c.length === len) choices.push(c);
   }
-  // If not enough same-length, generate random
   while (choices.length < 4) {
     let r = '';
-    for (let i = 0; i < len; i++) r += 'bcdfghjklmnpqrstvwxyz'[Math.floor(Math.random() * 21)];
+    const src = vowelMode ? VOWEL_LIST : CONSONANTS;
+    for (let i = 0; i < len; i++) r += src[Math.floor(Math.random() * src.length)];
     if (!choices.includes(r)) choices.push(r);
   }
   return shuffleArray(choices);
@@ -515,6 +528,8 @@ function presentWord() {
 }
 
 // ===== Render letter blocks =====
+const VOWEL_COLOR = '#FF6B6B';
+const CONSONANT_COLOR = '#4ECDC4';
 const BLOCK_COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#e91e8c','#DDA0DD','#f59e0b','#98D8C8','#8b5cf6','#ef4444'];
 
 function renderWordLetters(word, blankStart, blankLen, chunk) {
@@ -541,8 +556,7 @@ function renderWordLetters(word, blankStart, blankLen, chunk) {
       span.dataset.blankIdx = i - blankStart;
     } else {
       span.textContent = letters[i];
-      const ci = i % BLOCK_COLORS.length;
-      span.style.background = BLOCK_COLORS[ci];
+      span.style.background = VOWELS.has(letters[i]) ? VOWEL_COLOR : CONSONANT_COLOR;
     }
     container.appendChild(span);
   }
