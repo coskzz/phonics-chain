@@ -178,30 +178,39 @@ function tickParticles() {
   }
 }
 
-// ===== Speech (Google TTS) =====
-let speechAudio = null;
+// ===== Speech =====
+let enVoice = null;
+let voicesLoaded = false;
+function loadEnVoice() {
+  if (voicesLoaded) return;
+  const voices = window.speechSynthesis?.getVoices() || [];
+  if (voices.length === 0) return;
+  voicesLoaded = true;
+  // Priority: high-quality en-US voices
+  enVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Samantha'))
+         || voices.find(v => v.lang === 'en-US' && v.name.includes('Karen'))
+         || voices.find(v => v.lang === 'en-US' && v.name.includes('Daniel'))
+         || voices.find(v => v.lang === 'en-US' && v.name.includes('Google'))
+         || voices.find(v => v.lang === 'en-US')
+         || voices.find(v => v.lang === 'en-GB')
+         || voices.find(v => v.lang.startsWith('en'));
+}
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = loadEnVoice;
+  loadEnVoice();
+}
+
 function speakWord(word) {
   try {
-    if (speechAudio) { speechAudio.pause(); speechAudio = null; }
-    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodeURIComponent(word)}`;
-    speechAudio = new Audio(url);
-    speechAudio.playbackRate = 0.9;
-    speechAudio.play().catch(() => {
-      // Fallback to browser speechSynthesis
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(word);
-        u.lang = 'en-US';
-        u.rate = 0.85;
-        u.pitch = 1.0;
-        const voices = window.speechSynthesis.getVoices();
-        const good = voices.find(v => v.lang === 'en-US' && v.name.includes('Samantha'))
-                  || voices.find(v => v.lang === 'en-US' && !v.localService === false)
-                  || voices.find(v => v.lang.startsWith('en'));
-        if (good) u.voice = good;
-        window.speechSynthesis.speak(u);
-      }
-    });
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    loadEnVoice();
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = 'en-US';
+    u.rate = 0.85;
+    u.pitch = 1.0;
+    if (enVoice) u.voice = enVoice;
+    window.speechSynthesis.speak(u);
   } catch(e) {}
 }
 
