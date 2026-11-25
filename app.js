@@ -114,89 +114,148 @@ const SFX = {
   },
 };
 
-// ===== BGM Engine =====
-let bgmNodes = [];
-let bgmInterval = null;
+// ===== BGM Engine (beat + bass + melody + drums) =====
+let bgmTimeout = null;
 let bgmDanger = false;
+let bgmMaster = null;
+let bgmStep = 0;
 
 function startBGM() {
   stopBGM();
   if (bgmMuted) return;
   bgmDanger = false;
-  playBGMLoop();
+  bgmStep = 0;
+  try {
+    const ctx = getAudioCtx();
+    bgmMaster = ctx.createGain();
+    bgmMaster.gain.value = 0.5;
+    bgmMaster.connect(ctx.destination);
+    bgmTick();
+  } catch(e) {}
 }
 function stopBGM() {
-  bgmNodes.forEach(n => { try { n.stop(); } catch(e) {} });
-  bgmNodes = [];
-  if (bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; }
+  if (bgmTimeout) { clearTimeout(bgmTimeout); bgmTimeout = null; }
+  bgmMaster = null;
 }
-function playBGMLoop() {
-  const normal = [
-    [261, 329, 392], [293, 349, 440], [329, 392, 523], [349, 440, 523],
-    [392, 493, 587], [349, 440, 523], [329, 392, 493], [293, 349, 440],
-  ];
-  const danger = [
-    [392, 493, 587], [440, 523, 659], [493, 587, 740], [523, 659, 784],
-    [493, 587, 740], [523, 659, 784], [587, 740, 880], [523, 659, 784],
-  ];
-  let step = 0;
-  const play = () => {
-    if (bgmMuted) return;
-    const ctx = getAudioCtx();
-    const chords = bgmDanger ? danger : normal;
-    const chord = chords[step % chords.length];
-    const tempo = bgmDanger ? 180 : 280;
-    chord.forEach(freq => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = bgmDanger ? 'sawtooth' : 'triangle';
-      osc.frequency.value = freq;
-      gain.gain.value = bgmDanger ? 0.04 : 0.025;
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (tempo / 1000));
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + (tempo / 1000));
-      bgmNodes.push(osc);
-    });
-    step++;
-  };
-  play();
-  bgmInterval = setInterval(play, bgmDanger ? 180 : 280);
+
+function playNoise(dur, vol, hpFreq) {
+  const ctx = getAudioCtx();
+  if (!bgmMaster) return;
+  const bufSize = ctx.sampleRate * dur;
+  const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const hp = ctx.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.value = hpFreq || 7000;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(vol, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+  src.connect(hp);
+  hp.connect(g);
+  g.connect(bgmMaster);
+  src.start(ctx.currentTime);
 }
+
+function playDrum(type) {
+  const ctx = getAudioCtx();
+  if (!bgmMaster) return;
+  const g = ctx.createGain();
+  const osc = ctx.createOscillator();
+  if (type === 'kick') {
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.12);
+    g.gain.setValueAtTime(0.25, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    osc.connect(g); g.connect(bgmMaster);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.15);
+  } else if (type === 'snare') {
+    osc.type = 'triangle';
+    osc.frequency.value = 200;
+    g.gain.setValueAtTime(0.1, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+    osc.connect(g); g.connect(bgmMaster);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.08);
+    playNoise(0.1, 0.12, 4000);
+  } else if (type === 'hihat') {
+    playNoise(0.04, 0.06, 9000);
+  } else if (type === 'ohh') {
+    playNoise(0.12, 0.08, 7000);
+  }
+}
+
+function playBass(freq, dur) {
+  const ctx = getAudioCtx();
+  if (!bgmMaster) return;
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.value = freq;
+  g.gain.setValueAtTime(0.08, ctx.currentTime);
+  g.gain.linearRampToValueAtTime(0.0, ctx.currentTime + dur * 0.8);
+  osc.connect(g); g.connect(bgmMaster);
+  osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
+}
+
+function playMelody(freq, dur) {
+  const ctx = getAudioCtx();
+  if (!bgmMaster) return;
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = bgmDanger ? 'sawtooth' : 'triangle';
+  osc.frequency.value = freq;
+  g.gain.setValueAtTime(0.06, ctx.currentTime);
+  g.gain.linearRampToValueAtTime(0.0, ctx.currentTime + dur * 0.7);
+  osc.connect(g); g.connect(bgmMaster);
+  osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
+}
+
+// Normal: 4/4 hip-hop groove, 130BPM
+// Danger: double-time 160BPM, more aggressive
+const BASS_NORMAL = [130, 0, 130, 0, 174, 0, 164, 0, 130, 0, 130, 0, 196, 0, 174, 0];
+const BASS_DANGER = [196, 0, 196, 233, 0, 261, 233, 0, 196, 0, 196, 261, 0, 233, 196, 0];
+const MELODY_NORMAL = [0, 523, 0, 659, 0, 0, 587, 0, 0, 523, 0, 0, 659, 0, 784, 0];
+const MELODY_DANGER = [784, 0, 880, 0, 784, 659, 0, 784, 880, 0, 1047, 0, 880, 784, 0, 659];
+// Drum pattern: K=kick S=snare H=hihat O=open-hh
+const DRUM_NORMAL =  ['K','H','H','H', 'S','H','K','H', 'K','H','H','H', 'S','H','K','H'];
+const DRUM_DANGER =  ['K','H','S','H', 'K','S','K','H', 'S','K','S','H', 'K','S','K','S'];
+
+function bgmTick() {
+  if (bgmMuted || !bgmMaster) return;
+  const bpm = bgmDanger ? 160 : 130;
+  const beatMs = (60000 / bpm) / 4; // 16th notes
+  const beatSec = beatMs / 1000;
+  const idx = bgmStep % 16;
+
+  // Drums
+  const dp = bgmDanger ? DRUM_DANGER : DRUM_NORMAL;
+  const d = dp[idx];
+  if (d === 'K') playDrum('kick');
+  else if (d === 'S') playDrum('snare');
+  else if (d === 'H') playDrum('hihat');
+  else if (d === 'O') playDrum('ohh');
+
+  // Bass (every other step)
+  const bp = bgmDanger ? BASS_DANGER : BASS_NORMAL;
+  const bf = bp[idx];
+  if (bf > 0) playBass(bf, beatSec * 1.8);
+
+  // Melody (sparse hits)
+  const mp = bgmDanger ? MELODY_DANGER : MELODY_NORMAL;
+  const mf = mp[idx];
+  if (mf > 0) playMelody(mf, beatSec * 1.5);
+
+  bgmStep++;
+  bgmTimeout = setTimeout(bgmTick, beatMs);
+}
+
 function setBGMDanger(isDanger) {
   if (isDanger === bgmDanger) return;
   bgmDanger = isDanger;
-  if (!bgmMuted && bgmInterval) {
-    clearInterval(bgmInterval);
-    bgmInterval = setInterval(() => {
-      if (bgmMuted) return;
-      const ctx = getAudioCtx();
-      const danger = [
-        [392, 493, 587], [440, 523, 659], [493, 587, 740], [523, 659, 784],
-        [493, 587, 740], [523, 659, 784], [587, 740, 880], [523, 659, 784],
-      ];
-      const normal = [
-        [261, 329, 392], [293, 349, 440], [329, 392, 523], [349, 440, 523],
-        [392, 493, 587], [349, 440, 523], [329, 392, 493], [293, 349, 440],
-      ];
-      const chords = bgmDanger ? danger : normal;
-      const chord = chords[Math.floor(Math.random() * chords.length)];
-      const tempo = bgmDanger ? 180 : 280;
-      chord.forEach(freq => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = bgmDanger ? 'sawtooth' : 'triangle';
-        osc.frequency.value = freq;
-        gain.gain.value = bgmDanger ? 0.04 : 0.025;
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (tempo / 1000));
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + (tempo / 1000));
-      });
-    }, bgmDanger ? 180 : 280);
-  }
+  if (bgmMaster) bgmMaster.gain.value = isDanger ? 0.6 : 0.5;
 }
 
 // Mute toggles
