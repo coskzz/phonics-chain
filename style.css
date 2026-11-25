@@ -172,7 +172,7 @@ body {
   max-width: 100%;
 }
 
-.word-letters { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 48px; flex-wrap: nowrap; }
+.word-letters { display: flex; align-items: center; justify-content: center; gap: 3px; min-height: 48px; flex-wrap: nowrap; overflow: hidden; }
 
 /* Letter tiles — Phonics Machine style */
 .word-letter {

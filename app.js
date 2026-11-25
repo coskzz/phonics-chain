@@ -336,7 +336,16 @@ let tickTimer = null;
 $('btn-play').addEventListener('click', () => startGame());
 
 function startGame() {
-  const families = shuffleArray(CHAIN_FAMILIES.filter(f => f.words.length >= 2));
+  const allFamilies = CHAIN_FAMILIES.filter(f => f.words.length >= 2);
+  const avgLen = f => f.words.reduce((s, w) => s + w.en.length, 0) / f.words.length;
+  allFamilies.sort((a, b) => avgLen(a) - avgLen(b));
+  // Group into easy/medium/hard thirds, shuffle within each group
+  const third = Math.ceil(allFamilies.length / 3);
+  const families = [
+    ...shuffleArray(allFamilies.slice(0, third)),
+    ...shuffleArray(allFamilies.slice(third, third * 2)),
+    ...shuffleArray(allFamilies.slice(third * 2)),
+  ];
   if (families.length === 0) return;
 
   game = {
@@ -546,6 +555,9 @@ function renderWordLetters(word, blankStart, blankLen, chunk) {
   const container = $('word-letters');
   container.innerHTML = '';
   const letters = word.toLowerCase().split('');
+  const len = letters.length;
+  const tileSize = len <= 5 ? 44 : len <= 7 ? 38 : len <= 9 ? 32 : 26;
+  const fontSize = len <= 5 ? 1.6 : len <= 7 ? 1.3 : len <= 9 ? 1.1 : 0.9;
 
   // Show previous word ABOVE the board
   const prevLabel = document.querySelector('.word-prev-label');
@@ -562,6 +574,9 @@ function renderWordLetters(word, blankStart, blankLen, chunk) {
   for (let i = 0; i < letters.length; i++) {
     const span = document.createElement('span');
     span.className = 'word-letter';
+    span.style.minWidth = tileSize + 'px';
+    span.style.height = tileSize + 'px';
+    span.style.fontSize = fontSize + 'rem';
 
     if (blankStart >= 0 && i >= blankStart && i < blankStart + blankLen) {
       span.classList.add('blank');
@@ -724,7 +739,11 @@ function nextFamily() {
   $('game-chain-count').textContent = '0';
   $('chain-visual').innerHTML = '';
   if (game.familyIdx >= game.families.length) {
-    game.families = shuffleArray(CHAIN_FAMILIES.filter(f => f.words.length >= 2));
+    const allF = CHAIN_FAMILIES.filter(f => f.words.length >= 2);
+    const aL = f => f.words.reduce((s, w) => s + w.en.length, 0) / f.words.length;
+    allF.sort((a, b) => aL(a) - aL(b));
+    const t = Math.ceil(allF.length / 3);
+    game.families = [...shuffleArray(allF.slice(0, t)), ...shuffleArray(allF.slice(t, t * 2)), ...shuffleArray(allF.slice(t * 2))];
     game.familyIdx = 0;
   }
   presentWord();
