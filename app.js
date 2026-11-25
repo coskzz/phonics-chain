@@ -128,7 +128,7 @@ function startBGM() {
   try {
     const ctx = getAudioCtx();
     bgmMaster = ctx.createGain();
-    bgmMaster.gain.value = 0.5;
+    bgmMaster.gain.value = 1.0;
     bgmMaster.connect(ctx.destination);
     bgmTick();
   } catch(e) {}
@@ -168,22 +168,22 @@ function playDrum(type) {
     osc.type = 'sine';
     osc.frequency.setValueAtTime(150, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.12);
-    g.gain.setValueAtTime(0.25, ctx.currentTime);
+    g.gain.setValueAtTime(0.5, ctx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
     osc.connect(g); g.connect(bgmMaster);
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.15);
   } else if (type === 'snare') {
     osc.type = 'triangle';
     osc.frequency.value = 200;
-    g.gain.setValueAtTime(0.1, ctx.currentTime);
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
     osc.connect(g); g.connect(bgmMaster);
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.08);
-    playNoise(0.1, 0.12, 4000);
+    playNoise(0.1, 0.3, 4000);
   } else if (type === 'hihat') {
-    playNoise(0.04, 0.06, 9000);
+    playNoise(0.04, 0.15, 9000);
   } else if (type === 'ohh') {
-    playNoise(0.12, 0.08, 7000);
+    playNoise(0.12, 0.2, 7000);
   }
 }
 
@@ -194,7 +194,7 @@ function playBass(freq, dur) {
   const g = ctx.createGain();
   osc.type = 'square';
   osc.frequency.value = freq;
-  g.gain.setValueAtTime(0.08, ctx.currentTime);
+  g.gain.setValueAtTime(0.2, ctx.currentTime);
   g.gain.linearRampToValueAtTime(0.0, ctx.currentTime + dur * 0.8);
   osc.connect(g); g.connect(bgmMaster);
   osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
@@ -207,7 +207,7 @@ function playMelody(freq, dur) {
   const g = ctx.createGain();
   osc.type = bgmDanger ? 'sawtooth' : 'triangle';
   osc.frequency.value = freq;
-  g.gain.setValueAtTime(0.06, ctx.currentTime);
+  g.gain.setValueAtTime(0.15, ctx.currentTime);
   g.gain.linearRampToValueAtTime(0.0, ctx.currentTime + dur * 0.7);
   osc.connect(g); g.connect(bgmMaster);
   osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
@@ -255,7 +255,7 @@ function bgmTick() {
 function setBGMDanger(isDanger) {
   if (isDanger === bgmDanger) return;
   bgmDanger = isDanger;
-  if (bgmMaster) bgmMaster.gain.value = isDanger ? 0.6 : 0.5;
+  if (bgmMaster) bgmMaster.gain.value = isDanger ? 1.2 : 1.0;
 }
 
 // Mute toggles
