@@ -136,8 +136,7 @@ body {
 /* Word display */
 .game-word-area { text-align: center; padding: 12px 16px; flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
 .word-family { font-size: 0.7rem; color: #64748b; margin-bottom: 2px; }
-.word-display-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
-.word-letters { display: flex; align-items: center; justify-content: center; gap: 2px; min-height: 56px; }
+.word-letters { display: flex; align-items: center; justify-content: center; gap: 2px; min-height: 56px; flex-wrap: wrap; margin-bottom: 6px; }
 .word-letter {
   font-size: 2.2rem; font-weight: 900; font-family: 'Courier New', monospace;
   letter-spacing: 0.05em; color: #e2e8f0; line-height: 1;
@@ -153,7 +152,7 @@ body {
 .word-letter.wrong-flash { color: #ef4444; animation: letterWrong 0.3s ease-out; }
 @keyframes letterWrong { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 .word-meaning { font-size: 1rem; color: #94a3b8; }
-.speak-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: #fff; flex-shrink: 0; }
+.speak-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 36px; height: 36px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: #fff; margin: 8px auto 0; }
 .speak-btn:active { background: rgba(255,255,255,0.25); transform: scale(0.9); }
 
 /* 4-choice buttons */
