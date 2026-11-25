@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Phonics Chain - ハピクル英語塾</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Loading -->
+<div id="screen-loading" class="screen active">
+  <div class="loading-content">
+    <div class="logo-icon">&#x1F517;</div>
+    <div class="logo">Phonics Chain</div>
+    <div class="loading-spinner"></div>
+  </div>
+</div>
+
+<!-- Login / Signup -->
+<div id="screen-login" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <div class="logo-icon">&#x1F517;</div>
+      <div class="logo">Phonics Chain</div>
+      <div class="subtitle">つなげて覚える英単語ゲーム</div>
+    </div>
+    <div id="form-login" class="auth-form">
+      <h2 class="auth-title">ログイン</h2>
+      <input type="text" id="login-id" class="auth-input" placeholder="ID またはメールアドレス" autocomplete="username">
+      <input type="password" id="login-password" class="auth-input" placeholder="パスワード" autocomplete="current-password">
+      <div class="auth-error hidden" id="login-error"></div>
+      <button class="btn btn-primary btn-full" id="btn-login">ログイン</button>
+      <p class="auth-switch">アカウントをお持ちでない方は <a href="#" id="show-signup">新規登録</a></p>
+    </div>
+    <div id="form-signup" class="auth-form hidden">
+      <h2 class="auth-title">新規登録</h2>
+      <input type="text" id="signup-nickname" class="auth-input" placeholder="ニックネーム" autocomplete="name">
+      <input type="text" id="signup-id" class="auth-input" placeholder="ID（半角英数字）" autocomplete="username">
+      <input type="password" id="signup-password" class="auth-input" placeholder="パスワード（6文字以上）" autocomplete="new-password">
+      <select id="signup-grade" class="auth-input">
+        <option value="">学年を選んでください</option>
+        <option value="e1">小学1年</option><option value="e2">小学2年</option>
+        <option value="e3">小学3年</option><option value="e4">小学4年</option>
+        <option value="e5">小学5年</option><option value="e6">小学6年</option>
+        <option value="j1">中学1年</option><option value="j2">中学2年</option>
+        <option value="j3">中学3年</option>
+        <option value="h1">高校1年</option><option value="h2">高校2年</option><option value="h3">高校3年</option>
+        <option value="adult">大人</option>
+      </select>
+      <div class="auth-error hidden" id="signup-error"></div>
+      <button class="btn btn-primary btn-full" id="btn-signup">登録する</button>
+      <p class="auth-switch">すでにアカウントをお持ちの方は <a href="#" id="show-login">ログイン</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Home -->
+<div id="screen-home" class="screen">
+  <div class="home-header">
+    <div class="logo-row"><span class="logo-icon-sm">&#x1F517;</span> Phonics Chain</div>
+    <div class="user-info">
+      <span id="home-username"></span>
+      <span id="home-streak" class="streak-badge"></span>
+    </div>
+  </div>
+  <div class="home-body">
+    <div class="home-card play-card" id="btn-play">
+      <div class="card-icon">&#x26D3;&#xFE0F;</div>
+      <div class="card-title">チェーンゲーム</div>
+      <div class="card-desc">単語をつなげてチェーンを伸ばそう！</div>
+    </div>
+    <div class="home-stats-row">
+      <div class="stat-box">
+        <div class="stat-num" id="stat-words">0</div>
+        <div class="stat-label">発見した単語</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="stat-chains">0</div>
+        <div class="stat-label">最長チェーン</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="stat-score">0</div>
+        <div class="stat-label">ハイスコア</div>
+      </div>
+    </div>
+    <div class="home-card recent-card" id="btn-recent-stretch">
+      <div class="card-title">&#x1F31F; 背伸び成功</div>
+      <div class="card-desc" id="recent-stretch-text">まだありません</div>
+    </div>
+  </div>
+</div>
+
+<!-- Game: Difficulty Select -->
+<div id="screen-difficulty" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="btn-back-home-diff">&#x2190; 戻る</button>
+    <h2>難易度を選ぼう</h2>
+  </div>
+  <div class="difficulty-grid">
+    <button class="diff-btn" data-diff="easy">
+      <span class="diff-stars">&#x2B50;</span>
+      <span class="diff-name">やさしい</span>
+      <span class="diff-desc">英検5級〜4級の単語</span>
+    </button>
+    <button class="diff-btn" data-diff="normal">
+      <span class="diff-stars">&#x2B50;&#x2B50;</span>
+      <span class="diff-name">ふつう</span>
+      <span class="diff-desc">英検4級〜3級の単語</span>
+    </button>
+    <button class="diff-btn" data-diff="hard">
+      <span class="diff-stars">&#x2B50;&#x2B50;&#x2B50;</span>
+      <span class="diff-name">むずかしい</span>
+      <span class="diff-desc">英検3級〜準1級の単語</span>
+    </button>
+    <button class="diff-btn" data-diff="extreme">
+      <span class="diff-stars">&#x1F525;</span>
+      <span class="diff-name">エクストリーム</span>
+      <span class="diff-desc">全単語（1級まで！）</span>
+    </button>
+  </div>
+</div>
+
+<!-- Game: Chain Play -->
+<div id="screen-game" class="screen">
+  <div class="game-top-bar">
+    <button class="back-btn" id="btn-quit-game">&#x2716;</button>
+    <div class="game-score-display">
+      <span id="game-score">0</span>
+      <span class="score-label">pt</span>
+    </div>
+    <div class="game-chain-display">
+      <span class="chain-icon">&#x1F517;</span>
+      <span id="game-chain-count">0</span>
+    </div>
+  </div>
+
+  <!-- Chain visualization -->
+  <div class="chain-visual" id="chain-visual"></div>
+
+  <!-- Current word prompt -->
+  <div class="game-prompt">
+    <div class="prompt-family" id="prompt-family"></div>
+    <div class="prompt-hint" id="prompt-hint"></div>
+    <div class="prompt-meaning" id="prompt-meaning"></div>
+  </div>
+
+  <!-- Answer area -->
+  <div class="game-answer-area">
+    <div class="answer-display" id="answer-display"></div>
+    <div class="letter-keyboard" id="letter-keyboard"></div>
+  </div>
+
+  <!-- Feedback overlay -->
+  <div class="game-feedback hidden" id="game-feedback">
+    <div class="feedback-content" id="feedback-content"></div>
+  </div>
+</div>
+
+<!-- Game Over / Results -->
+<div id="screen-results" class="screen">
+  <div class="results-content">
+    <div class="results-title" id="results-title"></div>
+    <div class="results-score">
+      <div class="score-big" id="results-score-num">0</div>
+      <div class="score-label-big">ポイント</div>
+    </div>
+    <div class="results-stats" id="results-stats"></div>
+    <div class="results-stretch" id="results-stretch"></div>
+    <div class="results-words" id="results-words"></div>
+    <div class="results-buttons">
+      <button class="btn btn-primary" id="btn-retry">もう1回</button>
+      <button class="btn btn-secondary" id="btn-results-home">ホームへ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Word Encyclopedia -->
+<div id="screen-encyclopedia" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="btn-back-enc">&#x2190;</button>
+    <h2>&#x1F4D6; 単語図鑑</h2>
+  </div>
+  <div class="enc-filter" id="enc-filter">
+    <button class="chip active" data-eiken="all">すべて</button>
+    <button class="chip" data-eiken="5">5級</button>
+    <button class="chip" data-eiken="4">4級</button>
+    <button class="chip" data-eiken="3">3級</button>
+    <button class="chip" data-eiken="p2">準2級</button>
+    <button class="chip" data-eiken="2">2級</button>
+    <button class="chip" data-eiken="p1">準1級</button>
+    <button class="chip" data-eiken="1">1級</button>
+  </div>
+  <div class="enc-stats" id="enc-stats"></div>
+  <div class="enc-list" id="enc-list"></div>
+</div>
+
+<!-- Rankings -->
+<div id="screen-ranking" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="btn-back-rank">&#x2190;</button>
+    <h2>&#x1F3C6; ランキング</h2>
+  </div>
+  <div class="rank-tabs" id="rank-tabs">
+    <button class="rank-tab active" data-rank="all">全体</button>
+    <button class="rank-tab" data-rank="school">校舎</button>
+    <button class="rank-tab" data-rank="grade">学年</button>
+  </div>
+  <div class="rank-period" id="rank-period">
+    <button class="chip active" data-period="week">今週</button>
+    <button class="chip" data-period="all-time">全期間</button>
+  </div>
+  <div class="rank-list" id="rank-list"></div>
+</div>
+
+<!-- My Page -->
+<div id="screen-mypage" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="btn-back-mypage">&#x2190;</button>
+    <h2>&#x1F464; マイページ</h2>
+  </div>
+  <div class="mypage-body">
+    <div class="profile-card">
+      <div class="profile-name" id="mypage-name"></div>
+      <div class="profile-grade" id="mypage-grade"></div>
+      <div class="profile-school" id="mypage-school"></div>
+      <button class="btn btn-secondary btn-small" id="btn-edit-profile">プロフィール編集</button>
+    </div>
+    <div class="mypage-section-title">&#x1F4CA; 学習データ</div>
+    <div class="effort-grid" id="mypage-effort"></div>
+    <div class="mypage-section-title">&#x1F525; 連続学習</div>
+    <div class="streak-card-big" id="mypage-streak"></div>
+    <div class="mypage-section-title">&#x1F4C5; カレンダー</div>
+    <div id="mypage-calendar"></div>
+    <div class="mypage-bottom">
+      <button class="btn btn-secondary btn-small" id="btn-logout">ログアウト</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin -->
+<div id="screen-admin" class="screen">
+  <div class="screen-header">
+    <div>
+      <div class="logo-row"><span class="logo-icon-sm">&#x1F517;</span> 管理画面</div>
+      <div class="subtitle" id="admin-teacher-name"></div>
+    </div>
+    <button id="btn-admin-logout" class="btn btn-secondary btn-small">ログアウト</button>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-admin-tab="students">&#x1F465; 生徒一覧</button>
+    <button class="admin-tab" data-admin-tab="teachers">&#x1F3EB; 教師一覧</button>
+    <button class="admin-tab" data-admin-tab="schools">&#x1F3E0; 校舎管理</button>
+  </div>
+  <!-- Students panel -->
+  <div id="admin-panel-students" class="admin-panel">
+    <div class="admin-toolbar">
+      <input type="text" id="admin-search" class="admin-search" placeholder="生徒名・IDで検索...">
+      <button class="btn btn-secondary btn-small" id="btn-admin-refresh">&#x1F504;</button>
+    </div>
+    <div id="admin-student-list"></div>
+  </div>
+  <!-- Teachers panel -->
+  <div id="admin-panel-teachers" class="admin-panel hidden">
+    <details class="admin-create-form">
+      <summary>&#x2795; 新しい教師アカウントを作成</summary>
+      <div class="create-form-inner">
+        <input type="text" id="create-teacher-name" class="auth-input" placeholder="お名前">
+        <input type="text" id="create-teacher-id" class="auth-input" placeholder="ID">
+        <input type="text" id="create-teacher-password" class="auth-input" placeholder="パスワード（6文字以上）">
+        <select id="create-teacher-school" class="auth-input"></select>
+        <div class="auth-error hidden" id="create-teacher-error"></div>
+        <button class="btn btn-primary btn-small" id="btn-create-teacher">作成する</button>
+      </div>
+    </details>
+    <div id="admin-teacher-list"></div>
+  </div>
+  <!-- Schools panel -->
+  <div id="admin-panel-schools" class="admin-panel hidden">
+    <details class="admin-create-form">
+      <summary>&#x2795; 新しい校舎を追加</summary>
+      <div class="create-form-inner">
+        <input type="text" id="create-school-name" class="auth-input" placeholder="校舎名">
+        <div class="auth-error hidden" id="create-school-error"></div>
+        <button class="btn btn-primary btn-small" id="btn-create-school">追加する</button>
+      </div>
+    </details>
+    <div id="admin-school-list"></div>
+  </div>
+</div>
+
+<!-- Tab bar -->
+<div id="tab-bar" class="tab-bar hidden">
+  <button class="tab-btn active" data-tab="home">
+    <span class="tab-icon">&#x1F3E0;</span><span class="tab-label">ホーム</span>
+  </button>
+  <button class="tab-btn" data-tab="encyclopedia">
+    <span class="tab-icon">&#x1F4D6;</span><span class="tab-label">図鑑</span>
+  </button>
+  <button class="tab-btn" data-tab="ranking">
+    <span class="tab-icon">&#x1F3C6;</span><span class="tab-label">ランキング</span>
+  </button>
+  <button class="tab-btn" data-tab="mypage">
+    <span class="tab-icon">&#x1F464;</span><span class="tab-label">マイページ</span>
+  </button>
+  <button class="tab-btn hidden" data-tab="admin">
+    <span class="tab-icon">&#x1F3EB;</span><span class="tab-label">管理</span>
+  </button>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="words_data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
