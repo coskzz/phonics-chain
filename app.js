@@ -515,7 +515,7 @@ function presentWord() {
 }
 
 // ===== Render letter blocks =====
-const BLOCK_COLORS = ['#667eea','#764ba2','#4ade80','#f59e0b','#ec4899','#06b6d4','#8b5cf6','#ef4444','#10b981','#f97316'];
+const BLOCK_COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#e91e8c','#DDA0DD','#f59e0b','#98D8C8','#8b5cf6','#ef4444'];
 
 function renderWordLetters(word, blankStart, blankLen, chunk) {
   const container = $('word-letters');
@@ -526,8 +526,7 @@ function renderWordLetters(word, blankStart, blankLen, chunk) {
   const prev = prevWord();
   if (prev && blankStart >= 0) {
     const arrow = document.createElement('span');
-    arrow.className = 'word-letter';
-    arrow.style.cssText = 'font-size:1rem;color:#64748b;margin-right:4px;opacity:0.5';
+    arrow.className = 'word-prev-arrow';
     arrow.textContent = prev.en + ' →';
     container.appendChild(arrow);
   }
@@ -538,18 +537,12 @@ function renderWordLetters(word, blankStart, blankLen, chunk) {
 
     if (blankStart >= 0 && i >= blankStart && i < blankStart + blankLen) {
       span.classList.add('blank');
-      span.textContent = '_';
-      span.style.background = 'rgba(251,191,36,0.15)';
-      span.style.borderRadius = '6px';
-      span.style.padding = '0 3px';
+      span.textContent = '?';
       span.dataset.blankIdx = i - blankStart;
     } else {
       span.textContent = letters[i];
-      const ci = (i * 7 + word.charCodeAt(0)) % BLOCK_COLORS.length;
-      span.style.color = '#e2e8f0';
-      span.style.background = 'rgba(255,255,255,0.08)';
-      span.style.borderRadius = '6px';
-      span.style.padding = '0 4px';
+      const ci = i % BLOCK_COLORS.length;
+      span.style.background = BLOCK_COLORS[ci];
     }
     container.appendChild(span);
   }
