@@ -402,30 +402,33 @@ function currentWord() { return currentFamily()?.words[game.wordIdx]; }
 function prevWord() { return game.wordIdx > 0 ? currentFamily().words[game.wordIdx - 1] : null; }
 
 // ===== Chunk Diff Logic =====
+const MAX_CHUNK = 2;
+
 function findChunkDiff(prev, curr) {
   const p = prev.toLowerCase();
   const c = curr.toLowerCase();
   // Find longest common suffix
   let suffLen = 0;
   while (suffLen < p.length && suffLen < c.length && p[p.length - 1 - suffLen] === c[c.length - 1 - suffLen]) suffLen++;
-  const suffix = c.slice(c.length - suffLen);
   const cPrefix = c.slice(0, c.length - suffLen);
   const pPrefix = p.slice(0, p.length - suffLen);
 
   if (cPrefix.length > 0 && cPrefix !== pPrefix) {
-    return { blankStart: 0, blankLen: cPrefix.length, chunk: cPrefix, suffix };
+    // Cap to MAX_CHUNK from the start of the differing prefix
+    const len = Math.min(cPrefix.length, MAX_CHUNK);
+    return { blankStart: 0, blankLen: len, chunk: c.slice(0, len) };
   }
   // Find longest common prefix
   let prefLen = 0;
   while (prefLen < p.length && prefLen < c.length && p[prefLen] === c[prefLen]) prefLen++;
-  const prefix = c.slice(0, prefLen);
   const cSuffix = c.slice(prefLen);
   if (cSuffix.length > 0) {
-    return { blankStart: prefLen, blankLen: cSuffix.length, chunk: cSuffix, suffix: '' };
+    const len = Math.min(cSuffix.length, MAX_CHUNK);
+    return { blankStart: prefLen, blankLen: len, chunk: c.slice(prefLen, prefLen + len) };
   }
-  // Fallback: pick a random position
+  // Fallback: 1 letter
   const pos = Math.floor(Math.random() * c.length);
-  return { blankStart: pos, blankLen: 1, chunk: c[pos], suffix: '' };
+  return { blankStart: pos, blankLen: 1, chunk: c[pos] };
 }
 
 function generateChoices(correctChunk) {
