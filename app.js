@@ -303,6 +303,16 @@ function enterHome() {
   setActiveTab('home');
 }
 
+// Tooltip toggle
+document.addEventListener('click', e => {
+  const trigger = e.target.closest('.tooltip-trigger');
+  document.querySelectorAll('.tooltip-popup.show').forEach(el => el.classList.remove('show'));
+  if (trigger) {
+    const popup = trigger.closest('.home-card')?.querySelector('.tooltip-popup');
+    if (popup) { popup.classList.add('show'); e.stopPropagation(); }
+  }
+});
+
 // ===== Tab Navigation =====
 document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -537,13 +547,16 @@ function renderWordLetters(word, blankStart, blankLen, chunk) {
   container.innerHTML = '';
   const letters = word.toLowerCase().split('');
 
-  // If showing previous word arrow
+  // Show previous word ABOVE the board
+  const prevLabel = document.querySelector('.word-prev-label');
+  if (prevLabel) prevLabel.remove();
   const prev = prevWord();
   if (prev && blankStart >= 0) {
-    const arrow = document.createElement('span');
-    arrow.className = 'word-prev-arrow';
-    arrow.textContent = prev.en + ' →';
-    container.appendChild(arrow);
+    const lbl = document.createElement('div');
+    lbl.className = 'word-prev-label';
+    lbl.textContent = prev.en + '  →';
+    const board = document.querySelector('.word-board');
+    if (board) board.parentNode.insertBefore(lbl, board);
   }
 
   for (let i = 0; i < letters.length; i++) {
