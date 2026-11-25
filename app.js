@@ -567,8 +567,8 @@ function renderChoices(choices, correctChunk) {
   area.innerHTML = '';
   choices.forEach(ch => {
     const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = ch;
+    btn.className = 'choice-btn ' + (isVowelChunk(ch) ? 'vowel-choice' : 'consonant-choice');
+    btn.textContent = ch.toLowerCase();
     btn.addEventListener('click', () => handleChoice(ch, correctChunk, btn));
     area.appendChild(btn);
   });
