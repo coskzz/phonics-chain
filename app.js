@@ -903,10 +903,27 @@ async function endGame() {
       updates.lastPlayDate = today;
       updates[`dailyLog.${today}`] = { games: firebase.firestore.FieldValue.increment(1), correct: game.wordsCorrect, score: game.score };
     }
+    // Game history entry
+    const historyEntry = {
+      date: new Date().toISOString(),
+      score: game.score,
+      correct: game.wordsCorrect,
+      chain: game.maxChain,
+      stretch: game.stretchSuccesses.length,
+      duration: GAME_TIME,
+    };
+    updates.gameHistory = firebase.firestore.FieldValue.arrayUnion(historyEntry);
+
     try {
       await db.collection('users').doc(currentUser.uid).update(updates);
       const freshDoc = await db.collection('users').doc(currentUser.uid).get();
       userDoc = freshDoc.data();
+      // Trim gameHistory to last 50 on client
+      if (userDoc.gameHistory && userDoc.gameHistory.length > 50) {
+        const trimmed = userDoc.gameHistory.slice(-50);
+        await db.collection('users').doc(currentUser.uid).update({ gameHistory: trimmed });
+        userDoc.gameHistory = trimmed;
+      }
     } catch (e) { console.error('Save error:', e); }
   }
 }
@@ -1015,6 +1032,8 @@ async function loadRankings() {
 }
 
 // ===== My Page =====
+let mypageCalDate = new Date();
+
 function enterMyPage() {
   show('screen-mypage'); showTab(true); setActiveTab('mypage');
   if (!userDoc) return;
@@ -1029,31 +1048,113 @@ function enterMyPage() {
   `;
   const streak = userDoc.streak || 0, best = userDoc.bestStreak || 0;
   $('mypage-streak').innerHTML = `<div style="font-size:2rem">🔥</div><div><div style="font-size:1.5rem;font-weight:800">${streak}日</div><div style="font-size:0.8rem;color:#888">最高: ${best}日</div></div>`;
-  renderCalendar();
+  mypageCalDate = new Date();
+  renderCalendarWidget($('mypage-calendar'), userDoc.dailyLog || {}, mypageCalDate, 'mypage');
+  renderMasteryChart();
+  renderGameHistory(userDoc.gameHistory || []);
 }
 $('btn-back-mypage').addEventListener('click', () => enterHome());
 $('btn-logout').addEventListener('click', () => auth.signOut());
-function renderCalendar() {
-  const cal = $('mypage-calendar');
-  const log = userDoc.dailyLog || {};
-  const today = new Date();
-  const year = today.getFullYear(), month = today.getMonth();
+
+// Shared calendar renderer
+function renderCalendarWidget(container, dailyLog, viewDate, target) {
+  const year = viewDate.getFullYear(), month = viewDate.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  let html = `<div style="font-size:0.85rem;font-weight:600;margin-bottom:8px">${year}年${month + 1}月</div>`;
-  html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">';
-  ['日','月','火','水','木','金','土'].forEach(d => { html += `<div style="font-size:0.7rem;color:#888">${d}</div>`; });
-  const firstDay = new Date(year, month, 1).getDay();
-  for (let i = 0; i < firstDay; i++) html += '<div></div>';
+  const firstDow = new Date(year, month, 1).getDay();
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  let html = '<div class="cal-container">';
+  html += `<div class="cal-header">
+    <button class="cal-nav-btn" onclick="calNav(-1,'${target}')">&#x2039;</button>
+    <span class="cal-header-title">${year}年${month + 1}月</span>
+    <button class="cal-nav-btn" onclick="calNav(1,'${target}')">&#x203A;</button>
+  </div>`;
+  html += '<div class="cal-dow">';
+  ['日','月','火','水','木','金','土'].forEach(d => { html += `<div>${d}</div>`; });
+  html += '</div><div class="cal-grid">';
+  for (let i = 0; i < firstDow; i++) html += '<div></div>';
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    const hasLog = log[dateStr];
-    const isToday = d === today.getDate();
-    const bg = hasLog ? '#667eea' : isToday ? '#e8e8e8' : 'transparent';
-    const color = hasLog ? '#fff' : '#333';
-    html += `<div style="width:28px;height:28px;border-radius:50%;background:${bg};color:${color};display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:${hasLog ? '700' : '400'};margin:0 auto">${d}</div>`;
+    const log = dailyLog[dateStr];
+    const isToday = dateStr === todayStr;
+    const cls = log ? 'cal-day has-log' : isToday ? 'cal-day today' : 'cal-day';
+    const onclick = log ? ` onclick="showDayDetail('${target}','${dateStr}')"` : '';
+    html += `<div class="${cls}"${onclick}>${d}</div>`;
   }
+  html += '</div></div>';
+  html += `<div id="cal-day-detail-${target}"></div>`;
+  container.innerHTML = html;
+}
+
+function calNav(delta, target) {
+  if (target === 'mypage') {
+    mypageCalDate.setMonth(mypageCalDate.getMonth() + delta);
+    renderCalendarWidget($('mypage-calendar'), userDoc.dailyLog || {}, mypageCalDate, 'mypage');
+  } else if (target === 'detail') {
+    detailCalDate.setMonth(detailCalDate.getMonth() + delta);
+    if (detailStudentData) renderCalendarWidget($('detail-body'), detailStudentData.dailyLog || {}, detailCalDate, 'detail');
+  }
+}
+
+function showDayDetail(target, dateStr) {
+  const log = target === 'mypage' ? (userDoc.dailyLog || {})[dateStr] : (detailStudentData?.dailyLog || {})[dateStr];
+  const el = document.getElementById(`cal-day-detail-${target}`);
+  if (!el || !log) return;
+  const parts = dateStr.split('-');
+  el.innerHTML = `<div class="cal-day-detail">
+    <strong>${parseInt(parts[1])}/${parseInt(parts[2])}</strong> —
+    ${log.games || 0}回プレイ / ${log.correct || 0}問正解 / ${log.score || 0}pt
+  </div>`;
+}
+
+// Word mastery by eiken level
+function renderMasteryChart() {
+  const discovered = userDoc.discoveredWords || [];
+  const levels = [
+    { key: '5', label: '5級' }, { key: '4', label: '4級' }, { key: '3', label: '3級' },
+    { key: 'p2', label: '準2級' }, { key: '2', label: '2級' }, { key: 'p1', label: '準1級' }, { key: '1', label: '1級' }
+  ];
+  const counts = {};
+  const totals = {};
+  levels.forEach(l => { counts[l.key] = 0; totals[l.key] = 0; });
+  ALL_WORDS.forEach(w => {
+    const k = String(w.eiken);
+    if (totals[k] !== undefined) totals[k]++;
+    if (discovered.includes(w.en) && counts[k] !== undefined) counts[k]++;
+  });
+  const maxTotal = Math.max(...Object.values(totals), 1);
+  let html = '<div class="mastery-chart">';
+  levels.forEach(l => {
+    const pct = totals[l.key] > 0 ? (counts[l.key] / totals[l.key] * 100) : 0;
+    html += `<div class="mastery-row">
+      <span class="mastery-label">${l.label}</span>
+      <div class="mastery-bar-wrap"><div class="mastery-bar" style="width:${pct}%"></div></div>
+      <span class="mastery-count">${counts[l.key]}/${totals[l.key]}</span>
+    </div>`;
+  });
   html += '</div>';
-  cal.innerHTML = html;
+  $('mypage-mastery').innerHTML = html;
+}
+
+// Game history
+function renderGameHistory(history) {
+  const el = $('mypage-history');
+  if (!history || history.length === 0) {
+    el.innerHTML = '<div class="history-empty">まだ履歴がありません</div>';
+    return;
+  }
+  const sorted = [...history].sort((a, b) => b.date.localeCompare(a.date));
+  let html = '<div class="history-list">';
+  sorted.slice(0, 20).forEach(h => {
+    const d = new Date(h.date);
+    const when = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    html += `<div class="history-item">
+      <div><div class="history-date">${when}</div><div class="history-details">${h.correct || 0}問正解 / 🔗${h.chain || 0} / 🌟${h.stretch || 0}</div></div>
+      <div class="history-score">${h.score || 0}pt</div>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
 }
 
 // ===== Admin =====
@@ -1086,6 +1187,7 @@ async function loadAdminStudents() {
       const row = document.createElement('div');
       row.className = 'admin-student-row';
       row.innerHTML = `<div class="admin-student-name">${d.nickname || '???'}</div><div class="admin-student-stats">${GRADE_LABELS[d.grade] || ''} | ${(d.discoveredWords || []).length}語 | 🔥${d.streak || 0}日 | HS:${d.highScore || 0}</div>`;
+      row.addEventListener('click', () => openStudentDetail(doc.id, d));
       list.appendChild(row);
     });
   } catch (e) { list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>'; }
@@ -1161,6 +1263,142 @@ async function loadAdminSchools() {
     if (snap.empty) list.innerHTML = '<div style="padding:20px;color:#888">校舎がまだ登録されていません</div>';
   } catch (e) { list.innerHTML = '<div style="padding:20px;color:#e74c3c">読み込みエラー</div>'; }
 }
+// ===== Student Detail Modal (teacher view) =====
+let detailStudentData = null;
+let detailCalDate = new Date();
+
+function openStudentDetail(uid, data) {
+  detailStudentData = data;
+  detailCalDate = new Date();
+  $('detail-student-name').textContent = data.nickname || '—';
+  $('detail-student-id').textContent = data.loginId || '—';
+  const pwEl = $('detail-student-pw');
+  pwEl.textContent = '••••••';
+  pwEl.dataset.pw = data.pw || '（未登録）';
+  pwEl.dataset.visible = 'false';
+  $('btn-pw-toggle').textContent = '表示';
+  $('detail-student-grade-label').textContent = GRADE_LABELS[data.grade] || '';
+  renderDetailTab('calendar');
+  $('student-detail-modal').classList.remove('hidden');
+}
+
+$('btn-close-detail').addEventListener('click', () => {
+  $('student-detail-modal').classList.add('hidden');
+  detailStudentData = null;
+});
+
+$('btn-pw-toggle').addEventListener('click', () => {
+  const pwEl = $('detail-student-pw');
+  if (pwEl.dataset.visible === 'true') {
+    pwEl.textContent = '••••••';
+    pwEl.dataset.visible = 'false';
+    $('btn-pw-toggle').textContent = '表示';
+  } else {
+    pwEl.textContent = pwEl.dataset.pw;
+    pwEl.dataset.visible = 'true';
+    $('btn-pw-toggle').textContent = '隠す';
+  }
+});
+
+document.querySelectorAll('.detail-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.detail-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderDetailTab(btn.dataset.dtab);
+  });
+});
+
+function renderDetailTab(tab) {
+  const body = $('detail-body');
+  const data = detailStudentData;
+  if (!data) return;
+  body.innerHTML = '';
+
+  if (tab === 'calendar') {
+    renderCalendarWidget(body, data.dailyLog || {}, detailCalDate, 'detail');
+    // Summary stats
+    const summary = document.createElement('div');
+    summary.className = 'detail-effort-grid';
+    summary.innerHTML = `
+      <div class="detail-effort-item"><div class="detail-effort-num">${data.totalGames || 0}</div><div class="detail-effort-label">プレイ回数</div></div>
+      <div class="detail-effort-item"><div class="detail-effort-num">${(data.discoveredWords || []).length}</div><div class="detail-effort-label">発見単語</div></div>
+      <div class="detail-effort-item"><div class="detail-effort-num">🔥${data.streak || 0}</div><div class="detail-effort-label">連続日数</div></div>
+    `;
+    body.appendChild(summary);
+  } else if (tab === 'chart') {
+    renderDetailChart(body, data);
+  } else if (tab === 'history') {
+    renderDetailHistory(body, data);
+  }
+}
+
+function renderDetailChart(container, data) {
+  const log = data.dailyLog || {};
+  const dates = Object.keys(log).sort();
+  if (dates.length === 0) {
+    container.innerHTML = '<div class="history-empty">まだデータがありません</div>';
+    return;
+  }
+  // Group by week
+  const weeks = {};
+  dates.forEach(d => {
+    const ws = getWeekStart(d);
+    if (!weeks[ws]) weeks[ws] = { games: 0, correct: 0, score: 0 };
+    const entry = log[d];
+    weeks[ws].games += entry.games || 0;
+    weeks[ws].correct += entry.correct || 0;
+    weeks[ws].score += entry.score || 0;
+  });
+  const weekKeys = Object.keys(weeks).sort().slice(-12);
+  const maxScore = Math.max(...weekKeys.map(k => weeks[k].score), 1);
+
+  let html = '<div class="detail-section-title">週ごとのスコア推移</div>';
+  html += '<div class="bar-chart">';
+  weekKeys.forEach(wk => {
+    const w = weeks[wk];
+    const pct = (w.score / maxScore * 100);
+    const parts = wk.split('-');
+    const label = `${parseInt(parts[1])}/${parseInt(parts[2])}`;
+    html += `<div class="bar-col">
+      <div class="bar-value">${w.score}</div>
+      <div class="bar-fill" style="height:${pct}%"></div>
+      <div class="bar-label">${label}</div>
+    </div>`;
+  });
+  html += '</div>';
+
+  // Discovered words breakdown
+  const disc = data.discoveredWords || [];
+  html += '<div class="detail-section-title">発見単語の内訳</div>';
+  html += '<div class="detail-effort-grid">';
+  html += `<div class="detail-effort-item"><div class="detail-effort-num">${disc.length}</div><div class="detail-effort-label">合計</div></div>`;
+  html += `<div class="detail-effort-item"><div class="detail-effort-num">${data.highScore || 0}</div><div class="detail-effort-label">ハイスコア</div></div>`;
+  html += `<div class="detail-effort-item"><div class="detail-effort-num">${data.longestChain || 0}</div><div class="detail-effort-label">最長チェーン</div></div>`;
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderDetailHistory(container, data) {
+  const history = data.gameHistory || [];
+  if (history.length === 0) {
+    container.innerHTML = '<div class="history-empty">まだ履歴がありません</div>';
+    return;
+  }
+  const sorted = [...history].sort((a, b) => b.date.localeCompare(a.date));
+  let html = '<div class="history-list">';
+  sorted.forEach(h => {
+    const d = new Date(h.date);
+    const when = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    html += `<div class="history-item">
+      <div><div class="history-date">${when}</div><div class="history-details">${h.correct || 0}問正解 / 🔗${h.chain || 0} / 🌟${h.stretch || 0}</div></div>
+      <div class="history-score">${h.score || 0}pt</div>
+    </div>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ===== Profile =====
 $('btn-edit-profile')?.addEventListener('click', () => {
   const newNick = prompt('新しいニックネームを入力してください', userDoc.nickname);
   if (newNick && newNick.trim()) {

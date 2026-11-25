@@ -221,8 +221,12 @@
     <div class="effort-grid" id="mypage-effort"></div>
     <div class="mypage-section-title">&#x1F525; 連続学習</div>
     <div class="streak-card-big" id="mypage-streak"></div>
+    <div class="mypage-section-title">&#x1F4CA; 英検級別 発見単語</div>
+    <div id="mypage-mastery"></div>
     <div class="mypage-section-title">&#x1F4C5; カレンダー</div>
     <div id="mypage-calendar"></div>
+    <div class="mypage-section-title">&#x1F4DD; ゲーム履歴</div>
+    <div id="mypage-history"></div>
     <div class="mypage-bottom">
       <button class="btn btn-secondary btn-small" id="btn-logout">ログアウト</button>
     </div>
@@ -274,6 +278,32 @@
       </div>
     </details>
     <div id="admin-school-list"></div>
+  </div>
+</div>
+
+<!-- Student Detail Modal (teacher) -->
+<div id="student-detail-modal" class="modal-overlay hidden">
+  <div class="modal-box modal-box-wide">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title" id="detail-student-name"></h3>
+        <div class="detail-credentials">
+          <span class="detail-cred-item">ID: <strong id="detail-student-id"></strong></span>
+          <span class="detail-cred-item">PW:
+            <strong id="detail-student-pw"></strong>
+            <button class="btn-pw-toggle" id="btn-pw-toggle">表示</button>
+          </span>
+          <span class="detail-cred-item" id="detail-student-grade-label"></span>
+        </div>
+      </div>
+      <button class="modal-close-btn" id="btn-close-detail">&#x2715;</button>
+    </div>
+    <div class="detail-tabs">
+      <button class="detail-tab-btn active" data-dtab="calendar">&#x1F4C5; カレンダー</button>
+      <button class="detail-tab-btn" data-dtab="chart">&#x1F4C8; グラフ</button>
+      <button class="detail-tab-btn" data-dtab="history">&#x1F4DD; 履歴</button>
+    </div>
+    <div id="detail-body" class="detail-body"></div>
   </div>
 </div>
 
