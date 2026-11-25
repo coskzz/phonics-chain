@@ -158,16 +158,30 @@ function tickParticles() {
   }
 }
 
-// ===== Speech =====
+// ===== Speech (Google TTS) =====
+let speechAudio = null;
 function speakWord(word) {
   try {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(word);
-      u.lang = 'en-US';
-      u.rate = 0.85;
-      window.speechSynthesis.speak(u);
-    }
+    if (speechAudio) { speechAudio.pause(); speechAudio = null; }
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodeURIComponent(word)}`;
+    speechAudio = new Audio(url);
+    speechAudio.playbackRate = 0.9;
+    speechAudio.play().catch(() => {
+      // Fallback to browser speechSynthesis
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(word);
+        u.lang = 'en-US';
+        u.rate = 0.85;
+        u.pitch = 1.0;
+        const voices = window.speechSynthesis.getVoices();
+        const good = voices.find(v => v.lang === 'en-US' && v.name.includes('Samantha'))
+                  || voices.find(v => v.lang === 'en-US' && !v.localService === false)
+                  || voices.find(v => v.lang.startsWith('en'));
+        if (good) u.voice = good;
+        window.speechSynthesis.speak(u);
+      }
+    });
   } catch(e) {}
 }
 
