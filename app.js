@@ -803,22 +803,46 @@ function handleChoice(chosen, correct, btn) {
 
     // Combo display
     updateCombo();
-    if (game.combo % 5 === 0 && game.combo > 0) {
-      SFX.combo(game.combo);
-      screenFlash('white');
-    }
 
-    // Background intensity
-    updateBg(game.combo);
-
-    // Particles — edges only so they don't cover the word
+    // Combo-scaled effects: more combo = more dopamine
+    const c = game.combo;
     const contRect = $('game-container').getBoundingClientRect();
     const cw = contRect.width;
     const ch = contRect.height;
-    emitEdgeParticles(cw, ch, 12, ['#4ade80', '#22c55e', '#fbbf24', '#fff', '#a78bfa'], 5);
 
-    // Screen shake
-    shakeScreen(false);
+    if (c >= 20) {
+      // GODLIKE: everything goes crazy
+      SFX.combo(c);
+      screenFlash('gold');
+      emitEdgeParticles(cw, ch, 60, ['#ffd700','#ff6eb4','#4ade80','#fff','#a78bfa','#f59e0b'], 10);
+      shakeScreen(true);
+      showFloatingText('GODLIKE!!', '#ffd700', 3);
+    } else if (c >= 15) {
+      SFX.combo(c);
+      screenFlash('pink');
+      emitEdgeParticles(cw, ch, 45, ['#ff6eb4','#ffd700','#fff','#a78bfa'], 8);
+      shakeScreen(true);
+      showFloatingText('UNSTOPPABLE!', '#ff6eb4', 2.5);
+    } else if (c >= 10) {
+      SFX.combo(c);
+      screenFlash('white');
+      emitEdgeParticles(cw, ch, 35, ['#ffd700','#4ade80','#fff','#ff6eb4'], 7);
+      shakeScreen(true);
+      showFloatingText('ON FIRE!!', '#f59e0b', 2);
+    } else if (c >= 5 && c % 5 === 0) {
+      SFX.combo(c);
+      screenFlash('white');
+      emitEdgeParticles(cw, ch, 25, ['#4ade80','#fbbf24','#fff'], 6);
+      shakeScreen(false);
+    } else if (c >= 3) {
+      emitEdgeParticles(cw, ch, 15 + c, ['#4ade80','#22c55e','#fbbf24','#fff','#a78bfa'], 5 + c * 0.3);
+      shakeScreen(false);
+    } else {
+      emitEdgeParticles(cw, ch, 10, ['#4ade80','#22c55e','#fbbf24','#fff'], 4);
+    }
+
+    // Background intensity
+    updateBg(c);
 
     // Flash correct letters
     flashCorrectLetters();
@@ -918,10 +942,10 @@ function shakeScreen(big) {
 
 function screenFlash(type) {
   const el = $('screen-flash');
-  el.classList.remove('flash-white', 'flash-gold');
+  el.classList.remove('flash-white', 'flash-gold', 'flash-pink');
   void el.offsetWidth;
   el.classList.add('flash-' + type);
-  setTimeout(() => el.classList.remove('flash-white', 'flash-gold'), 100);
+  setTimeout(() => el.classList.remove('flash-white', 'flash-gold', 'flash-pink'), 100);
 }
 
 function flashCorrectLetters() {
@@ -949,6 +973,15 @@ function animateScore(added) {
     if (current >= target) clearInterval(anim);
   }, 25);
   setTimeout(() => el.classList.remove('score-pop'), 300);
+}
+
+function showFloatingText(text, color, scale) {
+  const el = document.createElement('div');
+  el.className = 'combo-shout';
+  el.textContent = text;
+  el.style.cssText = `color:${color};font-size:${scale || 2}rem;`;
+  $('game-container').appendChild(el);
+  setTimeout(() => el.remove(), 1200);
 }
 
 function showScorePopup(text) {

@@ -153,6 +153,22 @@ body {
 .combo-text.pop { animation: comboPop 0.2s ease-out; }
 @keyframes comboPop { 0% { transform: scale(1.6); } 100% { transform: scale(1); } }
 
+/* Combo shout (ON FIRE, UNSTOPPABLE, GODLIKE) */
+.combo-shout {
+  position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+  font-weight: 900; letter-spacing: 0.08em; z-index: 60;
+  pointer-events: none; white-space: nowrap;
+  text-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 4px 8px rgba(0,0,0,0.5);
+  animation: comboShoutAnim 1.2s ease-out forwards;
+}
+@keyframes comboShoutAnim {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.3) rotate(-5deg); }
+  15% { opacity: 1; transform: translateX(-50%) scale(1.3) rotate(3deg); }
+  30% { transform: translateX(-50%) scale(1.0) rotate(-1deg); }
+  70% { opacity: 1; transform: translateX(-50%) scale(1.05) rotate(0deg); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1.5) translateY(-30px); }
+}
+
 /* Chain pills */
 .chain-visual { display: flex; gap: 4px; padding: 4px 12px; overflow-x: auto; min-height: 32px; align-items: center; flex-wrap: nowrap; flex-shrink: 0; }
 .chain-visual::-webkit-scrollbar { display: none; }
@@ -331,8 +347,9 @@ body {
   position: absolute; inset: 0; pointer-events: none; z-index: 20;
   opacity: 0; transition: opacity 0.05s;
 }
-.screen-flash.flash-white { background: #fff; opacity: 0.15; }
-.screen-flash.flash-gold { background: #fbbf24; opacity: 0.2; }
+.screen-flash.flash-white { background: #fff; opacity: 0.2; }
+.screen-flash.flash-gold { background: #ffd700; opacity: 0.3; }
+.screen-flash.flash-pink { background: #ff6eb4; opacity: 0.25; }
 
 /* ===== Results ===== */
 #screen-results { justify-content: center; align-items: center; background: linear-gradient(135deg, #1a1a4e 0%, #0d0d2a 100%); color: #fff; }
