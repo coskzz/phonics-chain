@@ -488,12 +488,14 @@ function presentWord() {
   $('word-meaning').textContent = word.ja;
 
   if (isFirst) {
-    // First word: show meaning, pick the whole word from 4 choices
-    renderWordLetters('_'.repeat(word.en.length), 0, word.en.length, '');
-    game.currentDiff = { blankStart: 0, blankLen: word.en.length, chunk: word.en.toLowerCase() };
-    game.targetWord = word.en.toLowerCase();
-    const choices = generateFirstWordChoices(word.en.toLowerCase(), fam);
-    renderChoices(choices, word.en.toLowerCase());
+    // First word: blank 1 random letter, show the rest
+    const w = word.en.toLowerCase();
+    const pos = Math.floor(Math.random() * w.length);
+    game.currentDiff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
+    game.targetWord = w;
+    renderWordLetters(w, pos, 1, w[pos]);
+    const choices = generateChoices(w[pos]);
+    renderChoices(choices, w[pos]);
     game.answering = true;
     return;
   }
