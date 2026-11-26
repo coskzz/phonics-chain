@@ -1550,6 +1550,8 @@ function renderScoreChart(history) {
     tip.innerHTML = `<b>${p.score || 0}pt</b><br>${d.getMonth() + 1}/${d.getDate()} ${hm}<br>${p.correct || 0}問正解・🔗${p.chain || 0}`;
     tip.style.left = (x(i) * r.width / W) + 'px';
     tip.style.top = (y(p.score || 0) * r.height / H) + 'px';
+    // Near the top, flip the tooltip below the point so it doesn't cover the summary
+    tip.style.transform = y(p.score || 0) < H * 0.4 ? 'translate(-50%, 14px)' : 'translate(-50%, -110%)';
   };
   const hide = () => { tip.hidden = true; cross.setAttribute('visibility', 'hidden'); hdot.setAttribute('visibility', 'hidden'); };
   const hit = $('sc-hit');
