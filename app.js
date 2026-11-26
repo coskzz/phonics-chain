@@ -518,7 +518,7 @@ let tickTimer = null;
 $('btn-play').addEventListener('click', () => startGame());
 
 function startGame() {
-  const allFamilies = CHAIN_FAMILIES.filter(f => f.words.length >= 2);
+  const allFamilies = playableFamilies();
   const avgLen = f => f.words.reduce((s, w) => s + w.en.length, 0) / f.words.length;
   allFamilies.sort((a, b) => avgLen(a) - avgLen(b));
   // Group into easy/medium/hard thirds, shuffle within each group
@@ -646,22 +646,22 @@ function findChunkDiff(prev, curr) {
   return { blankStart: pos, blankLen: 1, chunk: c[pos] };
 }
 
-function generateChoices(correctChunk) {
+function generateChoices(correctChunk, excludeLetters) {
+  const ex = excludeLetters || new Set();
+  const ok = c => c !== correctChunk && ![...c].some(ch => ex.has(ch));
   const len = correctChunk.length;
-  // Mix vowels and consonants — the blank position determines what's correct
   const allPool = len === 1
     ? [...CONSONANTS, ...VOWEL_LIST]
     : [...(ONSET_CLUSTERS[len] || []), ...(VOWEL_CLUSTERS[len] || [])];
   const choices = [correctChunk];
-  const candidates = shuffleArray(allPool.filter(c => c !== correctChunk && c.length === len));
-  for (const c of candidates) {
+  for (const c of shuffleArray(allPool.filter(c => c.length === len && ok(c)))) {
     if (choices.length >= 4) break;
     choices.push(c);
   }
+  const letters = [...CONSONANTS, ...VOWEL_LIST].filter(ch => !ex.has(ch));
   while (choices.length < 4) {
     let r = '';
-    const all = [...CONSONANTS, ...VOWEL_LIST];
-    for (let i = 0; i < len; i++) r += all[Math.floor(Math.random() * all.length)];
+    for (let i = 0; i < len; i++) r += letters[Math.floor(Math.random() * letters.length)];
     if (!choices.includes(r)) choices.push(r);
   }
   return shuffleArray(choices);
@@ -705,34 +705,58 @@ function presentWord() {
   $('word-family').textContent = `${fam.theme}  (${game.wordIdx + 1}/${fam.words.length})`;
   $('word-meaning').textContent = word.pos ? `${word.ja}（${word.pos}）` : word.ja;
 
-  // Blank 1 letter — exclude shared pattern letters
+  // Blank 1 letter outside the family's shared pattern
   const w = word.en.toLowerCase();
-  // Extract the shared pattern from theme (e.g. "-at" → "at", "sl-" → "sl", "un-" → "un")
-  const themeMatch = fam.theme.match(/[-]?([a-z]+)[-]?/i);
-  const pattern = themeMatch ? themeMatch[1].toLowerCase() : '';
-  // Find positions where the letter is NOT part of the shared pattern suffix/prefix
-  const candidates = [];
-  for (let i = 0; i < w.length; i++) {
-    // Check if this position is part of the shared pattern
-    let isShared = false;
-    if (pattern) {
-      // Suffix pattern (e.g. "at" in cat, bat, hat) — check end of word
-      const suffStart = w.length - pattern.length;
-      if (suffStart >= 0 && w.endsWith(pattern) && i >= suffStart) isShared = true;
-      // Prefix pattern (e.g. "sl" in slap, slip) — check start of word
-      if (w.startsWith(pattern) && i < pattern.length) isShared = true;
-    }
-    if (!isShared) candidates.push(i);
-  }
-  const pool = candidates.length > 0 ? candidates : [Math.floor(Math.random() * w.length)];
-  const pos = pool[Math.floor(Math.random() * pool.length)];
+  const pat = getFamilyPattern(fam);
+  const candidates = blankCandidates(w, pat);
+  const pos = candidates[Math.floor(Math.random() * candidates.length)];
   const diff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
   game.currentDiff = diff;
   game.targetWord = w;
   renderWordLetters(w, pos, 1, w[pos]);
-  const choices = generateChoices(w[pos]);
+  const choices = generateChoices(w[pos], pat.letters);
   renderChoices(choices, w[pos]);
   game.answering = true;
+}
+
+// Families with pattern-only words (e.g. "at" in -at) removed, since nothing can be blanked
+function playableFamilies() {
+  return CHAIN_FAMILIES.map(f => {
+    const pat = getFamilyPattern(f);
+    return { ...f, _pattern: pat, words: f.words.filter(x => blankCandidates(x.en.toLowerCase(), pat).length > 0) };
+  }).filter(f => f.words.length >= 2);
+}
+
+// Shared prefix/suffix of all words in a family (e.g. -at → suffix "at", sl- → prefix "sl")
+function getFamilyPattern(fam) {
+  if (fam._pattern) return fam._pattern;
+  const ws = fam.words.map(x => x.en.toLowerCase());
+  let prefix = ws[0], suffix = ws[0];
+  for (const x of ws) {
+    while (prefix && !x.startsWith(prefix)) prefix = prefix.slice(0, -1);
+    while (suffix && !x.endsWith(suffix)) suffix = suffix.slice(1);
+  }
+  // Fallback to the theme name for mixed families like "-oi/-oy"
+  if (!prefix && !suffix) {
+    const parts = (fam.theme.match(/[a-z]+/gi) || []).map(s => s.toLowerCase());
+    fam._pattern = { prefix: '', suffix: '', parts, letters: new Set(parts.join('')) };
+    return fam._pattern;
+  }
+  fam._pattern = { prefix, suffix, parts: [], letters: new Set(prefix + suffix) };
+  return fam._pattern;
+}
+
+function blankCandidates(w, pat) {
+  const shared = new Array(w.length).fill(false);
+  if (pat.prefix && w.startsWith(pat.prefix)) for (let i = 0; i < pat.prefix.length; i++) shared[i] = true;
+  if (pat.suffix && w.endsWith(pat.suffix)) for (let i = w.length - pat.suffix.length; i < w.length; i++) shared[i] = true;
+  for (const part of pat.parts) {
+    const idx = w.indexOf(part);
+    if (idx >= 0) for (let i = idx; i < idx + part.length; i++) shared[i] = true;
+  }
+  const out = [];
+  for (let i = 0; i < w.length; i++) if (!shared[i] && !pat.letters.has(w[i])) out.push(i);
+  return out;
 }
 
 // ===== Render letter blocks =====
@@ -953,7 +977,7 @@ function nextFamily() {
   $('game-chain-count').textContent = '0';
   $('chain-visual').innerHTML = '';
   if (game.familyIdx >= game.families.length) {
-    const allF = CHAIN_FAMILIES.filter(f => f.words.length >= 2);
+    const allF = playableFamilies();
     const aL = f => f.words.reduce((s, w) => s + w.en.length, 0) / f.words.length;
     allF.sort((a, b) => aL(a) - aL(b));
     const t = Math.ceil(allF.length / 3);
