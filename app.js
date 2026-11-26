@@ -843,7 +843,6 @@ function handleChoice(chosen, correct, btn) {
     updateCombo();
 
     // Combo-scaled effects: more combo = more dopamine
-    const c = game.combo;
     const contRect = $('game-container').getBoundingClientRect();
     const cw = contRect.width;
     const ch = contRect.height;
