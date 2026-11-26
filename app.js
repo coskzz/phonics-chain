@@ -1208,6 +1208,13 @@ async function endGame() {
   }
 
   // Save to Firestore
+  // Guests: keep this session's tries in memory so the score chart still works
+  if (isGuest && userDoc) {
+    (userDoc.gameHistory = userDoc.gameHistory || []).push({
+      date: new Date().toISOString(), score: game.score, correct: game.wordsCorrect,
+      chain: game.maxChain, stretch: game.stretchSuccesses.length, duration: GAME_TIME,
+    });
+  }
   if (currentUser && userDoc && !isGuest) {
     const today = new Date().toISOString().slice(0, 10);
     const updates = {
@@ -1252,9 +1259,9 @@ async function endGame() {
       await db.collection('users').doc(currentUser.uid).update(updates);
       const freshDoc = await db.collection('users').doc(currentUser.uid).get();
       userDoc = freshDoc.data();
-      // Trim gameHistory to last 50 on client
-      if (userDoc.gameHistory && userDoc.gameHistory.length > 50) {
-        const trimmed = userDoc.gameHistory.slice(-50);
+      // Keep the last 500 tries so the Month view has enough data
+      if (userDoc.gameHistory && userDoc.gameHistory.length > 500) {
+        const trimmed = userDoc.gameHistory.slice(-500);
         await db.collection('users').doc(currentUser.uid).update({ gameHistory: trimmed });
         userDoc.gameHistory = trimmed;
       }
@@ -1385,6 +1392,7 @@ function enterMyPage() {
   mypageCalDate = new Date();
   renderCalendarWidget($('mypage-calendar'), userDoc.dailyLog || {}, mypageCalDate, 'mypage');
   renderMasteryChart();
+  renderScoreChart(userDoc.gameHistory || []);
   renderGameHistory(userDoc.gameHistory || []);
 }
 $('btn-back-mypage').addEventListener('click', () => enterHome());
@@ -1474,6 +1482,82 @@ function renderMasteryChart() {
 }
 
 // Game history
+// ===== Score trend chart (one point per try) =====
+let scoreRange = 'day';
+document.querySelectorAll('#score-range-tabs .range-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#score-range-tabs .range-tab').forEach(b => b.classList.toggle('active', b === btn));
+    scoreRange = btn.dataset.range;
+    renderScoreChart(userDoc?.gameHistory || []);
+  });
+});
+
+function renderScoreChart(history) {
+  const box = $('score-chart'), sum = $('score-summary');
+  const now = new Date();
+  const start = scoreRange === 'day'
+    ? new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    : new Date(now.getTime() - (scoreRange === 'week' ? 7 : 30) * 86400000);
+  const pts = (history || []).filter(h => h && h.date && new Date(h.date) >= start)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const label = { day: '今日', week: '直近7日', month: '直近30日' }[scoreRange];
+  if (!pts.length) {
+    sum.innerHTML = '';
+    box.innerHTML = `<div class="score-empty">${label}のプレイはまだありません</div>`;
+    return;
+  }
+  const scores = pts.map(p => p.score || 0);
+  const best = Math.max(...scores), avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  sum.innerHTML = `<div><div class="ss-num">${pts.length}回</div><div class="ss-label">${label}のプレイ</div></div>
+    <div><div class="ss-num">${best}</div><div class="ss-label">最高</div></div>
+    <div><div class="ss-num">${avg}</div><div class="ss-label">平均</div></div>`;
+
+  const W = 320, H = 180, L = 34, R = 34, T = 12, B = 26;
+  const yMax = Math.max(100, Math.ceil(best * 1.15 / 100) * 100);
+  const x = i => pts.length === 1 ? L + (W - L - R) / 2 : L + i * (W - L - R) / (pts.length - 1);
+  const y = v => T + (H - T - B) * (1 - v / yMax);
+  const fmt = d => scoreRange === 'day'
+    ? `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+    : `${d.getMonth() + 1}/${d.getDate()}`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}のスコアの推移">`;
+  for (const v of [0, yMax / 2, yMax]) {
+    svg += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>`;
+    svg += `<text class="axis-label" x="${L - 6}" y="${y(v) + 3}" text-anchor="end">${v}</text>`;
+  }
+  svg += `<path class="line" d="${pts.map((p, i) => (i ? 'L' : 'M') + x(i) + ' ' + y(p.score || 0)).join(' ')}"/>`;
+  if (pts.length <= 40) pts.forEach((p, i) => { svg += `<circle class="dot" cx="${x(i)}" cy="${y(p.score || 0)}" r="4"/>`; });
+  const last = pts.length - 1;
+  svg += `<text class="end-label" x="${x(last) + 7}" y="${y(scores[last]) + 4}">${scores[last]}</text>`;
+  svg += `<text class="axis-label" x="${x(0)}" y="${H - 8}" text-anchor="${pts.length === 1 ? 'middle' : 'start'}">${fmt(new Date(pts[0].date))}</text>`;
+  if (pts.length > 1) svg += `<text class="axis-label" x="${x(last)}" y="${H - 8}" text-anchor="end">${fmt(new Date(pts[last].date))}</text>`;
+  svg += `<line class="crosshair" id="sc-cross" y1="${T}" y2="${H - B}" visibility="hidden"/>`;
+  svg += `<circle class="hover-dot" id="sc-hdot" r="5" visibility="hidden"/>`;
+  svg += `<rect x="${L - 10}" y="0" width="${W - L - R + 20}" height="${H}" fill="transparent" id="sc-hit"/></svg>`;
+  box.innerHTML = svg + '<div class="score-tooltip" id="sc-tip" hidden></div>';
+
+  const svgEl = box.querySelector('svg'), tip = $('sc-tip');
+  const cross = $('sc-cross'), hdot = $('sc-hdot');
+  const show = ev => {
+    const r = svgEl.getBoundingClientRect();
+    const sx = (ev.clientX - r.left) * W / r.width;
+    let i = pts.length === 1 ? 0 : Math.round((sx - L) / ((W - L - R) / (pts.length - 1)));
+    i = Math.max(0, Math.min(last, i));
+    const p = pts[i], d = new Date(p.date);
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
+    hdot.setAttribute('cx', x(i)); hdot.setAttribute('cy', y(p.score || 0)); hdot.setAttribute('visibility', 'visible');
+    tip.hidden = false;
+    const hm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    tip.innerHTML = `<b>${p.score || 0}pt</b><br>${d.getMonth() + 1}/${d.getDate()} ${hm}<br>${p.correct || 0}問正解・🔗${p.chain || 0}`;
+    tip.style.left = (x(i) * r.width / W) + 'px';
+    tip.style.top = (y(p.score || 0) * r.height / H) + 'px';
+  };
+  const hide = () => { tip.hidden = true; cross.setAttribute('visibility', 'hidden'); hdot.setAttribute('visibility', 'hidden'); };
+  const hit = $('sc-hit');
+  hit.addEventListener('pointermove', show);
+  hit.addEventListener('pointerdown', show);
+  hit.addEventListener('pointerleave', hide);
+}
+
 function renderGameHistory(history) {
   const el = $('mypage-history');
   if (!history || history.length === 0) {
