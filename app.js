@@ -47,10 +47,10 @@ const VOWEL_CLUSTERS = {
 function isVowelChunk(chunk) {
   return chunk.split('').every(c => VOWELS.has(c));
 }
-const GAME_TIME = 30;
-const TIME_BONUS_CORRECT = 3;
-const TIME_BONUS_CHAIN = 5;
-const TIME_PENALTY_WRONG = 3;
+const GAME_TIME = 20;
+const TIME_BONUS_CORRECT = 1;
+const TIME_BONUS_CHAIN = 2;
+const TIME_PENALTY_WRONG = 5;
 
 // ===== Helpers =====
 function $(id) { return document.getElementById(id); }
@@ -596,7 +596,7 @@ function startTimer() {
 }
 
 function addTime(sec) {
-  game.timeLeft = Math.min(game.timeLeft + sec, GAME_TIME * 1.5);
+  game.timeLeft = Math.min(game.timeLeft + sec, GAME_TIME);
   clearInterval(gameTimer);
   clearInterval(tickTimer);
   startTimer();
