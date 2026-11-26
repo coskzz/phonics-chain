@@ -129,7 +129,7 @@ function startBGM() {
   try {
     const ctx = getAudioCtx();
     bgmMaster = ctx.createGain();
-    bgmMaster.gain.value = 1.0;
+    bgmMaster.gain.value = 0.35;
     bgmMaster.connect(ctx.destination);
     bgmTick();
   } catch(e) {}
@@ -256,7 +256,7 @@ function bgmTick() {
 function setBGMDanger(isDanger) {
   if (isDanger === bgmDanger) return;
   bgmDanger = isDanger;
-  if (bgmMaster) bgmMaster.gain.value = isDanger ? 1.2 : 1.0;
+  if (bgmMaster) bgmMaster.gain.value = isDanger ? 0.45 : 0.35;
 }
 
 // Mute toggles
