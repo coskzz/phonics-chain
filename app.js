@@ -705,9 +705,17 @@ function presentWord() {
   $('word-family').textContent = `${fam.theme}  (${game.wordIdx + 1}/${fam.words.length})`;
   $('word-meaning').textContent = word.pos ? `${word.ja}（${word.pos}）` : word.ja;
 
-  // Random 1-letter blank — player must read the meaning to know the word
+  // Blank 1 letter — only at positions that DIFFER between words in the family
   const w = word.en.toLowerCase();
-  const pos = Math.floor(Math.random() * w.length);
+  const familyWords = fam.words.map(fw => fw.en.toLowerCase());
+  const varyingPositions = [];
+  for (let i = 0; i < w.length; i++) {
+    const letter = w[i];
+    const allSame = familyWords.every(fw => i < fw.length && fw[i] === letter);
+    if (!allSame) varyingPositions.push(i);
+  }
+  const candidates = varyingPositions.length > 0 ? varyingPositions : [Math.floor(Math.random() * w.length)];
+  const pos = candidates[Math.floor(Math.random() * candidates.length)];
   const diff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
   game.currentDiff = diff;
   game.targetWord = w;
