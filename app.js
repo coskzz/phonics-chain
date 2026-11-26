@@ -1096,7 +1096,7 @@ $('btn-speak').addEventListener('click', () => {
   const word = currentWord();
   if (word && !game.gameOver) {
     speakWord(word.en);
-    addTime(-2);
+    addTime(-0.5);
   }
 });
 
