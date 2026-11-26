@@ -303,6 +303,13 @@ body {
   0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
   100% { opacity: 0; transform: translateX(-50%) translateY(-60px) scale(0.7); }
 }
+.float-feedback .fb-ph { color: #ffd6ea; font-weight: 600; font-size: 0.8rem; }
+.last-answer { min-height: 28px; margin-top: 10px; font-size: 1rem; color: #fff; text-align: center; }
+.last-answer .la-check { color: #4ade80; font-weight: 900; }
+.last-answer .la-word { font-weight: 800; }
+.last-answer .la-ph { color: #ffb6d9; font-weight: 600; margin-left: 4px; }
+.last-answer.pop { animation: laPop 0.25s ease-out; }
+@keyframes laPop { 0% { transform: scale(1.2); opacity: 0.4; } 100% { transform: scale(1); opacity: 1; } }
 .float-feedback .fb-pos { background: rgba(255,255,255,0.2); color: #fff; border-radius: 8px; padding: 1px 6px; font-size: 0.65rem; margin-left: 2px; }
 .float-feedback .fb-eiken { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; border-radius: 10px; padding: 1px 8px; font-size: 0.7rem; margin-left: 4px; }
 

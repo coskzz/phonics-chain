@@ -563,6 +563,7 @@ function startGame() {
   $('game-chain-count').textContent = '0';
   $('chain-visual').innerHTML = '';
   $('combo-area').innerHTML = '';
+  $('last-answer').innerHTML = '';
   $('game-timer').textContent = GAME_TIME.toFixed(1);
   $('game-timer').classList.remove('danger');
   $('timer-bar').style.width = '100%';
@@ -1054,9 +1055,13 @@ function showFloatFeedback(word) {
   el.className = 'float-feedback';
   el.style.top = '40%';
   const posLabel = word.pos ? `<span class="fb-pos">${word.pos}</span> ` : '';
-  el.innerHTML = `${word.en} ${posLabel}<span class="fb-eiken">${EIKEN_LABELS[word.eiken]}</span>`;
+  el.innerHTML = `${word.en} <span class="fb-ph">${word.ph || ''}</span> ${posLabel}<span class="fb-eiken">${EIKEN_LABELS[word.eiken]}</span>`;
   $('game-container').appendChild(el);
   setTimeout(() => el.remove(), 800);
+  // Keep the last correct word + IPA visible while the next question is on screen
+  const la = $('last-answer');
+  la.innerHTML = `<span class="la-check">✓</span> <span class="la-word">${word.en}</span> <span class="la-ph">${word.ph || ''}</span>`;
+  la.classList.remove('pop'); void la.offsetWidth; la.classList.add('pop');
 }
 
 function showStretchBanner(word) {
