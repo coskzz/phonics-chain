@@ -1074,7 +1074,10 @@ function addChainPill(word) {
 // Speak button
 $('btn-speak').addEventListener('click', () => {
   const word = currentWord();
-  if (word) speakWord(word.en);
+  if (word && !game.gameOver) {
+    speakWord(word.en);
+    addTime(-2);
+  }
 });
 
 // Quit
