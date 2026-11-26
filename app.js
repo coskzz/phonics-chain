@@ -46,7 +46,7 @@ const VOWEL_CLUSTERS = {
 function isVowelChunk(chunk) {
   return chunk.split('').every(c => VOWELS.has(c));
 }
-const GAME_TIME = 60;
+const GAME_TIME = 30;
 const TIME_BONUS_CORRECT = 3;
 const TIME_BONUS_CHAIN = 5;
 const TIME_PENALTY_WRONG = 3;
