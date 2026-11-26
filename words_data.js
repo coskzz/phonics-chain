@@ -5690,6 +5690,1752 @@ const CHAIN_FAMILIES = [
       {en: "wholesale",ja: "卸売りの",ph: "/ˈhoʊlseɪl/",eiken: 1,pos: "形容詞"},
     ]
   },
+  // ---- 追加分（基本語 5級・4級・3級）----
+  {
+    id: "b5_teen_end",
+    theme: "-teen ファミリー",
+    words: [
+      {en: "fourteen",ja: "じゅうよん（14）",ph: "/ˌfɔːrˈtiːn/",eiken: 5,pos: "名詞"},
+      {en: "fifteen",ja: "じゅうご（15）",ph: "/ˌfɪfˈtiːn/",eiken: 5,pos: "名詞"},
+      {en: "sixteen",ja: "じゅうろく（16）",ph: "/ˌsɪksˈtiːn/",eiken: 5,pos: "名詞"},
+      {en: "seventeen",ja: "じゅうなな（17）",ph: "/ˌsevənˈtiːn/",eiken: 5,pos: "名詞"},
+      {en: "eighteen",ja: "じゅうはち（18）",ph: "/ˌeɪˈtiːn/",eiken: 5,pos: "名詞"},
+      {en: "nineteen",ja: "じゅうきゅう（19）",ph: "/ˌnaɪnˈtiːn/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_day_end",
+    theme: "-day ファミリー",
+    words: [
+      {en: "sunday",ja: "日曜日",ph: "/ˈsʌndeɪ/",eiken: 5,pos: "名詞"},
+      {en: "monday",ja: "月曜日",ph: "/ˈmʌndeɪ/",eiken: 5,pos: "名詞"},
+      {en: "tuesday",ja: "火曜日",ph: "/ˈtuːzdeɪ/",eiken: 5,pos: "名詞"},
+      {en: "wednesday",ja: "水曜日",ph: "/ˈwenzdeɪ/",eiken: 5,pos: "名詞"},
+      {en: "thursday",ja: "木曜日",ph: "/ˈθɜːrzdeɪ/",eiken: 5,pos: "名詞"},
+      {en: "friday",ja: "金曜日",ph: "/ˈfraɪdeɪ/",eiken: 5,pos: "名詞"},
+      {en: "saturday",ja: "土曜日",ph: "/ˈsætərdeɪ/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_ty_end",
+    theme: "-ty ファミリー",
+    words: [
+      {en: "twenty",ja: "にじゅう（20）",ph: "/ˈtwenti/",eiken: 5,pos: "名詞"},
+      {en: "fifty",ja: "ごじゅう（50）",ph: "/ˈfɪfti/",eiken: 5,pos: "名詞"},
+      {en: "sixty",ja: "ろくじゅう（60）",ph: "/ˈsɪksti/",eiken: 5,pos: "名詞"},
+      {en: "seventy",ja: "ななじゅう（70）",ph: "/ˈsevənti/",eiken: 5,pos: "名詞"},
+      {en: "eighty",ja: "はちじゅう（80）",ph: "/ˈeɪti/",eiken: 5,pos: "名詞"},
+      {en: "ninety",ja: "きゅうじゅう（90）",ph: "/ˈnaɪnti/",eiken: 5,pos: "名詞"},
+      {en: "party",ja: "パーティー",ph: "/ˈpɑːrti/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_ber_end",
+    theme: "-ber ファミリー",
+    words: [
+      {en: "september",ja: "9月",ph: "/sepˈtembər/",eiken: 5,pos: "名詞"},
+      {en: "october",ja: "10月",ph: "/ɑːkˈtoʊbər/",eiken: 5,pos: "名詞"},
+      {en: "november",ja: "11月",ph: "/noʊˈvembər/",eiken: 5,pos: "名詞"},
+      {en: "december",ja: "12月",ph: "/dɪˈsembər/",eiken: 5,pos: "名詞"},
+      {en: "number",ja: "数・番号",ph: "/ˈnʌmbər/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_ther_end",
+    theme: "-ther ファミリー",
+    words: [
+      {en: "mother",ja: "母",ph: "/ˈmʌðər/",eiken: 5,pos: "名詞"},
+      {en: "father",ja: "父",ph: "/ˈfɑːðər/",eiken: 5,pos: "名詞"},
+      {en: "grandmother",ja: "祖母",ph: "/ˈɡrænmʌðər/",eiken: 5,pos: "名詞"},
+      {en: "grandfather",ja: "祖父",ph: "/ˈɡrænfɑːðər/",eiken: 5,pos: "名詞"},
+      {en: "weather",ja: "天気",ph: "/ˈweðər/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_th_end",
+    theme: "-th ファミリー",
+    words: [
+      {en: "fourth",ja: "4番目の",ph: "/fɔːrθ/",eiken: 5,pos: "形容詞"},
+      {en: "fifth",ja: "5番目の",ph: "/fɪfθ/",eiken: 5,pos: "形容詞"},
+      {en: "sixth",ja: "6番目の",ph: "/sɪksθ/",eiken: 5,pos: "形容詞"},
+      {en: "seventh",ja: "7番目の",ph: "/ˈsevənθ/",eiken: 5,pos: "形容詞"},
+      {en: "eighth",ja: "8番目の",ph: "/eɪtθ/",eiken: 5,pos: "形容詞"},
+      {en: "ninth",ja: "9番目の",ph: "/naɪnθ/",eiken: 5,pos: "形容詞"},
+      {en: "tenth",ja: "10番目の",ph: "/tenθ/",eiken: 5,pos: "形容詞"},
+      {en: "eleventh",ja: "11番目の",ph: "/ɪˈlevənθ/",eiken: 5,pos: "形容詞"},
+      {en: "twelfth",ja: "12番目の",ph: "/twelfθ/",eiken: 5,pos: "形容詞"},
+      {en: "thirteenth",ja: "13番目の",ph: "/ˌθɜːrˈtiːnθ/",eiken: 5,pos: "形容詞"},
+      {en: "twentieth",ja: "20番目の",ph: "/ˈtwentiəθ/",eiken: 5,pos: "形容詞"},
+      {en: "thirtieth",ja: "30番目の",ph: "/ˈθɜːrtiəθ/",eiken: 5,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b5_th_end2",
+    theme: "-th ファミリー",
+    words: [
+      {en: "mouth",ja: "口",ph: "/maʊθ/",eiken: 5,pos: "名詞"},
+      {en: "teeth",ja: "歯（複数）",ph: "/tiːθ/",eiken: 5,pos: "名詞"},
+      {en: "math",ja: "数学",ph: "/mæθ/",eiken: 5,pos: "名詞"},
+      {en: "with",ja: "〜と一緒に",ph: "/wɪð/",eiken: 5,pos: "前置詞"},
+    ]
+  },
+  {
+    id: "b5_ing_end",
+    theme: "-ing ファミリー",
+    words: [
+      {en: "evening",ja: "夕方",ph: "/ˈiːvnɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "swimming",ja: "水泳",ph: "/ˈswɪmɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "cooking",ja: "料理",ph: "/ˈkʊkɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "reading",ja: "読書",ph: "/ˈriːdɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "singing",ja: "歌うこと",ph: "/ˈsɪŋɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "dancing",ja: "ダンス",ph: "/ˈdænsɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "running",ja: "ランニング",ph: "/ˈrʌnɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "walking",ja: "散歩",ph: "/ˈwɔːkɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "playing",ja: "遊ぶこと",ph: "/ˈpleɪɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "fishing",ja: "つり",ph: "/ˈfɪʃɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "skiing",ja: "スキー",ph: "/ˈskiːɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "skating",ja: "スケート",ph: "/ˈskeɪtɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "interesting",ja: "おもしろい",ph: "/ˈɪntrəstɪŋ/",eiken: 5,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b5_to_start",
+    theme: "to- ファミリー",
+    words: [
+      {en: "tomato",ja: "トマト",ph: "/təˈmeɪtoʊ/",eiken: 5,pos: "名詞"},
+      {en: "tomorrow",ja: "明日",ph: "/təˈmɑːroʊ/",eiken: 5,pos: "副詞"},
+      {en: "tonight",ja: "今夜",ph: "/təˈnaɪt/",eiken: 5,pos: "副詞"},
+      {en: "tooth",ja: "歯",ph: "/tuːθ/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_ca_start",
+    theme: "ca- ファミリー",
+    words: [
+      {en: "candy",ja: "あめ",ph: "/ˈkændi/",eiken: 5,pos: "名詞"},
+      {en: "carrot",ja: "にんじん",ph: "/ˈkærət/",eiken: 5,pos: "名詞"},
+      {en: "camera",ja: "カメラ",ph: "/ˈkæmərə/",eiken: 5,pos: "名詞"},
+      {en: "camping",ja: "キャンプ",ph: "/ˈkæmpɪŋ/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_mo_start",
+    theme: "mo- ファミリー",
+    words: [
+      {en: "monkey",ja: "サル",ph: "/ˈmʌŋki/",eiken: 5,pos: "名詞"},
+      {en: "money",ja: "お金",ph: "/ˈmʌni/",eiken: 5,pos: "名詞"},
+      {en: "movie",ja: "映画",ph: "/ˈmuːvi/",eiken: 5,pos: "名詞"},
+      {en: "morning",ja: "朝",ph: "/ˈmɔːrnɪŋ/",eiken: 5,pos: "名詞"},
+      {en: "month",ja: "月（1か月）",ph: "/mʌnθ/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_fo_start",
+    theme: "fo- ファミリー",
+    words: [
+      {en: "food",ja: "食べ物",ph: "/fuːd/",eiken: 5,pos: "名詞"},
+      {en: "fork",ja: "フォーク",ph: "/fɔːrk/",eiken: 5,pos: "名詞"},
+      {en: "four",ja: "よん（4）",ph: "/fɔːr/",eiken: 5,pos: "名詞"},
+      {en: "forty",ja: "よんじゅう（40）",ph: "/ˈfɔːrti/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_ry_end",
+    theme: "-ry ファミリー",
+    words: [
+      {en: "january",ja: "1月",ph: "/ˈdʒænjueri/",eiken: 5,pos: "名詞"},
+      {en: "february",ja: "2月",ph: "/ˈfebrueri/",eiken: 5,pos: "名詞"},
+      {en: "curry",ja: "カレー",ph: "/ˈkɜːri/",eiken: 5,pos: "名詞"},
+      {en: "dictionary",ja: "辞書",ph: "/ˈdɪkʃəneri/",eiken: 5,pos: "名詞"},
+      {en: "country",ja: "国",ph: "/ˈkʌntri/",eiken: 5,pos: "名詞"},
+      {en: "hungry",ja: "おなかがすいた",ph: "/ˈhʌŋɡri/",eiken: 5,pos: "形容詞"},
+      {en: "every",ja: "毎〜",ph: "/ˈevri/",eiken: 5,pos: "形容詞"},
+      {en: "sorry",ja: "ごめんなさい",ph: "/ˈsɑːri/",eiken: 5,pos: "形容詞"},
+      {en: "very",ja: "とても",ph: "/ˈveri/",eiken: 5,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b5_er_end",
+    theme: "-er ファミリー",
+    words: [
+      {en: "sister",ja: "姉・妹",ph: "/ˈsɪstər/",eiken: 5,pos: "名詞"},
+      {en: "player",ja: "選手",ph: "/ˈpleɪər/",eiken: 5,pos: "名詞"},
+      {en: "hamburger",ja: "ハンバーガー",ph: "/ˈhæmbɜːrɡər/",eiken: 5,pos: "名詞"},
+      {en: "dinner",ja: "夕食",ph: "/ˈdɪnər/",eiken: 5,pos: "名詞"},
+      {en: "butter",ja: "バター",ph: "/ˈbʌtər/",eiken: 5,pos: "名詞"},
+      {en: "tiger",ja: "トラ",ph: "/ˈtaɪɡər/",eiken: 5,pos: "名詞"},
+      {en: "finger",ja: "指",ph: "/ˈfɪŋɡər/",eiken: 5,pos: "名詞"},
+      {en: "eraser",ja: "消しゴム",ph: "/ɪˈreɪsər/",eiken: 5,pos: "名詞"},
+      {en: "ruler",ja: "定規",ph: "/ˈruːlər/",eiken: 5,pos: "名詞"},
+      {en: "soccer",ja: "サッカー",ph: "/ˈsɑːkər/",eiken: 5,pos: "名詞"},
+      {en: "letter",ja: "手紙",ph: "/ˈletər/",eiken: 5,pos: "名詞"},
+      {en: "answer",ja: "答え",ph: "/ˈænsər/",eiken: 5,pos: "名詞"},
+      {en: "river",ja: "川",ph: "/ˈrɪvər/",eiken: 5,pos: "名詞"},
+      {en: "later",ja: "あとで",ph: "/ˈleɪtər/",eiken: 5,pos: "副詞"},
+      {en: "after",ja: "〜のあとに",ph: "/ˈæftər/",eiken: 5,pos: "前置詞"},
+    ]
+  },
+  {
+    id: "b5_en_end",
+    theme: "-en ファミリー",
+    words: [
+      {en: "seven",ja: "なな（7）",ph: "/ˈsevən/",eiken: 5,pos: "名詞"},
+      {en: "eleven",ja: "じゅういち（11）",ph: "/ɪˈlevən/",eiken: 5,pos: "名詞"},
+      {en: "women",ja: "女性たち",ph: "/ˈwɪmɪn/",eiken: 5,pos: "名詞"},
+      {en: "children",ja: "子どもたち",ph: "/ˈtʃɪldrən/",eiken: 5,pos: "名詞"},
+      {en: "garden",ja: "庭",ph: "/ˈɡɑːrdən/",eiken: 5,pos: "名詞"},
+      {en: "kitchen",ja: "台所",ph: "/ˈkɪtʃɪn/",eiken: 5,pos: "名詞"},
+      {en: "often",ja: "よく",ph: "/ˈɔːfən/",eiken: 5,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b5_le_end",
+    theme: "-le ファミリー",
+    words: [
+      {en: "uncle",ja: "おじ",ph: "/ˈʌŋkəl/",eiken: 5,pos: "名詞"},
+      {en: "people",ja: "人々",ph: "/ˈpiːpəl/",eiken: 5,pos: "名詞"},
+      {en: "apple",ja: "りんご",ph: "/ˈæpəl/",eiken: 5,pos: "名詞"},
+      {en: "vegetable",ja: "野菜",ph: "/ˈvedʒtəbəl/",eiken: 5,pos: "名詞"},
+      {en: "table",ja: "テーブル",ph: "/ˈteɪbəl/",eiken: 5,pos: "名詞"},
+      {en: "little",ja: "小さい",ph: "/ˈlɪtəl/",eiken: 5,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b5_on_end",
+    theme: "-on ファミリー",
+    words: [
+      {en: "lemon",ja: "レモン",ph: "/ˈlemən/",eiken: 5,pos: "名詞"},
+      {en: "melon",ja: "メロン",ph: "/ˈmelən/",eiken: 5,pos: "名詞"},
+      {en: "onion",ja: "たまねぎ",ph: "/ˈʌnjən/",eiken: 5,pos: "名詞"},
+      {en: "lion",ja: "ライオン",ph: "/ˈlaɪən/",eiken: 5,pos: "名詞"},
+      {en: "lesson",ja: "授業",ph: "/ˈlesən/",eiken: 5,pos: "名詞"},
+      {en: "badminton",ja: "バドミントン",ph: "/ˈbædmɪntən/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_ch_end",
+    theme: "-ch ファミリー",
+    words: [
+      {en: "march",ja: "3月",ph: "/mɑːrtʃ/",eiken: 5,pos: "名詞"},
+      {en: "peach",ja: "もも",ph: "/piːtʃ/",eiken: 5,pos: "名詞"},
+      {en: "sandwich",ja: "サンドイッチ",ph: "/ˈsænwɪtʃ/",eiken: 5,pos: "名詞"},
+      {en: "much",ja: "たくさんの",ph: "/mʌtʃ/",eiken: 5,pos: "形容詞"},
+      {en: "beach",ja: "浜辺",ph: "/biːtʃ/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_win_start",
+    theme: "win- ファミリー",
+    words: [
+      {en: "window",ja: "窓",ph: "/ˈwɪndoʊ/",eiken: 5,pos: "名詞"},
+      {en: "wind",ja: "風",ph: "/wɪnd/",eiken: 5,pos: "名詞"},
+      {en: "windy",ja: "風の強い",ph: "/ˈwɪndi/",eiken: 5,pos: "形容詞"},
+      {en: "winter",ja: "冬",ph: "/ˈwɪntər/",eiken: 5,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b5_ly_end",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "july",ja: "7月",ph: "/dʒuˈlaɪ/",eiken: 5,pos: "名詞"},
+      {en: "family",ja: "家族",ph: "/ˈfæməli/",eiken: 5,pos: "名詞"},
+      {en: "early",ja: "早く",ph: "/ˈɜːrli/",eiken: 5,pos: "副詞"},
+      {en: "usually",ja: "ふつうは",ph: "/ˈjuːʒuəli/",eiken: 5,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b5_or_end",
+    theme: "-or ファミリー",
+    words: [
+      {en: "color",ja: "色",ph: "/ˈkʌlər/",eiken: 5,pos: "名詞"},
+      {en: "doctor",ja: "医者",ph: "/ˈdɑːktər/",eiken: 5,pos: "名詞"},
+      {en: "door",ja: "ドア",ph: "/dɔːr/",eiken: 5,pos: "名詞"},
+      {en: "for",ja: "〜のために",ph: "/fɔːr/",eiken: 5,pos: "前置詞"},
+    ]
+  },
+  {
+    id: "b5_re_end",
+    theme: "-re ファミリー",
+    words: [
+      {en: "bookstore",ja: "本屋",ph: "/ˈbʊkstɔːr/",eiken: 5,pos: "名詞"},
+      {en: "here",ja: "ここに",ph: "/hɪr/",eiken: 5,pos: "副詞"},
+      {en: "there",ja: "そこに",ph: "/ðer/",eiken: 5,pos: "副詞"},
+      {en: "before",ja: "〜の前に",ph: "/bɪˈfɔːr/",eiken: 5,pos: "前置詞"},
+    ]
+  },
+  {
+    id: "b5_ny_end",
+    theme: "-ny ファミリー",
+    words: [
+      {en: "sunny",ja: "晴れた",ph: "/ˈsʌni/",eiken: 5,pos: "形容詞"},
+      {en: "rainy",ja: "雨の",ph: "/ˈreɪni/",eiken: 5,pos: "形容詞"},
+      {en: "many",ja: "たくさんの",ph: "/ˈmeni/",eiken: 5,pos: "形容詞"},
+      {en: "any",ja: "いくつかの",ph: "/ˈeni/",eiken: 5,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b5_bu_start",
+    theme: "bu- ファミリー",
+    words: [
+      {en: "bus",ja: "バス",ph: "/bʌs/",eiken: 5,pos: "名詞"},
+      {en: "busy",ja: "忙しい",ph: "/ˈbɪzi/",eiken: 5,pos: "形容詞"},
+      {en: "buy",ja: "買う",ph: "/baɪ/",eiken: 5,pos: "動詞"},
+      {en: "but",ja: "しかし",ph: "/bʌt/",eiken: 5,pos: "接続詞"},
+    ]
+  },
+  {
+    id: "b4_er",
+    theme: "-er ファミリー",
+    words: [
+      {en: "passenger",ja: "乗客",ph: "/ˈpæsɪndʒər/",eiken: 4,pos: "名詞"},
+      {en: "partner",ja: "パートナー",ph: "/ˈpɑːrtnər/",eiken: 4,pos: "名詞"},
+      {en: "member",ja: "メンバー",ph: "/ˈmembər/",eiken: 4,pos: "名詞"},
+      {en: "explorer",ja: "探検家",ph: "/ɪkˈsplɔːrər/",eiken: 4,pos: "名詞"},
+      {en: "designer",ja: "デザイナー",ph: "/dɪˈzaɪnər/",eiken: 4,pos: "名詞"},
+      {en: "traveler",ja: "旅行者",ph: "/ˈtrævələr/",eiken: 4,pos: "名詞"},
+      {en: "beginner",ja: "初心者",ph: "/bɪˈɡɪnər/",eiken: 4,pos: "名詞"},
+      {en: "winner",ja: "勝者",ph: "/ˈwɪnər/",eiken: 4,pos: "名詞"},
+      {en: "owner",ja: "持ち主",ph: "/ˈoʊnər/",eiken: 4,pos: "名詞"},
+      {en: "officer",ja: "警官・役人",ph: "/ˈɔːfɪsər/",eiken: 4,pos: "名詞"},
+      {en: "manager",ja: "管理者",ph: "/ˈmænɪdʒər/",eiken: 4,pos: "名詞"},
+      {en: "volunteer",ja: "ボランティア",ph: "/ˌvɑːlənˈtɪr/",eiken: 4,pos: "名詞"},
+      {en: "engineer",ja: "技師",ph: "/ˌendʒɪˈnɪr/",eiken: 4,pos: "名詞"},
+      {en: "printer",ja: "プリンター",ph: "/ˈprɪntər/",eiken: 4,pos: "名詞"},
+      {en: "poster",ja: "ポスター",ph: "/ˈpoʊstər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_er_2",
+    theme: "-er ファミリー",
+    words: [
+      {en: "sticker",ja: "シール",ph: "/ˈstɪkər/",eiken: 4,pos: "名詞"},
+      {en: "ladder",ja: "はしご",ph: "/ˈlædər/",eiken: 4,pos: "名詞"},
+      {en: "hammer",ja: "ハンマー",ph: "/ˈhæmər/",eiken: 4,pos: "名詞"},
+      {en: "toaster",ja: "トースター",ph: "/ˈtoʊstər/",eiken: 4,pos: "名詞"},
+      {en: "corner",ja: "角",ph: "/ˈkɔːrnər/",eiken: 4,pos: "名詞"},
+      {en: "center",ja: "中心",ph: "/ˈsentər/",eiken: 4,pos: "名詞"},
+      {en: "monster",ja: "怪物",ph: "/ˈmɑːnstər/",eiken: 4,pos: "名詞"},
+      {en: "together",ja: "いっしょに",ph: "/təˈɡeðər/",eiken: 4,pos: "副詞"},
+      {en: "remember",ja: "覚えている",ph: "/rɪˈmembər/",eiken: 4,pos: "動詞"},
+      {en: "cucumber",ja: "きゅうり",ph: "/ˈkjuːkʌmbər/",eiken: 4,pos: "名詞"},
+      {en: "ginger",ja: "しょうが",ph: "/ˈdʒɪndʒər/",eiken: 4,pos: "名詞"},
+      {en: "pepper",ja: "こしょう",ph: "/ˈpepər/",eiken: 4,pos: "名詞"},
+      {en: "cracker",ja: "クラッカー",ph: "/ˈkrækər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_er_3",
+    theme: "-er ファミリー",
+    words: [
+      {en: "hamster",ja: "ハムスター",ph: "/ˈhæmstər/",eiken: 4,pos: "名詞"},
+      {en: "stapler",ja: "ホッチキス",ph: "/ˈsteɪplər/",eiken: 4,pos: "名詞"},
+      {en: "barber",ja: "理容師",ph: "/ˈbɑːrbər/",eiken: 4,pos: "名詞"},
+      {en: "carpenter",ja: "大工",ph: "/ˈkɑːrpəntər/",eiken: 4,pos: "名詞"},
+      {en: "cashier",ja: "レジ係",ph: "/kæˈʃɪr/",eiken: 4,pos: "名詞"},
+      {en: "lawyer",ja: "弁護士",ph: "/ˈlɔːjər/",eiken: 4,pos: "名詞"},
+      {en: "soldier",ja: "兵士",ph: "/ˈsoʊldʒər/",eiken: 4,pos: "名詞"},
+      {en: "waiter",ja: "ウエーター",ph: "/ˈweɪtər/",eiken: 4,pos: "名詞"},
+      {en: "gather",ja: "集める",ph: "/ˈɡæðər/",eiken: 4,pos: "動詞"},
+      {en: "wander",ja: "歩き回る",ph: "/ˈwɑːndər/",eiken: 4,pos: "動詞"},
+      {en: "bitter",ja: "苦い",ph: "/ˈbɪtər/",eiken: 4,pos: "形容詞"},
+      {en: "eager",ja: "熱心な",ph: "/ˈiːɡər/",eiken: 4,pos: "形容詞"},
+      {en: "semester",ja: "学期",ph: "/səˈmestər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_er_4",
+    theme: "-er ファミリー",
+    words: [
+      {en: "locker",ja: "ロッカー",ph: "/ˈlɑːkər/",eiken: 4,pos: "名詞"},
+      {en: "helicopter",ja: "ヘリコプター",ph: "/ˈhelɪkɑːptər/",eiken: 4,pos: "名詞"},
+      {en: "granddaughter",ja: "孫娘",ph: "/ˈɡrændɔːtər/",eiken: 4,pos: "名詞"},
+      {en: "teenager",ja: "十代の若者",ph: "/ˈtiːneɪdʒər/",eiken: 4,pos: "名詞"},
+      {en: "customer",ja: "客",ph: "/ˈkʌstəmər/",eiken: 4,pos: "名詞"},
+      {en: "newspaper",ja: "新聞",ph: "/ˈnuːzpeɪpər/",eiken: 4,pos: "名詞"},
+      {en: "fever",ja: "熱",ph: "/ˈfiːvər/",eiken: 4,pos: "名詞"},
+      {en: "order",ja: "注文",ph: "/ˈɔːrdər/",eiken: 4,pos: "名詞"},
+      {en: "however",ja: "しかしながら",ph: "/haʊˈevər/",eiken: 4,pos: "副詞"},
+      {en: "cleaner",ja: "掃除機",ph: "/ˈkliːnər/",eiken: 4,pos: "名詞"},
+      {en: "dryer",ja: "乾燥機",ph: "/ˈdraɪər/",eiken: 4,pos: "名詞"},
+      {en: "heater",ja: "ヒーター",ph: "/ˈhiːtər/",eiken: 4,pos: "名詞"},
+      {en: "reporter",ja: "記者",ph: "/rɪˈpɔːrtər/",eiken: 4,pos: "名詞"},
+      {en: "announcer",ja: "アナウンサー",ph: "/əˈnaʊnsər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ing",
+    theme: "-ing ファミリー",
+    words: [
+      {en: "building",ja: "建物",ph: "/ˈbɪldɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "meeting",ja: "会議",ph: "/ˈmiːtɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "feeling",ja: "気持ち",ph: "/ˈfiːlɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "painting",ja: "絵",ph: "/ˈpeɪntɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "wedding",ja: "結婚式",ph: "/ˈwedɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "clothing",ja: "衣類",ph: "/ˈkloʊðɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "greeting",ja: "あいさつ",ph: "/ˈɡriːtɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "warning",ja: "警告",ph: "/ˈwɔːrnɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "beginning",ja: "始まり",ph: "/bɪˈɡɪnɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "ending",ja: "終わり",ph: "/ˈendɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "opening",ja: "開始",ph: "/ˈoʊpənɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "training",ja: "訓練",ph: "/ˈtreɪnɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "hiking",ja: "ハイキング",ph: "/ˈhaɪkɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "sightseeing",ja: "観光",ph: "/ˈsaɪtsiːɪŋ/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_er_5",
+    theme: "-er ファミリー",
+    words: [
+      {en: "daughter",ja: "娘",ph: "/ˈdɔːtər/",eiken: 4,pos: "名詞"},
+      {en: "anger",ja: "怒り",ph: "/ˈæŋɡər/",eiken: 4,pos: "名詞"},
+      {en: "manner",ja: "作法",ph: "/ˈmænər/",eiken: 4,pos: "名詞"},
+      {en: "silver",ja: "銀",ph: "/ˈsɪlvər/",eiken: 4,pos: "名詞"},
+      {en: "leather",ja: "革",ph: "/ˈleðər/",eiken: 4,pos: "名詞"},
+      {en: "rubber",ja: "ゴム",ph: "/ˈrʌbər/",eiken: 4,pos: "名詞"},
+      {en: "feather",ja: "羽",ph: "/ˈfeðər/",eiken: 4,pos: "名詞"},
+      {en: "hunter",ja: "猟師",ph: "/ˈhʌntər/",eiken: 4,pos: "名詞"},
+      {en: "danger",ja: "危険",ph: "/ˈdeɪndʒər/",eiken: 4,pos: "名詞"},
+      {en: "painter",ja: "画家",ph: "/ˈpeɪntər/",eiken: 4,pos: "名詞"},
+      {en: "dancer",ja: "ダンサー",ph: "/ˈdænsər/",eiken: 4,pos: "名詞"},
+      {en: "runner",ja: "走者",ph: "/ˈrʌnər/",eiken: 4,pos: "名詞"},
+      {en: "jogger",ja: "ジョギングする人",ph: "/ˈdʒɑːɡər/",eiken: 4,pos: "名詞"},
+      {en: "skater",ja: "スケーター",ph: "/ˈskeɪtər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ly",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "lonely",ja: "さびしい",ph: "/ˈloʊnli/",eiken: 4,pos: "形容詞"},
+      {en: "lovely",ja: "すてきな",ph: "/ˈlʌvli/",eiken: 4,pos: "形容詞"},
+      {en: "suddenly",ja: "突然",ph: "/ˈsʌdənli/",eiken: 4,pos: "副詞"},
+      {en: "quietly",ja: "静かに",ph: "/ˈkwaɪətli/",eiken: 4,pos: "副詞"},
+      {en: "easily",ja: "簡単に",ph: "/ˈiːzəli/",eiken: 4,pos: "副詞"},
+      {en: "certainly",ja: "確かに",ph: "/ˈsɜːrtənli/",eiken: 4,pos: "副詞"},
+      {en: "clearly",ja: "はっきりと",ph: "/ˈklɪrli/",eiken: 4,pos: "副詞"},
+      {en: "exactly",ja: "正確に",ph: "/ɪɡˈzæktli/",eiken: 4,pos: "副詞"},
+      {en: "simply",ja: "単に",ph: "/ˈsɪmpli/",eiken: 4,pos: "副詞"},
+      {en: "especially",ja: "特に",ph: "/ɪˈspeʃəli/",eiken: 4,pos: "副詞"},
+      {en: "recently",ja: "最近",ph: "/ˈriːsəntli/",eiken: 4,pos: "副詞"},
+      {en: "actually",ja: "実は",ph: "/ˈæktʃuəli/",eiken: 4,pos: "副詞"},
+      {en: "carefully",ja: "注意深く",ph: "/ˈkerfəli/",eiken: 4,pos: "副詞"},
+      {en: "nearly",ja: "ほとんど",ph: "/ˈnɪrli/",eiken: 4,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b4_ing_2",
+    theme: "-ing ファミリー",
+    words: [
+      {en: "exciting",ja: "わくわくする",ph: "/ɪkˈsaɪtɪŋ/",eiken: 4,pos: "形容詞"},
+      {en: "boring",ja: "退屈な",ph: "/ˈbɔːrɪŋ/",eiken: 4,pos: "形容詞"},
+      {en: "amazing",ja: "驚くべき",ph: "/əˈmeɪzɪŋ/",eiken: 4,pos: "形容詞"},
+      {en: "surprising",ja: "驚くような",ph: "/sərˈpraɪzɪŋ/",eiken: 4,pos: "形容詞"},
+      {en: "missing",ja: "行方不明の",ph: "/ˈmɪsɪŋ/",eiken: 4,pos: "形容詞"},
+      {en: "cycling",ja: "サイクリング",ph: "/ˈsaɪklɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "jogging",ja: "ジョギング",ph: "/ˈdʒɑːɡɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "during",ja: "〜の間に",ph: "/ˈdʊrɪŋ/",eiken: 4,pos: "前置詞"},
+      {en: "earring",ja: "イヤリング",ph: "/ˈɪrɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "pudding",ja: "プリン",ph: "/ˈpʊdɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "sting",ja: "刺す",ph: "/stɪŋ/",eiken: 4,pos: "動詞"},
+      {en: "lightning",ja: "稲妻",ph: "/ˈlaɪtnɪŋ/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_on",
+    theme: "-on ファミリー",
+    words: [
+      {en: "vacation",ja: "休暇",ph: "/veɪˈkeɪʃən/",eiken: 4,pos: "名詞"},
+      {en: "information",ja: "情報",ph: "/ˌɪnfərˈmeɪʃən/",eiken: 4,pos: "名詞"},
+      {en: "invitation",ja: "招待",ph: "/ˌɪnvɪˈteɪʃən/",eiken: 4,pos: "名詞"},
+      {en: "direction",ja: "方向",ph: "/dəˈrekʃən/",eiken: 4,pos: "名詞"},
+      {en: "collection",ja: "収集",ph: "/kəˈlekʃən/",eiken: 4,pos: "名詞"},
+      {en: "introduction",ja: "紹介",ph: "/ˌɪntrəˈdʌkʃən/",eiken: 4,pos: "名詞"},
+      {en: "competition",ja: "競争",ph: "/ˌkɑːmpəˈtɪʃən/",eiken: 4,pos: "名詞"},
+      {en: "celebration",ja: "お祝い",ph: "/ˌseləˈbreɪʃən/",eiken: 4,pos: "名詞"},
+      {en: "lotion",ja: "ローション",ph: "/ˈloʊʃən/",eiken: 4,pos: "名詞"},
+      {en: "graduation",ja: "卒業",ph: "/ˌɡrædʒuˈeɪʃən/",eiken: 4,pos: "名詞"},
+      {en: "opinion",ja: "意見",ph: "/əˈpɪnjən/",eiken: 4,pos: "名詞"},
+      {en: "million",ja: "100万",ph: "/ˈmɪljən/",eiken: 4,pos: "名詞"},
+      {en: "religion",ja: "宗教",ph: "/rɪˈlɪdʒən/",eiken: 4,pos: "名詞"},
+      {en: "billion",ja: "10億",ph: "/ˈbɪljən/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_nt",
+    theme: "-nt ファミリー",
+    words: [
+      {en: "apartment",ja: "アパート",ph: "/əˈpɑːrtmənt/",eiken: 4,pos: "名詞"},
+      {en: "department",ja: "部門",ph: "/dɪˈpɑːrtmənt/",eiken: 4,pos: "名詞"},
+      {en: "equipment",ja: "道具",ph: "/ɪˈkwɪpmənt/",eiken: 4,pos: "名詞"},
+      {en: "entertainment",ja: "娯楽",ph: "/ˌentərˈteɪnmənt/",eiken: 4,pos: "名詞"},
+      {en: "instrument",ja: "楽器・道具",ph: "/ˈɪnstrəmənt/",eiken: 4,pos: "名詞"},
+      {en: "tournament",ja: "トーナメント",ph: "/ˈtʊrnəmənt/",eiken: 4,pos: "名詞"},
+      {en: "monument",ja: "記念碑",ph: "/ˈmɑːnjumənt/",eiken: 4,pos: "名詞"},
+      {en: "payment",ja: "支払い",ph: "/ˈpeɪmənt/",eiken: 4,pos: "名詞"},
+      {en: "treatment",ja: "治療",ph: "/ˈtriːtmənt/",eiken: 4,pos: "名詞"},
+      {en: "cement",ja: "セメント",ph: "/sɪˈment/",eiken: 4,pos: "名詞"},
+      {en: "parent",ja: "親",ph: "/ˈperənt/",eiken: 4,pos: "名詞"},
+      {en: "percent",ja: "パーセント",ph: "/pərˈsent/",eiken: 4,pos: "名詞"},
+      {en: "agent",ja: "代理人",ph: "/ˈeɪdʒənt/",eiken: 4,pos: "名詞"},
+      {en: "grandparent",ja: "祖父母",ph: "/ˈɡrændperənt/",eiken: 4,pos: "名詞"},
+      {en: "eggplant",ja: "なす",ph: "/ˈeɡplænt/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_le",
+    theme: "-le ファミリー",
+    words: [
+      {en: "bottle",ja: "びん",ph: "/ˈbɑːtəl/",eiken: 4,pos: "名詞"},
+      {en: "castle",ja: "城",ph: "/ˈkæsəl/",eiken: 4,pos: "名詞"},
+      {en: "gentle",ja: "やさしい",ph: "/ˈdʒentəl/",eiken: 4,pos: "形容詞"},
+      {en: "puzzle",ja: "パズル",ph: "/ˈpʌzəl/",eiken: 4,pos: "名詞"},
+      {en: "middle",ja: "真ん中",ph: "/ˈmɪdəl/",eiken: 4,pos: "名詞"},
+      {en: "title",ja: "題名",ph: "/ˈtaɪtəl/",eiken: 4,pos: "名詞"},
+      {en: "candle",ja: "ろうそく",ph: "/ˈkændəl/",eiken: 4,pos: "名詞"},
+      {en: "jungle",ja: "ジャングル",ph: "/ˈdʒʌŋɡəl/",eiken: 4,pos: "名詞"},
+      {en: "needle",ja: "針",ph: "/ˈniːdəl/",eiken: 4,pos: "名詞"},
+      {en: "double",ja: "2倍の",ph: "/ˈdʌbəl/",eiken: 4,pos: "形容詞"},
+      {en: "temple",ja: "寺",ph: "/ˈtempəl/",eiken: 4,pos: "名詞"},
+      {en: "sample",ja: "見本",ph: "/ˈsæmpəl/",eiken: 4,pos: "名詞"},
+      {en: "simple",ja: "簡単な",ph: "/ˈsɪmpəl/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_er_6",
+    theme: "-er ファミリー",
+    words: [
+      {en: "baker",ja: "パン職人",ph: "/ˈbeɪkər/",eiken: 4,pos: "名詞"},
+      {en: "gardener",ja: "庭師",ph: "/ˈɡɑːrdnər/",eiken: 4,pos: "名詞"},
+      {en: "shopkeeper",ja: "店主",ph: "/ˈʃɑːpkiːpər/",eiken: 4,pos: "名詞"},
+      {en: "zookeeper",ja: "飼育員",ph: "/ˈzuːkiːpər/",eiken: 4,pos: "名詞"},
+      {en: "goalkeeper",ja: "ゴールキーパー",ph: "/ˈɡoʊlkiːpər/",eiken: 4,pos: "名詞"},
+      {en: "babysitter",ja: "ベビーシッター",ph: "/ˈbeɪbisɪtər/",eiken: 4,pos: "名詞"},
+      {en: "lover",ja: "愛好家",ph: "/ˈlʌvər/",eiken: 4,pos: "名詞"},
+      {en: "fighter",ja: "戦う人",ph: "/ˈfaɪtər/",eiken: 4,pos: "名詞"},
+      {en: "climber",ja: "登山家",ph: "/ˈklaɪmər/",eiken: 4,pos: "名詞"},
+      {en: "camper",ja: "キャンプする人",ph: "/ˈkæmpər/",eiken: 4,pos: "名詞"},
+      {en: "hiker",ja: "ハイカー",ph: "/ˈhaɪkər/",eiken: 4,pos: "名詞"},
+      {en: "diver",ja: "ダイバー",ph: "/ˈdaɪvər/",eiken: 4,pos: "名詞"},
+      {en: "voter",ja: "有権者",ph: "/ˈvoʊtər/",eiken: 4,pos: "名詞"},
+      {en: "listener",ja: "聞き手",ph: "/ˈlɪsənər/",eiken: 4,pos: "名詞"},
+      {en: "learner",ja: "学習者",ph: "/ˈlɜːrnər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ly_2",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "mostly",ja: "主に",ph: "/ˈmoʊstli/",eiken: 4,pos: "副詞"},
+      {en: "friendly",ja: "親しみやすい",ph: "/ˈfrendli/",eiken: 4,pos: "形容詞"},
+      {en: "butterfly",ja: "チョウ",ph: "/ˈbʌtərflaɪ/",eiken: 4,pos: "名詞"},
+      {en: "elderly",ja: "年配の",ph: "/ˈeldərli/",eiken: 4,pos: "形容詞"},
+      {en: "silly",ja: "ばかな",ph: "/ˈsɪli/",eiken: 4,pos: "形容詞"},
+      {en: "happily",ja: "幸せに",ph: "/ˈhæpɪli/",eiken: 4,pos: "副詞"},
+      {en: "gently",ja: "やさしく",ph: "/ˈdʒentli/",eiken: 4,pos: "副詞"},
+      {en: "badly",ja: "ひどく",ph: "/ˈbædli/",eiken: 4,pos: "副詞"},
+      {en: "sadly",ja: "悲しそうに",ph: "/ˈsædli/",eiken: 4,pos: "副詞"},
+      {en: "luckily",ja: "幸運にも",ph: "/ˈlʌkɪli/",eiken: 4,pos: "副詞"},
+      {en: "politely",ja: "礼儀正しく",ph: "/pəˈlaɪtli/",eiken: 4,pos: "副詞"},
+      {en: "proudly",ja: "誇らしげに",ph: "/ˈpraʊdli/",eiken: 4,pos: "副詞"},
+      {en: "silently",ja: "黙って",ph: "/ˈsaɪləntli/",eiken: 4,pos: "副詞"},
+      {en: "strongly",ja: "強く",ph: "/ˈstrɔːŋli/",eiken: 4,pos: "副詞"},
+      {en: "freely",ja: "自由に",ph: "/ˈfriːli/",eiken: 4,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b4_et",
+    theme: "-et ファミリー",
+    words: [
+      {en: "pocket",ja: "ポケット",ph: "/ˈpɑːkɪt/",eiken: 4,pos: "名詞"},
+      {en: "ticket",ja: "切符",ph: "/ˈtɪkɪt/",eiken: 4,pos: "名詞"},
+      {en: "market",ja: "市場",ph: "/ˈmɑːrkɪt/",eiken: 4,pos: "名詞"},
+      {en: "basket",ja: "かご",ph: "/ˈbæskɪt/",eiken: 4,pos: "名詞"},
+      {en: "jacket",ja: "上着",ph: "/ˈdʒækɪt/",eiken: 4,pos: "名詞"},
+      {en: "secret",ja: "秘密",ph: "/ˈsiːkrət/",eiken: 4,pos: "名詞"},
+      {en: "wallet",ja: "財布",ph: "/ˈwɑːlɪt/",eiken: 4,pos: "名詞"},
+      {en: "budget",ja: "予算",ph: "/ˈbʌdʒɪt/",eiken: 4,pos: "名詞"},
+      {en: "helmet",ja: "ヘルメット",ph: "/ˈhelmɪt/",eiken: 4,pos: "名詞"},
+      {en: "toilet",ja: "トイレ",ph: "/ˈtɔɪlət/",eiken: 4,pos: "名詞"},
+      {en: "forget",ja: "忘れる",ph: "/fərˈɡet/",eiken: 4,pos: "動詞"},
+      {en: "omelet",ja: "オムレツ",ph: "/ˈɑːmlət/",eiken: 4,pos: "名詞"},
+      {en: "carpet",ja: "じゅうたん",ph: "/ˈkɑːrpɪt/",eiken: 4,pos: "名詞"},
+      {en: "bucket",ja: "バケツ",ph: "/ˈbʌkɪt/",eiken: 4,pos: "名詞"},
+      {en: "bracelet",ja: "ブレスレット",ph: "/ˈbreɪslət/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ing_3",
+    theme: "-ing ファミリー",
+    words: [
+      {en: "writing",ja: "書くこと",ph: "/ˈraɪtɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "cleaning",ja: "掃除",ph: "/ˈkliːnɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "washing",ja: "洗濯",ph: "/ˈwɑːʃɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "boxing",ja: "ボクシング",ph: "/ˈbɑːksɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "bowling",ja: "ボウリング",ph: "/ˈboʊlɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "surfing",ja: "サーフィン",ph: "/ˈsɜːrfɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "sailing",ja: "ヨット遊び",ph: "/ˈseɪlɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "diving",ja: "ダイビング",ph: "/ˈdaɪvɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "climbing",ja: "登山",ph: "/ˈklaɪmɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "gardening",ja: "庭いじり",ph: "/ˈɡɑːrdnɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "parking",ja: "駐車",ph: "/ˈpɑːrkɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "spelling",ja: "つづり",ph: "/ˈspelɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "saying",ja: "ことわざ",ph: "/ˈseɪɪŋ/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ed",
+    theme: "-ed ファミリー",
+    words: [
+      {en: "bored",ja: "退屈した",ph: "/bɔːrd/",eiken: 4,pos: "形容詞"},
+      {en: "crowded",ja: "混雑した",ph: "/ˈkraʊdɪd/",eiken: 4,pos: "形容詞"},
+      {en: "excited",ja: "わくわくした",ph: "/ɪkˈsaɪtɪd/",eiken: 4,pos: "形容詞"},
+      {en: "surprised",ja: "驚いた",ph: "/sərˈpraɪzd/",eiken: 4,pos: "形容詞"},
+      {en: "interested",ja: "興味がある",ph: "/ˈɪntrəstɪd/",eiken: 4,pos: "形容詞"},
+      {en: "worried",ja: "心配した",ph: "/ˈwɜːrid/",eiken: 4,pos: "形容詞"},
+      {en: "pleased",ja: "喜んだ",ph: "/pliːzd/",eiken: 4,pos: "形容詞"},
+      {en: "satisfied",ja: "満足した",ph: "/ˈsætɪsfaɪd/",eiken: 4,pos: "形容詞"},
+      {en: "disappointed",ja: "がっかりした",ph: "/ˌdɪsəˈpɔɪntɪd/",eiken: 4,pos: "形容詞"},
+      {en: "confused",ja: "混乱した",ph: "/kənˈfjuːzd/",eiken: 4,pos: "形容詞"},
+      {en: "embarrassed",ja: "恥ずかしい",ph: "/ɪmˈbærəst/",eiken: 4,pos: "形容詞"},
+      {en: "scared",ja: "怖がった",ph: "/skerd/",eiken: 4,pos: "形容詞"},
+      {en: "relaxed",ja: "くつろいだ",ph: "/rɪˈlækst/",eiken: 4,pos: "形容詞"},
+      {en: "shocked",ja: "ショックを受けた",ph: "/ʃɑːkt/",eiken: 4,pos: "形容詞"},
+      {en: "amazed",ja: "驚いた",ph: "/əˈmeɪzd/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_ry",
+    theme: "-ry ファミリー",
+    words: [
+      {en: "jewelry",ja: "宝石類",ph: "/ˈdʒuːəlri/",eiken: 4,pos: "名詞"},
+      {en: "salary",ja: "給料",ph: "/ˈsæləri/",eiken: 4,pos: "名詞"},
+      {en: "anniversary",ja: "記念日",ph: "/ˌænɪˈvɜːrsəri/",eiken: 4,pos: "名詞"},
+      {en: "secretary",ja: "秘書",ph: "/ˈsekrəteri/",eiken: 4,pos: "名詞"},
+      {en: "summary",ja: "要約",ph: "/ˈsʌməri/",eiken: 4,pos: "名詞"},
+      {en: "scary",ja: "怖い",ph: "/ˈskeri/",eiken: 4,pos: "形容詞"},
+      {en: "battery",ja: "電池",ph: "/ˈbætəri/",eiken: 4,pos: "名詞"},
+      {en: "hurry",ja: "急ぐ",ph: "/ˈhɜːri/",eiken: 4,pos: "動詞"},
+      {en: "marry",ja: "結婚する",ph: "/ˈmæri/",eiken: 4,pos: "動詞"},
+      {en: "ferry",ja: "フェリー",ph: "/ˈferi/",eiken: 4,pos: "名詞"},
+      {en: "century",ja: "世紀",ph: "/ˈsentʃəri/",eiken: 4,pos: "名詞"},
+      {en: "injury",ja: "けが",ph: "/ˈɪndʒəri/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ss",
+    theme: "-ss ファミリー",
+    words: [
+      {en: "unless",ja: "〜でなければ",ph: "/ənˈles/",eiken: 4,pos: "接続詞"},
+      {en: "chess",ja: "チェス",ph: "/tʃes/",eiken: 4,pos: "名詞"},
+      {en: "waitress",ja: "ウエートレス",ph: "/ˈweɪtrəs/",eiken: 4,pos: "名詞"},
+      {en: "boss",ja: "上司",ph: "/bɔːs/",eiken: 4,pos: "名詞"},
+      {en: "sickness",ja: "病気",ph: "/ˈsɪknəs/",eiken: 4,pos: "名詞"},
+      {en: "across",ja: "〜を横切って",ph: "/əˈkrɔːs/",eiken: 4,pos: "前置詞"},
+      {en: "address",ja: "住所",ph: "/ˈædres/",eiken: 4,pos: "名詞"},
+      {en: "fitness",ja: "健康",ph: "/ˈfɪtnəs/",eiken: 4,pos: "名詞"},
+      {en: "fairness",ja: "公平",ph: "/ˈfernəs/",eiken: 4,pos: "名詞"},
+      {en: "freshness",ja: "新鮮さ",ph: "/ˈfreʃnəs/",eiken: 4,pos: "名詞"},
+      {en: "loudness",ja: "騒がしさ",ph: "/ˈlaʊdnəs/",eiken: 4,pos: "名詞"},
+      {en: "softness",ja: "やわらかさ",ph: "/ˈsɔːftnəs/",eiken: 4,pos: "名詞"},
+      {en: "shyness",ja: "内気",ph: "/ˈʃaɪnəs/",eiken: 4,pos: "名詞"},
+      {en: "harmless",ja: "無害な",ph: "/ˈhɑːrmləs/",eiken: 4,pos: "形容詞"},
+      {en: "helpless",ja: "無力な",ph: "/ˈhelpləs/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_on_2",
+    theme: "-on ファミリー",
+    words: [
+      {en: "fashion",ja: "流行",ph: "/ˈfæʃən/",eiken: 4,pos: "名詞"},
+      {en: "region",ja: "地域",ph: "/ˈriːdʒən/",eiken: 4,pos: "名詞"},
+      {en: "season",ja: "季節",ph: "/ˈsiːzən/",eiken: 4,pos: "名詞"},
+      {en: "person",ja: "人",ph: "/ˈpɜːrsən/",eiken: 4,pos: "名詞"},
+      {en: "button",ja: "ボタン",ph: "/ˈbʌtən/",eiken: 4,pos: "名詞"},
+      {en: "cotton",ja: "綿",ph: "/ˈkɑːtən/",eiken: 4,pos: "名詞"},
+      {en: "ribbon",ja: "リボン",ph: "/ˈrɪbən/",eiken: 4,pos: "名詞"},
+      {en: "salmon",ja: "サケ",ph: "/ˈsæmən/",eiken: 4,pos: "名詞"},
+      {en: "wagon",ja: "荷馬車",ph: "/ˈwæɡən/",eiken: 4,pos: "名詞"},
+      {en: "common",ja: "共通の",ph: "/ˈkɑːmən/",eiken: 4,pos: "形容詞"},
+      {en: "watermelon",ja: "すいか",ph: "/ˈwɔːtərmelən/",eiken: 4,pos: "名詞"},
+      {en: "bacon",ja: "ベーコン",ph: "/ˈbeɪkən/",eiken: 4,pos: "名詞"},
+      {en: "pigeon",ja: "ハト",ph: "/ˈpɪdʒɪn/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ful",
+    theme: "-ful ファミリー",
+    words: [
+      {en: "colorful",ja: "色彩豊かな",ph: "/ˈkʌlərfəl/",eiken: 4,pos: "形容詞"},
+      {en: "useful",ja: "役に立つ",ph: "/ˈjuːsfəl/",eiken: 4,pos: "形容詞"},
+      {en: "painful",ja: "痛い",ph: "/ˈpeɪnfəl/",eiken: 4,pos: "形容詞"},
+      {en: "delightful",ja: "楽しい",ph: "/dɪˈlaɪtfəl/",eiken: 4,pos: "形容詞"},
+      {en: "successful",ja: "成功した",ph: "/səkˈsesfəl/",eiken: 4,pos: "形容詞"},
+      {en: "harmful",ja: "有害な",ph: "/ˈhɑːrmfəl/",eiken: 4,pos: "形容詞"},
+      {en: "mouthful",ja: "ひと口",ph: "/ˈmaʊθfʊl/",eiken: 4,pos: "名詞"},
+      {en: "forgetful",ja: "忘れっぽい",ph: "/fərˈɡetfəl/",eiken: 4,pos: "形容詞"},
+      {en: "restful",ja: "安らかな",ph: "/ˈrestfəl/",eiken: 4,pos: "形容詞"},
+      {en: "fearful",ja: "恐れている",ph: "/ˈfɪrfəl/",eiken: 4,pos: "形容詞"},
+      {en: "joyful",ja: "うれしい",ph: "/ˈdʒɔɪfəl/",eiken: 4,pos: "形容詞"},
+      {en: "truthful",ja: "正直な",ph: "/ˈtruːθfəl/",eiken: 4,pos: "形容詞"},
+      {en: "graceful",ja: "優雅な",ph: "/ˈɡreɪsfəl/",eiken: 4,pos: "形容詞"},
+      {en: "tearful",ja: "涙ぐんだ",ph: "/ˈtɪrfəl/",eiken: 4,pos: "形容詞"},
+      {en: "spoonful",ja: "スプーン1杯",ph: "/ˈspuːnfʊl/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_or",
+    theme: "-or ファミリー",
+    words: [
+      {en: "actor",ja: "俳優",ph: "/ˈæktər/",eiken: 4,pos: "名詞"},
+      {en: "visitor",ja: "訪問者",ph: "/ˈvɪzɪtər/",eiken: 4,pos: "名詞"},
+      {en: "inventor",ja: "発明家",ph: "/ɪnˈventər/",eiken: 4,pos: "名詞"},
+      {en: "editor",ja: "編集者",ph: "/ˈedɪtər/",eiken: 4,pos: "名詞"},
+      {en: "elevator",ja: "エレベーター",ph: "/ˈelɪveɪtər/",eiken: 4,pos: "名詞"},
+      {en: "mirror",ja: "鏡",ph: "/ˈmɪrər/",eiken: 4,pos: "名詞"},
+      {en: "error",ja: "誤り",ph: "/ˈerər/",eiken: 4,pos: "名詞"},
+      {en: "neighbor",ja: "隣人",ph: "/ˈneɪbər/",eiken: 4,pos: "名詞"},
+      {en: "humor",ja: "ユーモア",ph: "/ˈhjuːmər/",eiken: 4,pos: "名詞"},
+      {en: "refrigerator",ja: "冷蔵庫",ph: "/rɪˈfrɪdʒəreɪtər/",eiken: 4,pos: "名詞"},
+      {en: "harbor",ja: "港",ph: "/ˈhɑːrbər/",eiken: 4,pos: "名詞"},
+      {en: "author",ja: "作家",ph: "/ˈɔːθər/",eiken: 4,pos: "名詞"},
+      {en: "director",ja: "監督",ph: "/dəˈrektər/",eiken: 4,pos: "名詞"},
+      {en: "conductor",ja: "指揮者",ph: "/kənˈdʌktər/",eiken: 4,pos: "名詞"},
+      {en: "motor",ja: "モーター",ph: "/ˈmoʊtər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_nt_2",
+    theme: "-nt ファミリー",
+    words: [
+      {en: "hunt",ja: "狩りをする",ph: "/hʌnt/",eiken: 4,pos: "動詞"},
+      {en: "rent",ja: "借りる",ph: "/rent/",eiken: 4,pos: "動詞"},
+      {en: "discount",ja: "割引",ph: "/ˈdɪskaʊnt/",eiken: 4,pos: "名詞"},
+      {en: "tent",ja: "テント",ph: "/tent/",eiken: 4,pos: "名詞"},
+      {en: "basement",ja: "地下室",ph: "/ˈbeɪsmənt/",eiken: 4,pos: "名詞"},
+      {en: "talent",ja: "才能",ph: "/ˈtælənt/",eiken: 4,pos: "名詞"},
+      {en: "improvement",ja: "改善",ph: "/ɪmˈpruːvmənt/",eiken: 4,pos: "名詞"},
+      {en: "agreement",ja: "同意",ph: "/əˈɡriːmənt/",eiken: 4,pos: "名詞"},
+      {en: "announcement",ja: "お知らせ",ph: "/əˈnaʊnsmənt/",eiken: 4,pos: "名詞"},
+      {en: "argument",ja: "口論",ph: "/ˈɑːrɡjumənt/",eiken: 4,pos: "名詞"},
+      {en: "excitement",ja: "興奮",ph: "/ɪkˈsaɪtmənt/",eiken: 4,pos: "名詞"},
+      {en: "advertisement",ja: "広告",ph: "/ˌædvərˈtaɪzmənt/",eiken: 4,pos: "名詞"},
+      {en: "enjoyment",ja: "楽しみ",ph: "/ɪnˈdʒɔɪmənt/",eiken: 4,pos: "名詞"},
+      {en: "punishment",ja: "罰",ph: "/ˈpʌnɪʃmənt/",eiken: 4,pos: "名詞"},
+      {en: "replacement",ja: "交換",ph: "/rɪˈpleɪsmənt/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ce",
+    theme: "-ce ファミリー",
+    words: [
+      {en: "notice",ja: "気づく",ph: "/ˈnoʊtɪs/",eiken: 4,pos: "動詞"},
+      {en: "office",ja: "事務所",ph: "/ˈɔːfɪs/",eiken: 4,pos: "名詞"},
+      {en: "police",ja: "警察",ph: "/pəˈliːs/",eiken: 4,pos: "名詞"},
+      {en: "service",ja: "サービス",ph: "/ˈsɜːrvɪs/",eiken: 4,pos: "名詞"},
+      {en: "justice",ja: "正義",ph: "/ˈdʒʌstɪs/",eiken: 4,pos: "名詞"},
+      {en: "romance",ja: "恋愛",ph: "/roʊˈmæns/",eiken: 4,pos: "名詞"},
+      {en: "finance",ja: "財政",ph: "/ˈfaɪnæns/",eiken: 4,pos: "名詞"},
+      {en: "fence",ja: "さく",ph: "/fens/",eiken: 4,pos: "名詞"},
+      {en: "lettuce",ja: "レタス",ph: "/ˈletɪs/",eiken: 4,pos: "名詞"},
+      {en: "sauce",ja: "ソース",ph: "/sɔːs/",eiken: 4,pos: "名詞"},
+      {en: "necklace",ja: "ネックレス",ph: "/ˈnekləs/",eiken: 4,pos: "名詞"},
+      {en: "palace",ja: "宮殿",ph: "/ˈpæləs/",eiken: 4,pos: "名詞"},
+      {en: "ambulance",ja: "救急車",ph: "/ˈæmbjələns/",eiken: 4,pos: "名詞"},
+      {en: "niece",ja: "めい",ph: "/niːs/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_en",
+    theme: "-en ファミリー",
+    words: [
+      {en: "frozen",ja: "凍った",ph: "/ˈfroʊzən/",eiken: 4,pos: "形容詞"},
+      {en: "happen",ja: "起こる",ph: "/ˈhæpən/",eiken: 4,pos: "動詞"},
+      {en: "listen",ja: "聞く",ph: "/ˈlɪsən/",eiken: 4,pos: "動詞"},
+      {en: "golden",ja: "金色の",ph: "/ˈɡoʊldən/",eiken: 4,pos: "形容詞"},
+      {en: "wooden",ja: "木製の",ph: "/ˈwʊdən/",eiken: 4,pos: "形容詞"},
+      {en: "broken",ja: "壊れた",ph: "/ˈbroʊkən/",eiken: 4,pos: "形容詞"},
+      {en: "hidden",ja: "隠れた",ph: "/ˈhɪdən/",eiken: 4,pos: "形容詞"},
+      {en: "sudden",ja: "突然の",ph: "/ˈsʌdən/",eiken: 4,pos: "形容詞"},
+      {en: "oven",ja: "オーブン",ph: "/ˈʌvən/",eiken: 4,pos: "名詞"},
+      {en: "kitten",ja: "子ねこ",ph: "/ˈkɪtən/",eiken: 4,pos: "名詞"},
+      {en: "kindergarten",ja: "幼稚園",ph: "/ˈkɪndərɡɑːrtən/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ca_pre",
+    theme: "ca- ファミリー",
+    words: [
+      {en: "calendar",ja: "カレンダー",ph: "/ˈkæləndər/",eiken: 4,pos: "名詞"},
+      {en: "capture",ja: "捕まえる",ph: "/ˈkæptʃər/",eiken: 4,pos: "動詞"},
+      {en: "capital",ja: "首都",ph: "/ˈkæpɪtəl/",eiken: 4,pos: "名詞"},
+      {en: "cabbage",ja: "キャベツ",ph: "/ˈkæbɪdʒ/",eiken: 4,pos: "名詞"},
+      {en: "cable",ja: "ケーブル",ph: "/ˈkeɪbəl/",eiken: 4,pos: "名詞"},
+      {en: "camel",ja: "ラクダ",ph: "/ˈkæməl/",eiken: 4,pos: "名詞"},
+      {en: "cafeteria",ja: "食堂",ph: "/ˌkæfəˈtɪriə/",eiken: 4,pos: "名詞"},
+      {en: "calm",ja: "落ち着いた",ph: "/kɑːm/",eiken: 4,pos: "形容詞"},
+      {en: "cabinet",ja: "戸棚",ph: "/ˈkæbɪnət/",eiken: 4,pos: "名詞"},
+      {en: "calf",ja: "子牛",ph: "/kæf/",eiken: 4,pos: "名詞"},
+      {en: "cage",ja: "かご",ph: "/keɪdʒ/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ow",
+    theme: "-ow ファミリー",
+    words: [
+      {en: "elbow",ja: "ひじ",ph: "/ˈelboʊ/",eiken: 4,pos: "名詞"},
+      {en: "pillow",ja: "まくら",ph: "/ˈpɪloʊ/",eiken: 4,pos: "名詞"},
+      {en: "narrow",ja: "狭い",ph: "/ˈnæroʊ/",eiken: 4,pos: "形容詞"},
+      {en: "arrow",ja: "矢",ph: "/ˈæroʊ/",eiken: 4,pos: "名詞"},
+      {en: "meadow",ja: "牧草地",ph: "/ˈmedoʊ/",eiken: 4,pos: "名詞"},
+      {en: "widow",ja: "未亡人",ph: "/ˈwɪdoʊ/",eiken: 4,pos: "名詞"},
+      {en: "eyebrow",ja: "まゆ毛",ph: "/ˈaɪbraʊ/",eiken: 4,pos: "名詞"},
+      {en: "allow",ja: "許す",ph: "/əˈlaʊ/",eiken: 4,pos: "動詞"},
+      {en: "below",ja: "〜の下に",ph: "/bɪˈloʊ/",eiken: 4,pos: "前置詞"},
+      {en: "sorrow",ja: "悲しみ",ph: "/ˈsɑːroʊ/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_al",
+    theme: "-al ファミリー",
+    words: [
+      {en: "festival",ja: "祭り",ph: "/ˈfestɪvəl/",eiken: 4,pos: "名詞"},
+      {en: "original",ja: "最初の",ph: "/əˈrɪdʒənəl/",eiken: 4,pos: "形容詞"},
+      {en: "signal",ja: "信号",ph: "/ˈsɪɡnəl/",eiken: 4,pos: "名詞"},
+      {en: "metal",ja: "金属",ph: "/ˈmetəl/",eiken: 4,pos: "名詞"},
+      {en: "pedal",ja: "ペダル",ph: "/ˈpedəl/",eiken: 4,pos: "名詞"},
+      {en: "professional",ja: "プロの",ph: "/prəˈfeʃənəl/",eiken: 4,pos: "形容詞"},
+      {en: "cereal",ja: "シリアル",ph: "/ˈsɪriəl/",eiken: 4,pos: "名詞"},
+      {en: "principal",ja: "校長",ph: "/ˈprɪnsəpəl/",eiken: 4,pos: "名詞"},
+      {en: "medal",ja: "メダル",ph: "/ˈmedəl/",eiken: 4,pos: "名詞"},
+      {en: "equal",ja: "等しい",ph: "/ˈiːkwəl/",eiken: 4,pos: "形容詞"},
+      {en: "normal",ja: "ふつうの",ph: "/ˈnɔːrməl/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_le_2",
+    theme: "-le ファミリー",
+    words: [
+      {en: "noodle",ja: "めん",ph: "/ˈnuːdəl/",eiken: 4,pos: "名詞"},
+      {en: "turtle",ja: "カメ",ph: "/ˈtɜːrtəl/",eiken: 4,pos: "名詞"},
+      {en: "beetle",ja: "カブトムシ",ph: "/ˈbiːtəl/",eiken: 4,pos: "名詞"},
+      {en: "available",ja: "利用できる",ph: "/əˈveɪləbəl/",eiken: 4,pos: "形容詞"},
+      {en: "bubble",ja: "あわ",ph: "/ˈbʌbəl/",eiken: 4,pos: "名詞"},
+      {en: "marble",ja: "ビー玉",ph: "/ˈmɑːrbəl/",eiken: 4,pos: "名詞"},
+      {en: "noble",ja: "高貴な",ph: "/ˈnoʊbəl/",eiken: 4,pos: "形容詞"},
+      {en: "pineapple",ja: "パイナップル",ph: "/ˈpaɪnæpəl/",eiken: 4,pos: "名詞"},
+      {en: "eagle",ja: "ワシ",ph: "/ˈiːɡəl/",eiken: 4,pos: "名詞"},
+      {en: "ankle",ja: "足首",ph: "/ˈæŋkəl/",eiken: 4,pos: "名詞"},
+      {en: "kettle",ja: "やかん",ph: "/ˈketəl/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_re_pre",
+    theme: "re- ファミリー",
+    words: [
+      {en: "remain",ja: "残る",ph: "/rɪˈmeɪn/",eiken: 4,pos: "動詞"},
+      {en: "relax",ja: "くつろぐ",ph: "/rɪˈlæks/",eiken: 4,pos: "動詞"},
+      {en: "repair",ja: "修理する",ph: "/rɪˈper/",eiken: 4,pos: "動詞"},
+      {en: "rescue",ja: "救助する",ph: "/ˈreskjuː/",eiken: 4,pos: "動詞"},
+      {en: "result",ja: "結果",ph: "/rɪˈzʌlt/",eiken: 4,pos: "名詞"},
+      {en: "record",ja: "記録",ph: "/ˈrekərd/",eiken: 4,pos: "名詞"},
+      {en: "remove",ja: "取り除く",ph: "/rɪˈmuːv/",eiken: 4,pos: "動詞"},
+      {en: "referee",ja: "審判",ph: "/ˌrefəˈriː/",eiken: 4,pos: "名詞"},
+      {en: "receipt",ja: "レシート",ph: "/rɪˈsiːt/",eiken: 4,pos: "名詞"},
+      {en: "reach",ja: "着く",ph: "/riːtʃ/",eiken: 4,pos: "動詞"},
+      {en: "retired",ja: "退職した",ph: "/rɪˈtaɪərd/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_co_pre",
+    theme: "co- ファミリー",
+    words: [
+      {en: "cottage",ja: "小屋",ph: "/ˈkɑːtɪdʒ/",eiken: 4,pos: "名詞"},
+      {en: "cookie",ja: "クッキー",ph: "/ˈkʊki/",eiken: 4,pos: "名詞"},
+      {en: "comb",ja: "くし",ph: "/koʊm/",eiken: 4,pos: "名詞"},
+      {en: "coast",ja: "海岸",ph: "/koʊst/",eiken: 4,pos: "名詞"},
+      {en: "comedian",ja: "お笑い芸人",ph: "/kəˈmiːdiən/",eiken: 4,pos: "名詞"},
+      {en: "cough",ja: "せきをする",ph: "/kɔːf/",eiken: 4,pos: "動詞"},
+      {en: "correct",ja: "正しい",ph: "/kəˈrekt/",eiken: 4,pos: "形容詞"},
+      {en: "cousin",ja: "いとこ",ph: "/ˈkʌzən/",eiken: 4,pos: "名詞"},
+      {en: "costly",ja: "高価な",ph: "/ˈkɔːstli/",eiken: 4,pos: "形容詞"},
+      {en: "container",ja: "容器",ph: "/kənˈteɪnər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_dy",
+    theme: "-dy ファミリー",
+    words: [
+      {en: "tidy",ja: "きちんとした",ph: "/ˈtaɪdi/",eiken: 4,pos: "形容詞"},
+      {en: "melody",ja: "メロディー",ph: "/ˈmelədi/",eiken: 4,pos: "名詞"},
+      {en: "lady",ja: "女性",ph: "/ˈleɪdi/",eiken: 4,pos: "名詞"},
+      {en: "already",ja: "すでに",ph: "/ɔːlˈredi/",eiken: 4,pos: "副詞"},
+      {en: "nobody",ja: "だれも〜ない",ph: "/ˈnoʊbɑːdi/",eiken: 4,pos: "代名詞"},
+      {en: "cloudy",ja: "くもりの",ph: "/ˈklaʊdi/",eiken: 4,pos: "形容詞"},
+      {en: "muddy",ja: "泥だらけの",ph: "/ˈmʌdi/",eiken: 4,pos: "形容詞"},
+      {en: "sandy",ja: "砂の",ph: "/ˈsændi/",eiken: 4,pos: "形容詞"},
+      {en: "handy",ja: "便利な",ph: "/ˈhændi/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_ve",
+    theme: "-ve ファミリー",
+    words: [
+      {en: "positive",ja: "前向きな",ph: "/ˈpɑːzətɪv/",eiken: 4,pos: "形容詞"},
+      {en: "attractive",ja: "魅力的な",ph: "/əˈtræktɪv/",eiken: 4,pos: "形容詞"},
+      {en: "olive",ja: "オリーブ",ph: "/ˈɑːlɪv/",eiken: 4,pos: "名詞"},
+      {en: "alive",ja: "生きている",ph: "/əˈlaɪv/",eiken: 4,pos: "形容詞"},
+      {en: "stove",ja: "コンロ",ph: "/stoʊv/",eiken: 4,pos: "名詞"},
+      {en: "dive",ja: "飛び込む",ph: "/daɪv/",eiken: 4,pos: "動詞"},
+      {en: "solve",ja: "解く",ph: "/sɑːlv/",eiken: 4,pos: "動詞"},
+      {en: "hive",ja: "巣箱",ph: "/haɪv/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_un_pre",
+    theme: "un- ファミリー",
+    words: [
+      {en: "unlucky",ja: "運の悪い",ph: "/ʌnˈlʌki/",eiken: 4,pos: "形容詞"},
+      {en: "unkind",ja: "不親切な",ph: "/ʌnˈkaɪnd/",eiken: 4,pos: "形容詞"},
+      {en: "unique",ja: "独特な",ph: "/juˈniːk/",eiken: 4,pos: "形容詞"},
+      {en: "unit",ja: "単位",ph: "/ˈjuːnɪt/",eiken: 4,pos: "名詞"},
+      {en: "university",ja: "大学",ph: "/ˌjuːnɪˈvɜːrsəti/",eiken: 4,pos: "名詞"},
+      {en: "until",ja: "〜まで",ph: "/ənˈtɪl/",eiken: 4,pos: "前置詞"},
+      {en: "unhealthy",ja: "不健康な",ph: "/ʌnˈhelθi/",eiken: 4,pos: "形容詞"},
+      {en: "underneath",ja: "〜の下に",ph: "/ˌʌndərˈniːθ/",eiken: 4,pos: "前置詞"},
+    ]
+  },
+  {
+    id: "b4_st",
+    theme: "-st ファミリー",
+    words: [
+      {en: "list",ja: "リスト",ph: "/lɪst/",eiken: 4,pos: "名詞"},
+      {en: "exist",ja: "存在する",ph: "/ɪɡˈzɪst/",eiken: 4,pos: "動詞"},
+      {en: "florist",ja: "花屋",ph: "/ˈflɔːrɪst/",eiken: 4,pos: "名詞"},
+      {en: "signpost",ja: "道しるべ",ph: "/ˈsaɪnpoʊst/",eiken: 4,pos: "名詞"},
+      {en: "host",ja: "主人",ph: "/hoʊst/",eiken: 4,pos: "名詞"},
+      {en: "ghost",ja: "おばけ",ph: "/ɡoʊst/",eiken: 4,pos: "名詞"},
+      {en: "almost",ja: "ほとんど",ph: "/ˈɔːlmoʊst/",eiken: 4,pos: "副詞"},
+      {en: "against",ja: "〜に反対して",ph: "/əˈɡenst/",eiken: 4,pos: "前置詞"},
+    ]
+  },
+  {
+    id: "b4_se",
+    theme: "-se ファミリー",
+    words: [
+      {en: "goose",ja: "ガチョウ",ph: "/ɡuːs/",eiken: 4,pos: "名詞"},
+      {en: "vase",ja: "花びん",ph: "/veɪs/",eiken: 4,pos: "名詞"},
+      {en: "loose",ja: "ゆるい",ph: "/luːs/",eiken: 4,pos: "形容詞"},
+      {en: "sunrise",ja: "日の出",ph: "/ˈsʌnraɪz/",eiken: 4,pos: "名詞"},
+      {en: "suitcase",ja: "スーツケース",ph: "/ˈsuːtkeɪs/",eiken: 4,pos: "名詞"},
+      {en: "raise",ja: "上げる",ph: "/reɪz/",eiken: 4,pos: "動詞"},
+      {en: "surprise",ja: "驚かせる",ph: "/sərˈpraɪz/",eiken: 4,pos: "動詞"},
+      {en: "false",ja: "間違った",ph: "/fɔːls/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_er_7",
+    theme: "-er ファミリー",
+    words: [
+      {en: "thinker",ja: "思想家",ph: "/ˈθɪŋkər/",eiken: 4,pos: "名詞"},
+      {en: "dreamer",ja: "夢見る人",ph: "/ˈdriːmər/",eiken: 4,pos: "名詞"},
+      {en: "blender",ja: "ミキサー",ph: "/ˈblendər/",eiken: 4,pos: "名詞"},
+      {en: "burner",ja: "コンロ",ph: "/ˈbɜːrnər/",eiken: 4,pos: "名詞"},
+      {en: "folder",ja: "フォルダー",ph: "/ˈfoʊldər/",eiken: 4,pos: "名詞"},
+      {en: "binder",ja: "バインダー",ph: "/ˈbaɪndər/",eiken: 4,pos: "名詞"},
+      {en: "marker",ja: "マーカー",ph: "/ˈmɑːrkər/",eiken: 4,pos: "名詞"},
+      {en: "sharpener",ja: "鉛筆けずり",ph: "/ˈʃɑːrpənər/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ian",
+    theme: "-ian ファミリー",
+    words: [
+      {en: "librarian",ja: "図書館員",ph: "/laɪˈbreriən/",eiken: 4,pos: "名詞"},
+      {en: "vegetarian",ja: "菜食主義者",ph: "/ˌvedʒəˈteriən/",eiken: 4,pos: "名詞"},
+      {en: "historian",ja: "歴史家",ph: "/hɪˈstɔːriən/",eiken: 4,pos: "名詞"},
+      {en: "italian",ja: "イタリア語",ph: "/ɪˈtæljən/",eiken: 4,pos: "名詞"},
+      {en: "pedestrian",ja: "歩行者",ph: "/pəˈdestriən/",eiken: 4,pos: "名詞"},
+      {en: "guardian",ja: "保護者",ph: "/ˈɡɑːrdiən/",eiken: 4,pos: "名詞"},
+      {en: "civilian",ja: "一般市民",ph: "/səˈvɪljən/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_re",
+    theme: "-re ファミリー",
+    words: [
+      {en: "temperature",ja: "温度",ph: "/ˈtemprətʃər/",eiken: 4,pos: "名詞"},
+      {en: "lecture",ja: "講義",ph: "/ˈlektʃər/",eiken: 4,pos: "名詞"},
+      {en: "mixture",ja: "混合",ph: "/ˈmɪkstʃər/",eiken: 4,pos: "名詞"},
+      {en: "signature",ja: "署名",ph: "/ˈsɪɡnətʃər/",eiken: 4,pos: "名詞"},
+      {en: "rare",ja: "まれな",ph: "/rer/",eiken: 4,pos: "形容詞"},
+      {en: "nowhere",ja: "どこにも〜ない",ph: "/ˈnoʊwer/",eiken: 4,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b4_pa_pre",
+    theme: "pa- ファミリー",
+    words: [
+      {en: "package",ja: "小包",ph: "/ˈpækɪdʒ/",eiken: 4,pos: "名詞"},
+      {en: "pasta",ja: "パスタ",ph: "/ˈpɑːstə/",eiken: 4,pos: "名詞"},
+      {en: "parrot",ja: "オウム",ph: "/ˈpærət/",eiken: 4,pos: "名詞"},
+      {en: "pajamas",ja: "パジャマ",ph: "/pəˈdʒɑːməz/",eiken: 4,pos: "名詞"},
+      {en: "password",ja: "パスワード",ph: "/ˈpæswɜːrd/",eiken: 4,pos: "名詞"},
+      {en: "path",ja: "小道",ph: "/pæθ/",eiken: 4,pos: "名詞"},
+      {en: "painless",ja: "痛みのない",ph: "/ˈpeɪnləs/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b4_el",
+    theme: "-el ファミリー",
+    words: [
+      {en: "label",ja: "ラベル",ph: "/ˈleɪbəl/",eiken: 4,pos: "名詞"},
+      {en: "towel",ja: "タオル",ph: "/ˈtaʊəl/",eiken: 4,pos: "名詞"},
+      {en: "angel",ja: "天使",ph: "/ˈeɪndʒəl/",eiken: 4,pos: "名詞"},
+      {en: "novel",ja: "小説",ph: "/ˈnɑːvəl/",eiken: 4,pos: "名詞"},
+      {en: "jewel",ja: "宝石",ph: "/ˈdʒuːəl/",eiken: 4,pos: "名詞"},
+      {en: "tunnel",ja: "トンネル",ph: "/ˈtʌnəl/",eiken: 4,pos: "名詞"},
+      {en: "level",ja: "水準",ph: "/ˈlevəl/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ing_4",
+    theme: "-ing ファミリー",
+    words: [
+      {en: "blessing",ja: "恵み",ph: "/ˈblesɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "filling",ja: "中身",ph: "/ˈfɪlɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "icing",ja: "砂糖ごろも",ph: "/ˈaɪsɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "stuffing",ja: "詰め物",ph: "/ˈstʌfɪŋ/",eiken: 4,pos: "名詞"},
+      {en: "dumpling",ja: "ぎょうざ",ph: "/ˈdʌmplɪŋ/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_he_pre",
+    theme: "he- ファミリー",
+    words: [
+      {en: "heavy",ja: "重い",ph: "/ˈhevi/",eiken: 4,pos: "形容詞"},
+      {en: "healthy",ja: "健康な",ph: "/ˈhelθi/",eiken: 4,pos: "形容詞"},
+      {en: "height",ja: "高さ",ph: "/haɪt/",eiken: 4,pos: "名詞"},
+      {en: "hero",ja: "英雄",ph: "/ˈhɪroʊ/",eiken: 4,pos: "名詞"},
+      {en: "health",ja: "健康",ph: "/helθ/",eiken: 4,pos: "名詞"},
+      {en: "herself",ja: "彼女自身",ph: "/hɜːrˈself/",eiken: 4,pos: "代名詞"},
+    ]
+  },
+  {
+    id: "b4_et_2",
+    theme: "-et ファミリー",
+    words: [
+      {en: "upset",ja: "動揺した",ph: "/ʌpˈset/",eiken: 4,pos: "形容詞"},
+      {en: "racket",ja: "ラケット",ph: "/ˈrækɪt/",eiken: 4,pos: "名詞"},
+      {en: "sunset",ja: "日没",ph: "/ˈsʌnset/",eiken: 4,pos: "名詞"},
+      {en: "rocket",ja: "ロケット",ph: "/ˈrɑːkɪt/",eiken: 4,pos: "名詞"},
+      {en: "diet",ja: "食事・ダイエット",ph: "/ˈdaɪət/",eiken: 4,pos: "名詞"},
+      {en: "faucet",ja: "蛇口",ph: "/ˈfɔːsɪt/",eiken: 4,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b4_ly_3",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "daily",ja: "毎日の",ph: "/ˈdeɪli/",eiken: 4,pos: "形容詞"},
+      {en: "weekly",ja: "毎週の",ph: "/ˈwiːkli/",eiken: 4,pos: "形容詞"},
+      {en: "monthly",ja: "毎月の",ph: "/ˈmʌnθli/",eiken: 4,pos: "形容詞"},
+      {en: "yearly",ja: "毎年の",ph: "/ˈjɪrli/",eiken: 4,pos: "形容詞"},
+      {en: "likely",ja: "ありそうな",ph: "/ˈlaɪkli/",eiken: 4,pos: "形容詞"},
+      {en: "lively",ja: "生き生きとした",ph: "/ˈlaɪvli/",eiken: 4,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_tion_s_1",
+    theme: "-tion ファミリー",
+    words: [
+      {en: "motion",ja: "動き",ph: "/ˈmoʊʃən/",eiken: 3,pos: "名詞"},
+      {en: "nation",ja: "国家",ph: "/ˈneɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "option",ja: "選択肢",ph: "/ˈɑːpʃən/",eiken: 3,pos: "名詞"},
+      {en: "fiction",ja: "小説",ph: "/ˈfɪkʃən/",eiken: 3,pos: "名詞"},
+      {en: "addition",ja: "追加",ph: "/əˈdɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "election",ja: "選挙",ph: "/ɪˈlekʃən/",eiken: 3,pos: "名詞"},
+      {en: "location",ja: "場所",ph: "/loʊˈkeɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "position",ja: "位置",ph: "/pəˈzɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "reaction",ja: "反応",ph: "/riˈækʃən/",eiken: 3,pos: "名詞"},
+      {en: "relation",ja: "関係",ph: "/rɪˈleɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "invention",ja: "発明",ph: "/ɪnˈvenʃən/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_tion_s_2",
+    theme: "-tion ファミリー",
+    words: [
+      {en: "pollution",ja: "汚染",ph: "/pəˈluːʃən/",eiken: 3,pos: "名詞"},
+      {en: "reception",ja: "受付",ph: "/rɪˈsepʃən/",eiken: 3,pos: "名詞"},
+      {en: "connection",ja: "つながり",ph: "/kəˈnekʃən/",eiken: 3,pos: "名詞"},
+      {en: "correction",ja: "訂正",ph: "/kəˈrekʃən/",eiken: 3,pos: "名詞"},
+      {en: "decoration",ja: "飾り",ph: "/ˌdekəˈreɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "generation",ja: "世代",ph: "/ˌdʒenəˈreɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "population",ja: "人口",ph: "/ˌpɑːpjəˈleɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "production",ja: "生産",ph: "/prəˈdʌkʃən/",eiken: 3,pos: "名詞"},
+      {en: "protection",ja: "保護",ph: "/prəˈtekʃən/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_tion_s_3",
+    theme: "-tion ファミリー",
+    words: [
+      {en: "suggestion",ja: "提案",ph: "/səɡˈdʒestʃən/",eiken: 3,pos: "名詞"},
+      {en: "explanation",ja: "説明",ph: "/ˌekspləˈneɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "instruction",ja: "指示",ph: "/ɪnˈstrʌkʃən/",eiken: 3,pos: "名詞"},
+      {en: "preparation",ja: "準備",ph: "/ˌprepəˈreɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "reservation",ja: "予約",ph: "/ˌrezərˈveɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "organization",ja: "組織",ph: "/ˌɔːrɡənəˈzeɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "presentation",ja: "発表",ph: "/ˌprezənˈteɪʃən/",eiken: 3,pos: "名詞"},
+      {en: "pronunciation",ja: "発音",ph: "/prəˌnʌnsiˈeɪʃən/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ment_s_2",
+    theme: "-ment ファミリー",
+    words: [
+      {en: "management",ja: "経営",ph: "/ˈmænɪdʒmənt/",eiken: 3,pos: "名詞"},
+      {en: "appointment",ja: "約束",ph: "/əˈpɔɪntmənt/",eiken: 3,pos: "名詞"},
+      {en: "arrangement",ja: "準備",ph: "/əˈreɪndʒmənt/",eiken: 3,pos: "名詞"},
+      {en: "disappointment",ja: "失望",ph: "/ˌdɪsəˈpɔɪntmənt/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ness_s",
+    theme: "-ness ファミリー",
+    words: [
+      {en: "witness",ja: "目撃者",ph: "/ˈwɪtnəs/",eiken: 3,pos: "名詞"},
+      {en: "coldness",ja: "冷たさ",ph: "/ˈkoʊldnəs/",eiken: 3,pos: "名詞"},
+      {en: "goodness",ja: "善良さ",ph: "/ˈɡʊdnəs/",eiken: 3,pos: "名詞"},
+      {en: "laziness",ja: "怠惰",ph: "/ˈleɪzinəs/",eiken: 3,pos: "名詞"},
+      {en: "rudeness",ja: "無礼",ph: "/ˈruːdnəs/",eiken: 3,pos: "名詞"},
+      {en: "emptiness",ja: "むなしさ",ph: "/ˈemptinəs/",eiken: 3,pos: "名詞"},
+      {en: "readiness",ja: "準備ができていること",ph: "/ˈredinəs/",eiken: 3,pos: "名詞"},
+      {en: "tiredness",ja: "疲れ",ph: "/ˈtaɪərdnəs/",eiken: 3,pos: "名詞"},
+      {en: "brightness",ja: "明るさ",ph: "/ˈbraɪtnəs/",eiken: 3,pos: "名詞"},
+      {en: "loneliness",ja: "孤独",ph: "/ˈloʊnlinəs/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ally_s",
+    theme: "-ally ファミリー",
+    words: [
+      {en: "equally",ja: "等しく",ph: "/ˈiːkwəli/",eiken: 3,pos: "副詞"},
+      {en: "totally",ja: "まったく",ph: "/ˈtoʊtəli/",eiken: 3,pos: "副詞"},
+      {en: "gradually",ja: "次第に",ph: "/ˈɡrædʒuəli/",eiken: 3,pos: "副詞"},
+      {en: "naturally",ja: "自然に",ph: "/ˈnætʃərəli/",eiken: 3,pos: "副詞"},
+      {en: "accidentally",ja: "偶然に",ph: "/ˌæksɪˈdentəli/",eiken: 3,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b3_age_s",
+    theme: "-age ファミリー",
+    words: [
+      {en: "wage",ja: "賃金",ph: "/weɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "garage",ja: "車庫",ph: "/ɡəˈrɑːʒ/",eiken: 3,pos: "名詞"},
+      {en: "average",ja: "平均",ph: "/ˈævərɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "baggage",ja: "手荷物",ph: "/ˈbæɡɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "bandage",ja: "包帯",ph: "/ˈbændɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "garbage",ja: "生ごみ",ph: "/ˈɡɑːrbɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "luggage",ja: "手荷物",ph: "/ˈlʌɡɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "passage",ja: "通路",ph: "/ˈpæsɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "sausage",ja: "ソーセージ",ph: "/ˈsɔːsɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "marriage",ja: "結婚",ph: "/ˈmærɪdʒ/",eiken: 3,pos: "名詞"},
+      {en: "advantage",ja: "利点",ph: "/ədˈvæntɪdʒ/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ful_s",
+    theme: "-ful ファミリー",
+    words: [
+      {en: "awful",ja: "ひどい",ph: "/ˈɔːfəl/",eiken: 3,pos: "形容詞"},
+      {en: "playful",ja: "遊び好きな",ph: "/ˈpleɪfəl/",eiken: 3,pos: "形容詞"},
+      {en: "thankful",ja: "感謝している",ph: "/ˈθæŋkfəl/",eiken: 3,pos: "形容詞"},
+      {en: "meaningful",ja: "意味のある",ph: "/ˈmiːnɪŋfəl/",eiken: 3,pos: "形容詞"},
+      {en: "respectful",ja: "礼儀正しい",ph: "/rɪˈspektfəl/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_ate_s",
+    theme: "-ate ファミリー",
+    words: [
+      {en: "rate",ja: "割合",ph: "/reɪt/",eiken: 3,pos: "名詞"},
+      {en: "donate",ja: "寄付する",ph: "/ˈdoʊneɪt/",eiken: 3,pos: "動詞"},
+      {en: "educate",ja: "教育する",ph: "/ˈedʒukeɪt/",eiken: 3,pos: "動詞"},
+      {en: "imitate",ja: "まねる",ph: "/ˈɪmɪteɪt/",eiken: 3,pos: "動詞"},
+      {en: "operate",ja: "操作する",ph: "/ˈɑːpəreɪt/",eiken: 3,pos: "動詞"},
+      {en: "decorate",ja: "飾る",ph: "/ˈdekəreɪt/",eiken: 3,pos: "動詞"},
+      {en: "celebrate",ja: "祝う",ph: "/ˈseləbreɪt/",eiken: 3,pos: "動詞"},
+      {en: "fortunate",ja: "幸運な",ph: "/ˈfɔːrtʃənət/",eiken: 3,pos: "形容詞"},
+      {en: "appreciate",ja: "感謝する",ph: "/əˈpriːʃieɪt/",eiken: 3,pos: "動詞"},
+    ]
+  },
+  {
+    id: "b3_ent_s",
+    theme: "-ent ファミリー",
+    words: [
+      {en: "absent",ja: "欠席の",ph: "/ˈæbsənt/",eiken: 3,pos: "形容詞"},
+      {en: "accent",ja: "なまり",ph: "/ˈæksent/",eiken: 3,pos: "名詞"},
+      {en: "urgent",ja: "緊急の",ph: "/ˈɜːrdʒənt/",eiken: 3,pos: "形容詞"},
+      {en: "current",ja: "現在の",ph: "/ˈkɜːrənt/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_dis_p",
+    theme: "dis- ファミリー",
+    words: [
+      {en: "discuss",ja: "話し合う",ph: "/dɪˈskʌs/",eiken: 3,pos: "動詞"},
+      {en: "disease",ja: "病気",ph: "/dɪˈziːz/",eiken: 3,pos: "名詞"},
+      {en: "disaster",ja: "災害",ph: "/dɪˈzæstər/",eiken: 3,pos: "名詞"},
+      {en: "district",ja: "地区",ph: "/ˈdɪstrɪkt/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ly_s_1",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "holy",ja: "神聖な",ph: "/ˈhoʊli/",eiken: 3,pos: "形容詞"},
+      {en: "rely",ja: "頼る",ph: "/rɪˈlaɪ/",eiken: 3,pos: "動詞"},
+      {en: "ugly",ja: "醜い",ph: "/ˈʌɡli/",eiken: 3,pos: "形容詞"},
+      {en: "fully",ja: "十分に",ph: "/ˈfʊli/",eiken: 3,pos: "副詞"},
+      {en: "truly",ja: "本当に",ph: "/ˈtruːli/",eiken: 3,pos: "副詞"},
+      {en: "calmly",ja: "落ち着いて",ph: "/ˈkɑːmli/",eiken: 3,pos: "副詞"},
+      {en: "deeply",ja: "深く",ph: "/ˈdiːpli/",eiken: 3,pos: "副詞"},
+      {en: "fairly",ja: "かなり",ph: "/ˈferli/",eiken: 3,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b3_ly_s_2",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "gladly",ja: "喜んで",ph: "/ˈɡlædli/",eiken: 3,pos: "副詞"},
+      {en: "hardly",ja: "ほとんど〜ない",ph: "/ˈhɑːrdli/",eiken: 3,pos: "副詞"},
+      {en: "highly",ja: "非常に",ph: "/ˈhaɪli/",eiken: 3,pos: "副詞"},
+      {en: "lately",ja: "最近",ph: "/ˈleɪtli/",eiken: 3,pos: "副詞"},
+      {en: "lazily",ja: "のんびりと",ph: "/ˈleɪzɪli/",eiken: 3,pos: "副詞"},
+      {en: "mainly",ja: "主に",ph: "/ˈmeɪnli/",eiken: 3,pos: "副詞"},
+      {en: "neatly",ja: "きちんと",ph: "/ˈniːtli/",eiken: 3,pos: "副詞"},
+      {en: "nicely",ja: "うまく",ph: "/ˈnaɪsli/",eiken: 3,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b3_ly_s_3",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "partly",ja: "部分的に",ph: "/ˈpɑːrtli/",eiken: 3,pos: "副詞"},
+      {en: "rarely",ja: "めったに〜ない",ph: "/ˈrerli/",eiken: 3,pos: "副詞"},
+      {en: "rudely",ja: "失礼に",ph: "/ˈruːdli/",eiken: 3,pos: "副詞"},
+      {en: "warmly",ja: "温かく",ph: "/ˈwɔːrmli/",eiken: 3,pos: "副詞"},
+      {en: "widely",ja: "広く",ph: "/ˈwaɪdli/",eiken: 3,pos: "副詞"},
+      {en: "wisely",ja: "賢く",ph: "/ˈwaɪzli/",eiken: 3,pos: "副詞"},
+      {en: "angrily",ja: "怒って",ph: "/ˈæŋɡrəli/",eiken: 3,pos: "副詞"},
+      {en: "closely",ja: "綿密に",ph: "/ˈkloʊsli/",eiken: 3,pos: "副詞"},
+      {en: "heavily",ja: "激しく",ph: "/ˈhevɪli/",eiken: 3,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b3_ly_s_4",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "rapidly",ja: "急速に",ph: "/ˈræpɪdli/",eiken: 3,pos: "副詞"},
+      {en: "roughly",ja: "おおよそ",ph: "/ˈrʌfli/",eiken: 3,pos: "副詞"},
+      {en: "brightly",ja: "明るく",ph: "/ˈbraɪtli/",eiken: 3,pos: "副詞"},
+      {en: "commonly",ja: "一般に",ph: "/ˈkɑːmənli/",eiken: 3,pos: "副詞"},
+      {en: "directly",ja: "直接に",ph: "/dəˈrektli/",eiken: 3,pos: "副詞"},
+      {en: "honestly",ja: "正直に",ph: "/ˈɑːnɪstli/",eiken: 3,pos: "副詞"},
+      {en: "properly",ja: "きちんと",ph: "/ˈprɑːpərli/",eiken: 3,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b3_ly_s_5",
+    theme: "-ly ファミリー",
+    words: [
+      {en: "unlikely",ja: "ありそうもない",ph: "/ʌnˈlaɪkli/",eiken: 3,pos: "形容詞"},
+      {en: "perfectly",ja: "完全に",ph: "/ˈpɜːrfɪktli/",eiken: 3,pos: "副詞"},
+      {en: "regularly",ja: "定期的に",ph: "/ˈreɡjələrli/",eiken: 3,pos: "副詞"},
+      {en: "seriously",ja: "真剣に",ph: "/ˈsɪriəsli/",eiken: 3,pos: "副詞"},
+      {en: "sincerely",ja: "心から",ph: "/sɪnˈsɪrli/",eiken: 3,pos: "副詞"},
+      {en: "absolutely",ja: "まったく",ph: "/ˌæbsəˈluːtli/",eiken: 3,pos: "副詞"},
+      {en: "completely",ja: "完全に",ph: "/kəmˈpliːtli/",eiken: 3,pos: "副詞"},
+      {en: "successfully",ja: "うまく",ph: "/səkˈsesfəli/",eiken: 3,pos: "副詞"},
+    ]
+  },
+  {
+    id: "b3_er_s_1",
+    theme: "-er ファミリー",
+    words: [
+      {en: "inner",ja: "内側の",ph: "/ˈɪnər/",eiken: 3,pos: "形容詞"},
+      {en: "outer",ja: "外側の",ph: "/ˈaʊtər/",eiken: 3,pos: "形容詞"},
+      {en: "upper",ja: "上の",ph: "/ˈʌpər/",eiken: 3,pos: "形容詞"},
+      {en: "border",ja: "国境",ph: "/ˈbɔːrdər/",eiken: 3,pos: "名詞"},
+      {en: "bother",ja: "悩ませる",ph: "/ˈbɑːðər/",eiken: 3,pos: "動詞"},
+      {en: "cancer",ja: "がん",ph: "/ˈkænsər/",eiken: 3,pos: "名詞"},
+      {en: "career",ja: "経歴",ph: "/kəˈrɪr/",eiken: 3,pos: "名詞"},
+      {en: "hunger",ja: "空腹",ph: "/ˈhʌŋɡər/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_er_s_2",
+    theme: "-er ファミリー",
+    words: [
+      {en: "master",ja: "主人",ph: "/ˈmæstər/",eiken: 3,pos: "名詞"},
+      {en: "matter",ja: "問題",ph: "/ˈmætər/",eiken: 3,pos: "名詞"},
+      {en: "powder",ja: "粉",ph: "/ˈpaʊdər/",eiken: 3,pos: "名詞"},
+      {en: "prayer",ja: "祈り",ph: "/prer/",eiken: 3,pos: "名詞"},
+      {en: "rather",ja: "むしろ",ph: "/ˈræðər/",eiken: 3,pos: "副詞"},
+      {en: "robber",ja: "強盗",ph: "/ˈrɑːbər/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_er_s_3",
+    theme: "-er ファミリー",
+    words: [
+      {en: "supper",ja: "夕食",ph: "/ˈsʌpər/",eiken: 3,pos: "名詞"},
+      {en: "temper",ja: "気性",ph: "/ˈtempər/",eiken: 3,pos: "名詞"},
+      {en: "builder",ja: "建築業者",ph: "/ˈbɪldər/",eiken: 3,pos: "名詞"},
+      {en: "counter",ja: "カウンター",ph: "/ˈkaʊntər/",eiken: 3,pos: "名詞"},
+      {en: "pioneer",ja: "開拓者",ph: "/ˌpaɪəˈnɪr/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_er_s_4",
+    theme: "-er ファミリー",
+    words: [
+      {en: "recover",ja: "回復する",ph: "/rɪˈkʌvər/",eiken: 3,pos: "動詞"},
+      {en: "trainer",ja: "トレーナー",ph: "/ˈtreɪnər/",eiken: 3,pos: "名詞"},
+      {en: "composer",ja: "作曲家",ph: "/kəmˈpoʊzər/",eiken: 3,pos: "名詞"},
+      {en: "follower",ja: "信奉者",ph: "/ˈfɑːloʊər/",eiken: 3,pos: "名詞"},
+      {en: "laughter",ja: "笑い",ph: "/ˈlæftər/",eiken: 3,pos: "名詞"},
+      {en: "prisoner",ja: "囚人",ph: "/ˈprɪzənər/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_le_s_1",
+    theme: "-le ファミリー",
+    words: [
+      {en: "male",ja: "男性の",ph: "/meɪl/",eiken: 3,pos: "形容詞"},
+      {en: "pale",ja: "青白い",ph: "/peɪl/",eiken: 3,pos: "形容詞"},
+      {en: "tale",ja: "物語",ph: "/teɪl/",eiken: 3,pos: "名詞"},
+      {en: "cycle",ja: "周期",ph: "/ˈsaɪkəl/",eiken: 3,pos: "名詞"},
+      {en: "battle",ja: "戦い",ph: "/ˈbætəl/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_le_s_2",
+    theme: "-le ファミリー",
+    words: [
+      {en: "couple",ja: "一組",ph: "/ˈkʌpəl/",eiken: 3,pos: "名詞"},
+      {en: "female",ja: "女性の",ph: "/ˈfiːmeɪl/",eiken: 3,pos: "形容詞"},
+      {en: "muscle",ja: "筋肉",ph: "/ˈmʌsəl/",eiken: 3,pos: "名詞"},
+      {en: "riddle",ja: "なぞなぞ",ph: "/ˈrɪdəl/",eiken: 3,pos: "名詞"},
+      {en: "settle",ja: "落ち着く",ph: "/ˈsetəl/",eiken: 3,pos: "動詞"},
+    ]
+  },
+  {
+    id: "b3_le_s_3",
+    theme: "-le ファミリー",
+    words: [
+      {en: "unable",ja: "できない",ph: "/ʌnˈeɪbəl/",eiken: 3,pos: "形容詞"},
+      {en: "article",ja: "記事",ph: "/ˈɑːrtɪkəl/",eiken: 3,pos: "名詞"},
+      {en: "miracle",ja: "奇跡",ph: "/ˈmɪrəkəl/",eiken: 3,pos: "名詞"},
+      {en: "tremble",ja: "震える",ph: "/ˈtrembəl/",eiken: 3,pos: "動詞"},
+      {en: "vehicle",ja: "乗り物",ph: "/ˈviːəkəl/",eiken: 3,pos: "名詞"},
+      {en: "suitable",ja: "適した",ph: "/ˈsuːtəbəl/",eiken: 3,pos: "形容詞"},
+      {en: "lifestyle",ja: "生活様式",ph: "/ˈlaɪfstaɪl/",eiken: 3,pos: "名詞"},
+      {en: "uncomfortable",ja: "心地よくない",ph: "/ʌnˈkʌmftərbəl/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_al_s_1",
+    theme: "-al ファミリー",
+    words: [
+      {en: "coal",ja: "石炭",ph: "/koʊl/",eiken: 3,pos: "名詞"},
+      {en: "legal",ja: "合法の",ph: "/ˈliːɡəl/",eiken: 3,pos: "形容詞"},
+      {en: "rival",ja: "好敵手",ph: "/ˈraɪvəl/",eiken: 3,pos: "名詞"},
+      {en: "royal",ja: "王の",ph: "/ˈrɔɪəl/",eiken: 3,pos: "形容詞"},
+      {en: "total",ja: "合計",ph: "/ˈtoʊtəl/",eiken: 3,pos: "名詞"},
+      {en: "annual",ja: "年に一度の",ph: "/ˈænjuəl/",eiken: 3,pos: "形容詞"},
+      {en: "formal",ja: "正式な",ph: "/ˈfɔːrməl/",eiken: 3,pos: "形容詞"},
+      {en: "mammal",ja: "哺乳類",ph: "/ˈmæməl/",eiken: 3,pos: "名詞"},
+      {en: "rental",ja: "レンタル",ph: "/ˈrentəl/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_al_s_2",
+    theme: "-al ファミリー",
+    words: [
+      {en: "social",ja: "社会の",ph: "/ˈsoʊʃəl/",eiken: 3,pos: "形容詞"},
+      {en: "visual",ja: "視覚の",ph: "/ˈvɪʒuəl/",eiken: 3,pos: "形容詞"},
+      {en: "central",ja: "中心の",ph: "/ˈsentrəl/",eiken: 3,pos: "形容詞"},
+      {en: "digital",ja: "デジタルの",ph: "/ˈdɪdʒɪtəl/",eiken: 3,pos: "形容詞"},
+      {en: "journal",ja: "日誌",ph: "/ˈdʒɜːrnəl/",eiken: 3,pos: "名詞"},
+      {en: "magical",ja: "魔法の",ph: "/ˈmædʒɪkəl/",eiken: 3,pos: "形容詞"},
+      {en: "several",ja: "いくつかの",ph: "/ˈsevrəl/",eiken: 3,pos: "形容詞"},
+      {en: "material",ja: "材料",ph: "/məˈtɪriəl/",eiken: 3,pos: "名詞"},
+      {en: "official",ja: "公式の",ph: "/əˈfɪʃəl/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_or_s_1",
+    theme: "-or ファミリー",
+    words: [
+      {en: "favor",ja: "親切な行い",ph: "/ˈfeɪvər/",eiken: 3,pos: "名詞"},
+      {en: "honor",ja: "名誉",ph: "/ˈɑːnər/",eiken: 3,pos: "名詞"},
+      {en: "major",ja: "主要な",ph: "/ˈmeɪdʒər/",eiken: 3,pos: "形容詞"},
+      {en: "razor",ja: "かみそり",ph: "/ˈreɪzər/",eiken: 3,pos: "名詞"},
+      {en: "rumor",ja: "うわさ",ph: "/ˈruːmər/",eiken: 3,pos: "名詞"},
+      {en: "tutor",ja: "家庭教師",ph: "/ˈtuːtər/",eiken: 3,pos: "名詞"},
+      {en: "horror",ja: "恐怖",ph: "/ˈhɔːrər/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_or_s_2",
+    theme: "-or ファミリー",
+    words: [
+      {en: "junior",ja: "年下の",ph: "/ˈdʒuːnjər/",eiken: 3,pos: "形容詞"},
+      {en: "sailor",ja: "船員",ph: "/ˈseɪlər/",eiken: 3,pos: "名詞"},
+      {en: "senior",ja: "年上の",ph: "/ˈsiːnjər/",eiken: 3,pos: "形容詞"},
+      {en: "emperor",ja: "皇帝",ph: "/ˈempərər/",eiken: 3,pos: "名詞"},
+      {en: "monitor",ja: "モニター",ph: "/ˈmɑːnɪtər/",eiken: 3,pos: "名詞"},
+      {en: "behavior",ja: "ふるまい",ph: "/bɪˈheɪvjər/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_re_p_1",
+    theme: "re- ファミリー",
+    words: [
+      {en: "rear",ja: "後ろの",ph: "/rɪr/",eiken: 3,pos: "形容詞"},
+      {en: "react",ja: "反応する",ph: "/riˈækt/",eiken: 3,pos: "動詞"},
+      {en: "refund",ja: "払い戻し",ph: "/ˈriːfʌnd/",eiken: 3,pos: "名詞"},
+      {en: "regret",ja: "後悔する",ph: "/rɪˈɡret/",eiken: 3,pos: "動詞"},
+      {en: "relief",ja: "安心",ph: "/rɪˈliːf/",eiken: 3,pos: "名詞"},
+      {en: "remind",ja: "思い出させる",ph: "/rɪˈmaɪnd/",eiken: 3,pos: "動詞"},
+    ]
+  },
+  {
+    id: "b3_re_p_2",
+    theme: "re- ファミリー",
+    words: [
+      {en: "regular",ja: "規則正しい",ph: "/ˈreɡjələr/",eiken: 3,pos: "形容詞"},
+      {en: "replace",ja: "取り替える",ph: "/rɪˈpleɪs/",eiken: 3,pos: "動詞"},
+      {en: "research",ja: "研究",ph: "/ˈriːsɜːrtʃ/",eiken: 3,pos: "名詞"},
+      {en: "response",ja: "返答",ph: "/rɪˈspɑːns/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_on_s_1",
+    theme: "-on ファミリー",
+    words: [
+      {en: "iron",ja: "鉄",ph: "/ˈaɪərn/",eiken: 3,pos: "名詞"},
+      {en: "union",ja: "組合",ph: "/ˈjuːnjən/",eiken: 3,pos: "名詞"},
+      {en: "pardon",ja: "許し",ph: "/ˈpɑːrdən/",eiken: 3,pos: "名詞"},
+      {en: "poison",ja: "毒",ph: "/ˈpɔɪzən/",eiken: 3,pos: "名詞"},
+      {en: "prison",ja: "刑務所",ph: "/ˈprɪzən/",eiken: 3,pos: "名詞"},
+      {en: "weapon",ja: "武器",ph: "/ˈwepən/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_on_s_2",
+    theme: "-on ファミリー",
+    words: [
+      {en: "cushion",ja: "クッション",ph: "/ˈkʊʃən/",eiken: 3,pos: "名詞"},
+      {en: "horizon",ja: "地平線",ph: "/həˈraɪzən/",eiken: 3,pos: "名詞"},
+      {en: "passion",ja: "情熱",ph: "/ˈpæʃən/",eiken: 3,pos: "名詞"},
+      {en: "surgeon",ja: "外科医",ph: "/ˈsɜːrdʒən/",eiken: 3,pos: "名詞"},
+      {en: "marathon",ja: "マラソン",ph: "/ˈmærəθɑːn/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_so_p",
+    theme: "so- ファミリー",
+    words: [
+      {en: "soft",ja: "やわらかい",ph: "/sɔːft/",eiken: 3,pos: "形容詞"},
+      {en: "soil",ja: "土",ph: "/sɔɪl/",eiken: 3,pos: "名詞"},
+      {en: "sore",ja: "痛い",ph: "/sɔːr/",eiken: 3,pos: "形容詞"},
+      {en: "sort",ja: "種類",ph: "/sɔːrt/",eiken: 3,pos: "名詞"},
+      {en: "soul",ja: "魂",ph: "/soʊl/",eiken: 3,pos: "名詞"},
+      {en: "sour",ja: "すっぱい",ph: "/ˈsaʊər/",eiken: 3,pos: "形容詞"},
+      {en: "solar",ja: "太陽の",ph: "/ˈsoʊlər/",eiken: 3,pos: "形容詞"},
+      {en: "solid",ja: "固体の",ph: "/ˈsɑːlɪd/",eiken: 3,pos: "形容詞"},
+      {en: "source",ja: "源",ph: "/sɔːrs/",eiken: 3,pos: "名詞"},
+      {en: "society",ja: "社会",ph: "/səˈsaɪəti/",eiken: 3,pos: "名詞"},
+      {en: "software",ja: "ソフトウェア",ph: "/ˈsɔːftwer/",eiken: 3,pos: "名詞"},
+      {en: "southern",ja: "南の",ph: "/ˈsʌðərn/",eiken: 3,pos: "形容詞"},
+      {en: "souvenir",ja: "おみやげ",ph: "/ˌsuːvəˈnɪr/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_se_s",
+    theme: "-se ファミリー",
+    words: [
+      {en: "base",ja: "土台",ph: "/beɪs/",eiken: 3,pos: "名詞"},
+      {en: "rise",ja: "上がる",ph: "/raɪz/",eiken: 3,pos: "動詞"},
+      {en: "wise",ja: "賢い",ph: "/waɪz/",eiken: 3,pos: "形容詞"},
+      {en: "cause",ja: "原因",ph: "/kɔːz/",eiken: 3,pos: "名詞"},
+      {en: "pause",ja: "一時停止",ph: "/pɔːz/",eiken: 3,pos: "名詞"},
+      {en: "sense",ja: "感覚",ph: "/sens/",eiken: 3,pos: "名詞"},
+      {en: "worse",ja: "より悪い",ph: "/wɜːrs/",eiken: 3,pos: "形容詞"},
+      {en: "praise",ja: "ほめる",ph: "/preɪz/",eiken: 3,pos: "動詞"},
+    ]
+  },
+  {
+    id: "b3_ry_s",
+    theme: "-ry ファミリー",
+    words: [
+      {en: "bury",ja: "埋める",ph: "/ˈberi/",eiken: 3,pos: "動詞"},
+      {en: "merry",ja: "陽気な",ph: "/ˈmeri/",eiken: 3,pos: "形容詞"},
+      {en: "luxury",ja: "ぜいたく",ph: "/ˈlʌkʃəri/",eiken: 3,pos: "名詞"},
+      {en: "gallery",ja: "画廊",ph: "/ˈɡæləri/",eiken: 3,pos: "名詞"},
+      {en: "laundry",ja: "洗濯物",ph: "/ˈlɔːndri/",eiken: 3,pos: "名詞"},
+      {en: "lottery",ja: "宝くじ",ph: "/ˈlɑːtəri/",eiken: 3,pos: "名詞"},
+      {en: "industry",ja: "産業",ph: "/ˈɪndəstri/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_st_s",
+    theme: "-st ファミリー",
+    words: [
+      {en: "cost",ja: "費用",ph: "/kɔːst/",eiken: 3,pos: "名詞"},
+      {en: "fist",ja: "げんこつ",ph: "/fɪst/",eiken: 3,pos: "名詞"},
+      {en: "mist",ja: "霧",ph: "/mɪst/",eiken: 3,pos: "名詞"},
+      {en: "post",ja: "郵便",ph: "/poʊst/",eiken: 3,pos: "名詞"},
+      {en: "worst",ja: "最も悪い",ph: "/wɜːrst/",eiken: 3,pos: "形容詞"},
+      {en: "arrest",ja: "逮捕する",ph: "/əˈrest/",eiken: 3,pos: "動詞"},
+      {en: "latest",ja: "最新の",ph: "/ˈleɪtɪst/",eiken: 3,pos: "形容詞"},
+      {en: "priest",ja: "司祭",ph: "/priːst/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ss_s",
+    theme: "-ss ファミリー",
+    words: [
+      {en: "loss",ja: "損失",ph: "/lɔːs/",eiken: 3,pos: "名詞"},
+      {en: "mess",ja: "散らかった状態",ph: "/mes/",eiken: 3,pos: "名詞"},
+      {en: "actress",ja: "女優",ph: "/ˈæktrəs/",eiken: 3,pos: "名詞"},
+      {en: "wireless",ja: "無線の",ph: "/ˈwaɪərləs/",eiken: 3,pos: "形容詞"},
+      {en: "powerless",ja: "無力な",ph: "/ˈpaʊərləs/",eiken: 3,pos: "形容詞"},
+      {en: "sleepless",ja: "眠れない",ph: "/ˈsliːpləs/",eiken: 3,pos: "形容詞"},
+      {en: "speechless",ja: "言葉が出ない",ph: "/ˈspiːtʃləs/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_ce_s",
+    theme: "-ce ファミリー",
+    words: [
+      {en: "race",ja: "競走",ph: "/reɪs/",eiken: 3,pos: "名詞"},
+      {en: "spice",ja: "香辛料",ph: "/spaɪs/",eiken: 3,pos: "名詞"},
+      {en: "trace",ja: "跡",ph: "/treɪs/",eiken: 3,pos: "名詞"},
+      {en: "workplace",ja: "職場",ph: "/ˈwɜːrkpleɪs/",eiken: 3,pos: "名詞"},
+      {en: "convenience",ja: "便利さ",ph: "/kənˈviːniəns/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ed_s",
+    theme: "-ed ファミリー",
+    words: [
+      {en: "ashamed",ja: "恥じて",ph: "/əˈʃeɪmd/",eiken: 3,pos: "形容詞"},
+      {en: "haunted",ja: "幽霊の出る",ph: "/ˈhɔːntɪd/",eiken: 3,pos: "形容詞"},
+      {en: "limited",ja: "限られた",ph: "/ˈlɪmɪtɪd/",eiken: 3,pos: "形容詞"},
+      {en: "advanced",ja: "進んだ",ph: "/ədˈvænst/",eiken: 3,pos: "形容詞"},
+      {en: "frightened",ja: "おびえた",ph: "/ˈfraɪtənd/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_el_s",
+    theme: "-el ファミリー",
+    words: [
+      {en: "fuel",ja: "燃料",ph: "/ˈfjuːəl/",eiken: 3,pos: "名詞"},
+      {en: "panel",ja: "パネル",ph: "/ˈpænəl/",eiken: 3,pos: "名詞"},
+      {en: "cancel",ja: "取り消す",ph: "/ˈkænsəl/",eiken: 3,pos: "動詞"},
+      {en: "parcel",ja: "小包",ph: "/ˈpɑːrsəl/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ty_s",
+    theme: "-ty ファミリー",
+    words: [
+      {en: "duty",ja: "義務",ph: "/ˈduːti/",eiken: 3,pos: "名詞"},
+      {en: "pity",ja: "あわれみ",ph: "/ˈpɪti/",eiken: 3,pos: "名詞"},
+      {en: "guilty",ja: "有罪の",ph: "/ˈɡɪlti/",eiken: 3,pos: "形容詞"},
+      {en: "safety",ja: "安全",ph: "/ˈseɪfti/",eiken: 3,pos: "名詞"},
+      {en: "honesty",ja: "正直",ph: "/ˈɑːnəsti/",eiken: 3,pos: "名詞"},
+      {en: "liberty",ja: "自由",ph: "/ˈlɪbərti/",eiken: 3,pos: "名詞"},
+      {en: "variety",ja: "多様性",ph: "/vəˈraɪəti/",eiken: 3,pos: "名詞"},
+      {en: "personality",ja: "性格",ph: "/ˌpɜːrsəˈnæləti/",eiken: 3,pos: "名詞"},
+      {en: "possibility",ja: "可能性",ph: "/ˌpɑːsəˈbɪləti/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_re_s",
+    theme: "-re ファミリー",
+    words: [
+      {en: "fare",ja: "運賃",ph: "/fer/",eiken: 3,pos: "名詞"},
+      {en: "aware",ja: "気づいて",ph: "/əˈwer/",eiken: 3,pos: "形容詞"},
+      {en: "spare",ja: "予備の",ph: "/sper/",eiken: 3,pos: "形容詞"},
+      {en: "stare",ja: "じっと見る",ph: "/ster/",eiken: 3,pos: "動詞"},
+      {en: "feature",ja: "特徴",ph: "/ˈfiːtʃər/",eiken: 3,pos: "名詞"},
+      {en: "gesture",ja: "身ぶり",ph: "/ˈdʒestʃər/",eiken: 3,pos: "名詞"},
+      {en: "sculpture",ja: "彫刻",ph: "/ˈskʌlptʃər/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_th_s",
+    theme: "-th ファミリー",
+    words: [
+      {en: "width",ja: "幅",ph: "/wɪdθ/",eiken: 3,pos: "名詞"},
+      {en: "worth",ja: "価値がある",ph: "/wɜːrθ/",eiken: 3,pos: "形容詞"},
+      {en: "youth",ja: "若さ",ph: "/juːθ/",eiken: 3,pos: "名詞"},
+      {en: "growth",ja: "成長",ph: "/ɡroʊθ/",eiken: 3,pos: "名詞"},
+      {en: "length",ja: "長さ",ph: "/leŋθ/",eiken: 3,pos: "名詞"},
+      {en: "warmth",ja: "暖かさ",ph: "/wɔːrmθ/",eiken: 3,pos: "名詞"},
+      {en: "wealth",ja: "富",ph: "/welθ/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_ue_s",
+    theme: "-ue ファミリー",
+    words: [
+      {en: "argue",ja: "議論する",ph: "/ˈɑːrɡjuː/",eiken: 3,pos: "動詞"},
+      {en: "value",ja: "価値",ph: "/ˈvæljuː/",eiken: 3,pos: "名詞"},
+      {en: "avenue",ja: "大通り",ph: "/ˈævənuː/",eiken: 3,pos: "名詞"},
+      {en: "league",ja: "リーグ",ph: "/liːɡ/",eiken: 3,pos: "名詞"},
+      {en: "tissue",ja: "ティッシュ",ph: "/ˈtɪʃuː/",eiken: 3,pos: "名詞"},
+      {en: "tongue",ja: "舌",ph: "/tʌŋ/",eiken: 3,pos: "名詞"},
+      {en: "colleague",ja: "同僚",ph: "/ˈkɑːliːɡ/",eiken: 3,pos: "名詞"},
+      {en: "technique",ja: "技術",ph: "/tekˈniːk/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_en_s",
+    theme: "-en ファミリー",
+    words: [
+      {en: "fasten",ja: "締める",ph: "/ˈfæsən/",eiken: 3,pos: "動詞"},
+      {en: "heaven",ja: "天国",ph: "/ˈhevən/",eiken: 3,pos: "名詞"},
+      {en: "oxygen",ja: "酸素",ph: "/ˈɑːksɪdʒən/",eiken: 3,pos: "名詞"},
+      {en: "rotten",ja: "腐った",ph: "/ˈrɑːtən/",eiken: 3,pos: "形容詞"},
+      {en: "citizen",ja: "市民",ph: "/ˈsɪtɪzən/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_id_s",
+    theme: "-id ファミリー",
+    words: [
+      {en: "lid",ja: "ふた",ph: "/lɪd/",eiken: 3,pos: "名詞"},
+      {en: "rid",ja: "取り除く",ph: "/rɪd/",eiken: 3,pos: "動詞"},
+      {en: "maid",ja: "お手伝いさん",ph: "/meɪd/",eiken: 3,pos: "名詞"},
+      {en: "avoid",ja: "避ける",ph: "/əˈvɔɪd/",eiken: 3,pos: "動詞"},
+      {en: "humid",ja: "湿気の多い",ph: "/ˈhjuːmɪd/",eiken: 3,pos: "形容詞"},
+      {en: "rapid",ja: "速い",ph: "/ˈræpɪd/",eiken: 3,pos: "形容詞"},
+      {en: "liquid",ja: "液体",ph: "/ˈlɪkwɪd/",eiken: 3,pos: "名詞"},
+      {en: "stupid",ja: "ばかな",ph: "/ˈstuːpɪd/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_nt_s",
+    theme: "-nt ファミリー",
+    words: [
+      {en: "faint",ja: "かすかな",ph: "/feɪnt/",eiken: 3,pos: "形容詞"},
+      {en: "joint",ja: "関節",ph: "/dʒɔɪnt/",eiken: 3,pos: "名詞"},
+      {en: "amount",ja: "量",ph: "/əˈmaʊnt/",eiken: 3,pos: "名詞"},
+      {en: "vacant",ja: "空いている",ph: "/ˈveɪkənt/",eiken: 3,pos: "形容詞"},
+      {en: "instant",ja: "即座の",ph: "/ˈɪnstənt/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_om_s",
+    theme: "-om ファミリー",
+    words: [
+      {en: "bottom",ja: "底",ph: "/ˈbɑːtəm/",eiken: 3,pos: "名詞"},
+      {en: "custom",ja: "習慣",ph: "/ˈkʌstəm/",eiken: 3,pos: "名詞"},
+      {en: "random",ja: "でたらめな",ph: "/ˈrændəm/",eiken: 3,pos: "形容詞"},
+      {en: "seldom",ja: "めったに〜ない",ph: "/ˈseldəm/",eiken: 3,pos: "副詞"},
+      {en: "wisdom",ja: "知恵",ph: "/ˈwɪzdəm/",eiken: 3,pos: "名詞"},
+      {en: "freedom",ja: "自由",ph: "/ˈfriːdəm/",eiken: 3,pos: "名詞"},
+      {en: "kingdom",ja: "王国",ph: "/ˈkɪŋdəm/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_co_p",
+    theme: "co- ファミリー",
+    words: [
+      {en: "court",ja: "コート・裁判所",ph: "/kɔːrt/",eiken: 3,pos: "名詞"},
+      {en: "collar",ja: "えり",ph: "/ˈkɑːlər/",eiken: 3,pos: "名詞"},
+      {en: "coward",ja: "おくびょう者",ph: "/ˈkaʊərd/",eiken: 3,pos: "名詞"},
+      {en: "costume",ja: "衣装",ph: "/ˈkɑːstuːm/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_la_p",
+    theme: "la- ファミリー",
+    words: [
+      {en: "lay",ja: "置く",ph: "/leɪ/",eiken: 3,pos: "動詞"},
+      {en: "lack",ja: "不足",ph: "/læk/",eiken: 3,pos: "名詞"},
+      {en: "lamb",ja: "子羊",ph: "/læm/",eiken: 3,pos: "名詞"},
+      {en: "lane",ja: "車線",ph: "/leɪn/",eiken: 3,pos: "名詞"},
+      {en: "lawn",ja: "芝生",ph: "/lɔːn/",eiken: 3,pos: "名詞"},
+      {en: "lazy",ja: "怠けた",ph: "/ˈleɪzi/",eiken: 3,pos: "形容詞"},
+      {en: "laptop",ja: "ノートパソコン",ph: "/ˈlæptɑːp/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_nd_s",
+    theme: "-nd ファミリー",
+    words: [
+      {en: "pond",ja: "池",ph: "/pɑːnd/",eiken: 3,pos: "名詞"},
+      {en: "tend",ja: "〜しがちである",ph: "/tend/",eiken: 3,pos: "動詞"},
+      {en: "pound",ja: "ポンド",ph: "/paʊnd/",eiken: 3,pos: "名詞"},
+      {en: "beyond",ja: "〜を越えて",ph: "/bɪˈjɑːnd/",eiken: 3,pos: "前置詞"},
+      {en: "diamond",ja: "ダイヤモンド",ph: "/ˈdaɪəmənd/",eiken: 3,pos: "名詞"},
+      {en: "surround",ja: "囲む",ph: "/səˈraʊnd/",eiken: 3,pos: "動詞"},
+    ]
+  },
+  {
+    id: "b3_ve_s",
+    theme: "-ve ファミリー",
+    words: [
+      {en: "carve",ja: "彫る",ph: "/kɑːrv/",eiken: 3,pos: "動詞"},
+      {en: "shave",ja: "そる",ph: "/ʃeɪv/",eiken: 3,pos: "動詞"},
+      {en: "weave",ja: "織る",ph: "/wiːv/",eiken: 3,pos: "動詞"},
+      {en: "starve",ja: "飢える",ph: "/stɑːrv/",eiken: 3,pos: "動詞"},
+      {en: "achieve",ja: "達成する",ph: "/əˈtʃiːv/",eiken: 3,pos: "動詞"},
+    ]
+  },
+  {
+    id: "b3_rn_s",
+    theme: "-rn ファミリー",
+    words: [
+      {en: "earn",ja: "稼ぐ",ph: "/ɜːrn/",eiken: 3,pos: "動詞"},
+      {en: "warn",ja: "警告する",ph: "/wɔːrn/",eiken: 3,pos: "動詞"},
+      {en: "modern",ja: "現代の",ph: "/ˈmɑːdərn/",eiken: 3,pos: "形容詞"},
+      {en: "pattern",ja: "模様",ph: "/ˈpætərn/",eiken: 3,pos: "名詞"},
+      {en: "western",ja: "西の",ph: "/ˈwestərn/",eiken: 3,pos: "形容詞"},
+      {en: "northern",ja: "北の",ph: "/ˈnɔːrðərn/",eiken: 3,pos: "形容詞"},
+    ]
+  },
+  {
+    id: "b3_il_s",
+    theme: "-il ファミリー",
+    words: [
+      {en: "evil",ja: "悪い",ph: "/ˈiːvəl/",eiken: 3,pos: "形容詞"},
+      {en: "jail",ja: "刑務所",ph: "/dʒeɪl/",eiken: 3,pos: "名詞"},
+      {en: "rail",ja: "線路",ph: "/reɪl/",eiken: 3,pos: "名詞"},
+      {en: "devil",ja: "悪魔",ph: "/ˈdevəl/",eiken: 3,pos: "名詞"},
+      {en: "pupil",ja: "生徒",ph: "/ˈpjuːpəl/",eiken: 3,pos: "名詞"},
+      {en: "fossil",ja: "化石",ph: "/ˈfɑːsəl/",eiken: 3,pos: "名詞"},
+    ]
+  },
+  {
+    id: "b3_fa_p",
+    theme: "fa- ファミリー",
+    words: [
+      {en: "fake",ja: "にせの",ph: "/feɪk/",eiken: 3,pos: "形容詞"},
+      {en: "fame",ja: "名声",ph: "/feɪm/",eiken: 3,pos: "名詞"},
+      {en: "fancy",ja: "高級な",ph: "/ˈfænsi/",eiken: 3,pos: "形容詞"},
+      {en: "fault",ja: "欠点",ph: "/fɔːlt/",eiken: 3,pos: "名詞"},
+      {en: "familiar",ja: "よく知っている",ph: "/fəˈmɪljər/",eiken: 3,pos: "形容詞"},
+      {en: "farewell",ja: "別れ",ph: "/ˌferˈwel/",eiken: 3,pos: "名詞"},
+    ]
+  },
 ];
 
 // Flatten all words with family reference for quick lookup
