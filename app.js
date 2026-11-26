@@ -346,31 +346,40 @@ function tickParticles() {
 
 // ===== Speech =====
 let enVoice = null;
-let voicesLoaded = false;
-function loadEnVoice() {
-  if (voicesLoaded) return;
+function pickEnVoice() {
   const voices = window.speechSynthesis?.getVoices() || [];
   if (voices.length === 0) return;
-  voicesLoaded = true;
-  // Priority: high-quality en-US voices
-  enVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Samantha'))
-         || voices.find(v => v.lang === 'en-US' && v.name.includes('Karen'))
-         || voices.find(v => v.lang === 'en-US' && v.name.includes('Daniel'))
-         || voices.find(v => v.lang === 'en-US' && v.name.includes('Google'))
-         || voices.find(v => v.lang === 'en-US')
-         || voices.find(v => v.lang === 'en-GB')
-         || voices.find(v => v.lang.startsWith('en'));
+  const prefs = [
+    v => v.lang === 'en-US' && /Google US/i.test(v.name),
+    v => v.lang === 'en-US' && /Samantha/i.test(v.name),
+    v => v.lang === 'en-US' && /Alex/i.test(v.name),
+    v => v.lang === 'en-US' && /Allison/i.test(v.name),
+    v => v.lang === 'en-US' && /Ava/i.test(v.name),
+    v => v.lang === 'en-GB' && /Google UK.*Female/i.test(v.name),
+    v => v.lang === 'en-GB' && /Daniel/i.test(v.name),
+    v => v.lang === 'en-US' && !v.localService,
+    v => v.lang === 'en-US',
+    v => v.lang === 'en-GB',
+    v => v.lang.startsWith('en-'),
+    v => v.lang.startsWith('en'),
+  ];
+  for (const fn of prefs) {
+    const found = voices.find(fn);
+    if (found) { enVoice = found; return; }
+  }
 }
 if ('speechSynthesis' in window) {
-  window.speechSynthesis.onvoiceschanged = loadEnVoice;
-  loadEnVoice();
+  window.speechSynthesis.onvoiceschanged = pickEnVoice;
+  setTimeout(pickEnVoice, 100);
+  setTimeout(pickEnVoice, 500);
+  setTimeout(pickEnVoice, 1500);
 }
 
 function speakWord(word) {
   try {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
-    loadEnVoice();
+    if (!enVoice) pickEnVoice();
     const u = new SpeechSynthesisUtterance(word);
     u.lang = 'en-US';
     u.rate = 0.85;
