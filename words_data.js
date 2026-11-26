@@ -331,9 +331,6 @@ const CHAIN_FAMILIES = [
       { en: 'shell',  ja: '貝殻',       ph: '/ʃɛl/',   eiken: 3, pos: '名詞' },
       { en: 'smell',  ja: 'におい',     ph: '/smɛl/',  eiken: 4, pos: '動詞' },
       { en: 'dwell',  ja: '住む',       ph: '/dwɛl/',  eiken: 2, pos: '動詞' },
-      { en: 'excel',  ja: '優れる',     ph: '/ɪkˈsɛl/', eiken: 'p1', pos: '動詞' },
-      { en: 'compel', ja: '強いる',     ph: '/kəmˈpɛl/', eiken: 'p1', pos: '動詞' },
-      { en: 'propel', ja: '推進する',   ph: '/prəˈpɛl/', eiken: 1, pos: '名詞' },
     ]
   },
   {
@@ -698,7 +695,6 @@ const CHAIN_FAMILIES = [
       { en: 'led',    ja: '導いた',     ph: '/lɛd/',    eiken: 4, pos: '動詞' },
       { en: 'shed',   ja: '小屋',       ph: '/ʃɛd/',   eiken: 3, pos: '動詞' },
       { en: 'sled',   ja: 'そり',       ph: '/slɛd/',  eiken: 3, pos: '名詞' },
-      { en: 'spread', ja: '広げる',     ph: '/sprɛd/', eiken: 3, pos: '動詞' },
     ]
   },
   {
@@ -2542,6 +2538,7 @@ const CHAIN_FAMILIES = [
       {en: "forehead",ja: "額",ph: "/ˈfɔːrhed/",eiken: 2,pos: "名詞"},
       {en: "overhead",ja: "頭上に",ph: "/ˌoʊvərˈhed/",eiken: 1,pos: "副詞"},
       {en: "widespread",ja: "広範囲の",ph: "/ˈwaɪdspred/",eiken: "p1",pos: "形容詞"},
+      { en: 'spread', ja: '広げる',     ph: '/sprɛd/', eiken: 3, pos: '動詞' },
     ]
   },
   {
@@ -3555,6 +3552,7 @@ const CHAIN_FAMILIES = [
       {en: "exaggerate",ja: "誇張する",ph: "/ɪɡˈzædʒəˌreɪt/",eiken: "p1",pos: "動詞"},
       {en: "expert",ja: "専門家",ph: "/ˈɛkspərt/",eiken: 2,pos: "名詞"},
       {en: "exotic",ja: "異国風の",ph: "/ɪɡˈzɑtɪk/",eiken: "p1",pos: "形容詞"},
+      { en: 'excel',  ja: '優れる',     ph: '/ɪkˈsɛl/', eiken: 'p1', pos: '動詞' },
     ]
   },
   {
@@ -4277,6 +4275,8 @@ const CHAIN_FAMILIES = [
       {en: "chapel",ja: "礼拝堂",ph: "/ˈtʃæpl/",eiken: 2,pos: "名詞"},
       {en: "lapel",ja: "襟",ph: "/ləˈpel/",eiken: 1,pos: "名詞"},
       {en: "rappel",ja: "懸垂下降する",ph: "/ræˈpel/",eiken: 1,pos: "動詞"},
+      { en: 'compel', ja: '強いる',     ph: '/kəmˈpɛl/', eiken: 'p1', pos: '動詞' },
+      { en: 'propel', ja: '推進する',   ph: '/prəˈpɛl/', eiken: 1, pos: '名詞' },
     ]
   },
   {
@@ -5103,17 +5103,13 @@ const CHAIN_FAMILIES = [
   },
   {
     id: "sprl_onset2",
-    theme: "spr-/spl- ファミリー",
+    theme: "spr- ファミリー",
     words: [
       {en: "spree",ja: "浮かれ騒ぎ",ph: "/spriː/",eiken: 1,pos: "名詞"},
       {en: "sprain",ja: "ねんざする",ph: "/spreɪn/",eiken: "p1",pos: "動詞"},
       {en: "sprawl",ja: "手足を伸ばす",ph: "/sprɔːl/",eiken: 1,pos: "動詞"},
       {en: "sprite",ja: "妖精",ph: "/spraɪt/",eiken: 1,pos: "名詞"},
       {en: "spruce",ja: "トウヒ",ph: "/spruːs/",eiken: 1,pos: "名詞"},
-      {en: "splurge",ja: "散財する",ph: "/splɜːrdʒ/",eiken: 1,pos: "動詞"},
-      {en: "splatter",ja: "はね散らす",ph: "/ˈsplætər/",eiken: 1,pos: "動詞"},
-      {en: "splendid",ja: "すばらしい",ph: "/ˈsplendɪd/",eiken: "p1",pos: "形容詞"},
-      {en: "splinter",ja: "とげ",ph: "/ˈsplɪntər/",eiken: 1,pos: "名詞"},
       {en: "sprinkle",ja: "振りかける",ph: "/ˈsprɪŋkəl/",eiken: "p1",pos: "動詞"},
       {en: "sprinkler",ja: "散水器",ph: "/ˈsprɪŋklər/",eiken: 2,pos: "名詞"},
     ]
@@ -7954,6 +7950,16 @@ const CHAIN_FAMILIES = [
       {en: "goodbye",ja: "さようなら",ph: "/ˌɡʊdˈbaɪ/",eiken: 5,pos: "名詞"},
       {en: "dye",ja: "染める",ph: "/daɪ/",eiken: 2,pos: "動詞"},
       {en: "rye",ja: "ライ麦",ph: "/raɪ/",eiken: 2,pos: "名詞"},
+    ]
+  },
+  {
+    id: "spl_onset",
+    theme: "spl- ファミリー",
+    words: [
+      {en: "splurge",ja: "散財する",ph: "/splɜːrdʒ/",eiken: 1,pos: "動詞"},
+      {en: "splatter",ja: "はね散らす",ph: "/ˈsplætər/",eiken: 1,pos: "動詞"},
+      {en: "splendid",ja: "すばらしい",ph: "/ˈsplendɪd/",eiken: "p1",pos: "形容詞"},
+      {en: "splinter",ja: "とげ",ph: "/ˈsplɪntər/",eiken: 1,pos: "名詞"},
     ]
   },
 ];

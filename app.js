@@ -737,13 +737,14 @@ function getFamilyPattern(fam) {
     while (prefix && !x.startsWith(prefix)) prefix = prefix.slice(0, -1);
     while (suffix && !x.endsWith(suffix)) suffix = suffix.slice(1);
   }
-  // Fallback to the theme name for mixed families like "-oi/-oy"
-  if (!prefix && !suffix) {
-    const parts = (fam.theme.match(/[a-z]+/gi) || []).map(s => s.toLowerCase());
-    fam._pattern = { prefix: '', suffix: '', parts, letters: new Set(parts.join('')) };
-    return fam._pattern;
-  }
-  fam._pattern = { prefix, suffix, parts: [], letters: new Set(prefix + suffix) };
+  // The spelling written in the theme ("-ell", "sl-", "-oi/-oy") always counts as the pattern,
+  // even if a stray word makes the computed prefix/suffix shorter
+  const themeSuf = [...fam.theme.matchAll(/-([a-z]+)/gi)].map(m => m[1].toLowerCase());
+  const themePre = [...fam.theme.matchAll(/([a-z]+)-/gi)].map(m => m[1].toLowerCase());
+  // Themes without a dash ("book チェーン", "act → action チェーン"): the first word is the shared stem
+  const themeMid = (!themeSuf.length && !themePre.length) ? [((fam.theme.match(/[a-z]+/i) || [''])[0]).toLowerCase()].filter(Boolean) : [];
+  const letters = new Set(prefix + suffix + themeSuf.join('') + themePre.join('') + themeMid.join(''));
+  fam._pattern = { prefix, suffix, themeSuf, themePre, themeMid, letters };
   return fam._pattern;
 }
 
@@ -751,10 +752,9 @@ function blankCandidates(w, pat) {
   const shared = new Array(w.length).fill(false);
   if (pat.prefix && w.startsWith(pat.prefix)) for (let i = 0; i < pat.prefix.length; i++) shared[i] = true;
   if (pat.suffix && w.endsWith(pat.suffix)) for (let i = w.length - pat.suffix.length; i < w.length; i++) shared[i] = true;
-  for (const part of pat.parts) {
-    const idx = w.indexOf(part);
-    if (idx >= 0) for (let i = idx; i < idx + part.length; i++) shared[i] = true;
-  }
+  for (const s of pat.themeSuf) if (w.endsWith(s)) for (let i = w.length - s.length; i < w.length; i++) shared[i] = true;
+  for (const p of pat.themePre) if (w.startsWith(p)) for (let i = 0; i < p.length; i++) shared[i] = true;
+  for (const m of pat.themeMid) { const idx = w.indexOf(m); if (idx >= 0) for (let i = idx; i < idx + m.length; i++) shared[i] = true; }
   const out = [];
   for (let i = 0; i < w.length; i++) if (!shared[i] && !pat.letters.has(w[i])) out.push(i);
   return out;
