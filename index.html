@@ -32,6 +32,8 @@
       <div class="auth-error hidden" id="login-error"></div>
       <button class="btn btn-primary btn-full" id="btn-login">ログイン</button>
       <p class="auth-switch">アカウントをお持ちでない方は <a href="#" id="show-signup">新規登録</a></p>
+      <div class="guest-divider"><span>または</span></div>
+      <button class="btn btn-guest btn-full" id="btn-guest">ログインせずに遊ぶ</button>
     </div>
     <div id="form-signup" class="auth-form hidden">
       <h2 class="auth-title">新規登録</h2>
@@ -88,6 +90,10 @@
       <div class="card-title">&#x1F31F; 背伸び成功 <span class="tooltip-trigger" id="stretch-tooltip-trigger">?</span></div>
       <div class="card-desc" id="recent-stretch-text">まだありません</div>
       <div class="tooltip-popup" id="stretch-tooltip">自分の学年より難しい英検レベルの単語を正解できた記録です。例えば小学5年生が英検3級の単語を読めたら「背伸び成功」！</div>
+    </div>
+    <div class="home-card guest-login-card hidden" id="guest-login-card">
+      <div class="card-desc">ログインすると成績が保存されます</div>
+      <button class="btn btn-primary btn-small" id="btn-guest-to-login">ログイン / 新規登録</button>
     </div>
   </div>
 </div>

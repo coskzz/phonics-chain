@@ -20,6 +20,7 @@ function getSecondaryApp() {
 let currentUser = null;
 let userDoc = null;
 let userRole = 'student';
+let isGuest = false;
 
 // ===== Constants =====
 const EMAIL_DOMAIN = '@phonicschain.app';
@@ -418,8 +419,24 @@ $('btn-signup').addEventListener('click', async () => {
 
 function showError(id, msg) { const el = $(id); el.textContent = msg; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 4000); }
 
+// Guest mode
+$('btn-guest').addEventListener('click', () => {
+  isGuest = true;
+  currentUser = null;
+  userDoc = { nickname: 'ゲスト', grade: 'e3', discoveredWords: [], highScore: 0, longestChain: 0, streak: 0, bestStreak: 0, totalGames: 0, totalCorrect: 0, stretchCount: 0, dailyLog: {}, gameHistory: [] };
+  userRole = 'student';
+  enterHome();
+});
+
+$('btn-guest-to-login')?.addEventListener('click', () => {
+  isGuest = false;
+  currentUser = null; userDoc = null;
+  show('screen-login'); showTab(false);
+});
+
 auth.onAuthStateChanged(async user => {
   if (user) {
+    isGuest = false;
     currentUser = user;
     const doc = await db.collection('users').doc(user.uid).get();
     if (!doc.exists) { auth.signOut(); return; }
@@ -427,7 +444,7 @@ auth.onAuthStateChanged(async user => {
     userRole = userDoc.role || 'student';
     if (userRole === 'teacher') enterAdmin();
     else enterHome();
-  } else {
+  } else if (!isGuest) {
     currentUser = null; userDoc = null;
     show('screen-login'); showTab(false);
   }
@@ -437,7 +454,8 @@ auth.onAuthStateChanged(async user => {
 function enterHome() {
   show('screen-home'); showTab(true);
   $('tab-admin')?.parentElement?.classList.toggle('hidden', userRole !== 'teacher');
-  $('home-username').textContent = userDoc.nickname || '';
+  $('home-username').textContent = isGuest ? 'ゲスト' : (userDoc.nickname || '');
+  $('guest-login-card')?.classList.toggle('hidden', !isGuest);
   const streak = userDoc.streak || 0;
   $('home-streak').textContent = streak > 0 ? ('🔥 ' + streak + '日') : '';
   $('home-streak').classList.toggle('hidden', streak === 0);
@@ -1129,7 +1147,7 @@ async function endGame() {
   }
 
   // Save to Firestore
-  if (currentUser && userDoc) {
+  if (currentUser && userDoc && !isGuest) {
     const today = new Date().toISOString().slice(0, 10);
     const updates = {
       totalGames: firebase.firestore.FieldValue.increment(1),
@@ -1309,7 +1327,10 @@ function enterMyPage() {
   renderGameHistory(userDoc.gameHistory || []);
 }
 $('btn-back-mypage').addEventListener('click', () => enterHome());
-$('btn-logout').addEventListener('click', () => auth.signOut());
+$('btn-logout').addEventListener('click', () => {
+  if (isGuest) { isGuest = false; currentUser = null; userDoc = null; show('screen-login'); showTab(false); }
+  else auth.signOut();
+});
 
 // Shared calendar renderer
 function renderCalendarWidget(container, dailyLog, viewDate, target) {
