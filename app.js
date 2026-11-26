@@ -605,7 +605,8 @@ function startTimer() {
 }
 
 function addTime(sec) {
-  game.timeLeft = Math.min(game.timeLeft + sec, GAME_TIME);
+  const cap = GAME_TIME + (game.combo >= 10 ? 5 : 0);
+  game.timeLeft = Math.min(game.timeLeft + sec, cap);
   clearInterval(gameTimer);
   clearInterval(tickTimer);
   startTimer();
@@ -823,8 +824,10 @@ function handleChoice(chosen, correct, btn) {
     animateScore(wordScore);
     showScorePopup('+' + wordScore);
 
-    // Time bonus
-    addTime(TIME_BONUS_CORRECT);
+    // Time bonus — scales with combo
+    const c = game.combo;
+    const timeBonus = c >= 20 ? 4 : c >= 10 ? 3 : c >= 5 ? 2 : TIME_BONUS_CORRECT;
+    addTime(timeBonus);
 
     // Chain
     game.chain.push(word.en);
