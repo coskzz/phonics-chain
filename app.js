@@ -696,14 +696,22 @@ function presentWord() {
   $('word-meaning').textContent = word.ja;
 
   if (isFirst) {
-    // First word: blank 1 random letter, show the rest
     const w = word.en.toLowerCase();
-    const pos = Math.floor(Math.random() * w.length);
-    game.currentDiff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
+    // Use diff against next word so the blank type matches the rest of the family
+    const nextW = fam.words.length > 1 ? fam.words[1].en.toLowerCase() : null;
+    let diff;
+    if (nextW) {
+      const fwd = findChunkDiff(w, nextW);
+      diff = { blankStart: fwd.blankStart, blankLen: Math.min(fwd.blankLen, MAX_CHUNK), chunk: w.slice(fwd.blankStart, fwd.blankStart + Math.min(fwd.blankLen, MAX_CHUNK)) };
+    } else {
+      const pos = Math.floor(Math.random() * w.length);
+      diff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
+    }
+    game.currentDiff = diff;
     game.targetWord = w;
-    renderWordLetters(w, pos, 1, w[pos]);
-    const choices = generateChoices(w[pos]);
-    renderChoices(choices, w[pos]);
+    renderWordLetters(w, diff.blankStart, diff.blankLen, diff.chunk);
+    const choices = generateChoices(diff.chunk);
+    renderChoices(choices, diff.chunk);
     game.answering = true;
     return;
   }
