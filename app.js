@@ -648,20 +648,20 @@ function findChunkDiff(prev, curr) {
 
 function generateChoices(correctChunk) {
   const len = correctChunk.length;
-  const vowelMode = isVowelChunk(correctChunk);
-  const pool = vowelMode
-    ? (VOWEL_CLUSTERS[len] || VOWEL_LIST)
-    : (ONSET_CLUSTERS[len] || ONSET_CLUSTERS[1]);
+  // Mix vowels and consonants — the blank position determines what's correct
+  const allPool = len === 1
+    ? [...CONSONANTS, ...VOWEL_LIST]
+    : [...(ONSET_CLUSTERS[len] || []), ...(VOWEL_CLUSTERS[len] || [])];
   const choices = [correctChunk];
-  const candidates = shuffleArray(pool.filter(c => c !== correctChunk));
+  const candidates = shuffleArray(allPool.filter(c => c !== correctChunk && c.length === len));
   for (const c of candidates) {
     if (choices.length >= 4) break;
-    if (c.length === len) choices.push(c);
+    choices.push(c);
   }
   while (choices.length < 4) {
     let r = '';
-    const src = vowelMode ? VOWEL_LIST : CONSONANTS;
-    for (let i = 0; i < len; i++) r += src[Math.floor(Math.random() * src.length)];
+    const all = [...CONSONANTS, ...VOWEL_LIST];
+    for (let i = 0; i < len; i++) r += all[Math.floor(Math.random() * all.length)];
     if (!choices.includes(r)) choices.push(r);
   }
   return shuffleArray(choices);
@@ -703,7 +703,7 @@ function presentWord() {
 
   // Family label + progress
   $('word-family').textContent = `${fam.theme}  (${game.wordIdx + 1}/${fam.words.length})`;
-  $('word-meaning').textContent = word.ja;
+  $('word-meaning').textContent = word.pos ? `${word.ja}（${word.pos}）` : word.ja;
 
   if (isFirst) {
     const w = word.en.toLowerCase();
@@ -1034,7 +1034,8 @@ function showFloatFeedback(word) {
   const el = document.createElement('div');
   el.className = 'float-feedback';
   el.style.top = '40%';
-  el.innerHTML = `${word.en} <span class="fb-eiken">${EIKEN_LABELS[word.eiken]}</span>`;
+  const posLabel = word.pos ? `<span class="fb-pos">${word.pos}</span> ` : '';
+  el.innerHTML = `${word.en} ${posLabel}<span class="fb-eiken">${EIKEN_LABELS[word.eiken]}</span>`;
   $('game-container').appendChild(el);
   setTimeout(() => el.remove(), 800);
 }
