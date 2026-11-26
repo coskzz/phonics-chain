@@ -705,17 +705,27 @@ function presentWord() {
   $('word-family').textContent = `${fam.theme}  (${game.wordIdx + 1}/${fam.words.length})`;
   $('word-meaning').textContent = word.pos ? `${word.ja}（${word.pos}）` : word.ja;
 
-  // Blank 1 letter — only at positions that DIFFER between words in the family
+  // Blank 1 letter — exclude shared pattern letters
   const w = word.en.toLowerCase();
-  const familyWords = fam.words.map(fw => fw.en.toLowerCase());
-  const varyingPositions = [];
+  // Extract the shared pattern from theme (e.g. "-at" → "at", "sl-" → "sl", "un-" → "un")
+  const themeMatch = fam.theme.match(/[-]?([a-z]+)[-]?/i);
+  const pattern = themeMatch ? themeMatch[1].toLowerCase() : '';
+  // Find positions where the letter is NOT part of the shared pattern suffix/prefix
+  const candidates = [];
   for (let i = 0; i < w.length; i++) {
-    const letter = w[i];
-    const allSame = familyWords.every(fw => i < fw.length && fw[i] === letter);
-    if (!allSame) varyingPositions.push(i);
+    // Check if this position is part of the shared pattern
+    let isShared = false;
+    if (pattern) {
+      // Suffix pattern (e.g. "at" in cat, bat, hat) — check end of word
+      const suffStart = w.length - pattern.length;
+      if (suffStart >= 0 && w.endsWith(pattern) && i >= suffStart) isShared = true;
+      // Prefix pattern (e.g. "sl" in slap, slip) — check start of word
+      if (w.startsWith(pattern) && i < pattern.length) isShared = true;
+    }
+    if (!isShared) candidates.push(i);
   }
-  const candidates = varyingPositions.length > 0 ? varyingPositions : [Math.floor(Math.random() * w.length)];
-  const pos = candidates[Math.floor(Math.random() * candidates.length)];
+  const pool = candidates.length > 0 ? candidates : [Math.floor(Math.random() * w.length)];
+  const pos = pool[Math.floor(Math.random() * pool.length)];
   const diff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
   game.currentDiff = diff;
   game.targetWord = w;
