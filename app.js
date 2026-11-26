@@ -705,38 +705,15 @@ function presentWord() {
   $('word-family').textContent = `${fam.theme}  (${game.wordIdx + 1}/${fam.words.length})`;
   $('word-meaning').textContent = word.pos ? `${word.ja}（${word.pos}）` : word.ja;
 
-  if (isFirst) {
-    const w = word.en.toLowerCase();
-    // Use diff against next word so the blank type matches the rest of the family
-    const nextW = fam.words.length > 1 ? fam.words[1].en.toLowerCase() : null;
-    let diff;
-    if (nextW) {
-      const fwd = findChunkDiff(w, nextW);
-      diff = { blankStart: fwd.blankStart, blankLen: Math.min(fwd.blankLen, MAX_CHUNK), chunk: w.slice(fwd.blankStart, fwd.blankStart + Math.min(fwd.blankLen, MAX_CHUNK)) };
-    } else {
-      const pos = Math.floor(Math.random() * w.length);
-      diff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
-    }
-    game.currentDiff = diff;
-    game.targetWord = w;
-    renderWordLetters(w, diff.blankStart, diff.blankLen, diff.chunk);
-    const choices = generateChoices(diff.chunk);
-    renderChoices(choices, diff.chunk);
-    game.answering = true;
-    return;
-  }
-
-  // Find chunk diff
-  const diff = findChunkDiff(prev.en, word.en);
+  // Random 1-letter blank — player must read the meaning to know the word
+  const w = word.en.toLowerCase();
+  const pos = Math.floor(Math.random() * w.length);
+  const diff = { blankStart: pos, blankLen: 1, chunk: w[pos] };
   game.currentDiff = diff;
-  game.targetWord = word.en.toLowerCase();
-
-  // Render word with blank
-  renderWordLetters(word.en, diff.blankStart, diff.blankLen, diff.chunk);
-
-  // Generate 4 choices
-  const choices = generateChoices(diff.chunk);
-  renderChoices(choices, diff.chunk);
+  game.targetWord = w;
+  renderWordLetters(w, pos, 1, w[pos]);
+  const choices = generateChoices(w[pos]);
+  renderChoices(choices, w[pos]);
   game.answering = true;
 }
 
