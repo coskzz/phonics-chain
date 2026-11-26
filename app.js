@@ -69,6 +69,19 @@ function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   return audioCtx;
 }
+// Mobile browsers keep audio suspended until it is resumed inside a tap.
+// iOS also mutes Web Audio in silent mode unless the session is set to "playback".
+function unlockAudio() {
+  try {
+    if (navigator.audioSession) navigator.audioSession.type = 'playback';
+    const ctx = getAudioCtx();
+    if (ctx.state !== 'running') ctx.resume();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination); src.start(0);
+  } catch (e) {}
+}
+['touchend', 'click'].forEach(ev => document.addEventListener(ev, unlockAudio, { passive: true }));
 function playTone(freq, duration, type, vol) {
   if (seMuted) return;
   try {
@@ -557,6 +570,7 @@ function startGame() {
   showTab(false);
   initParticles();
   resizeParticleCanvas();
+  unlockAudio();
   startBGM();
   updateSoundButtons();
   $('game-score').textContent = '0';
