@@ -453,7 +453,7 @@ auth.onAuthStateChanged(async user => {
 // ===== Home =====
 function enterHome() {
   show('screen-home'); showTab(true);
-  $('tab-admin')?.parentElement?.classList.toggle('hidden', userRole !== 'teacher');
+  $('tab-admin')?.classList.toggle('hidden', userRole !== 'teacher');
   $('home-username').textContent = isGuest ? 'ゲスト' : (userDoc.nickname || '');
   $('guest-login-card')?.classList.toggle('hidden', !isGuest);
   const streak = userDoc.streak || 0;
